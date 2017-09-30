@@ -10,21 +10,76 @@
       <text>商品</text>
     </view>
     <view class='goods clearfix'>
-      <view class='good'>
-        <image src="../../image/good.png"/>
+      <view wx:for="{{goodsList}}" wx:for-index="idx" wx:key="idx" class='good'>
+        <image src="{{item.imgurl}}"/>
         <view class='good-info'>
-          <text class='good-name'>上海本地蕃茄500g</text>
-          <text class='good-price'>￥1.8</text>
+          <text class='good-name'>{{item.name}}</text>
+          <text class='good-price'>￥{{item.price}}</text>
         </view>
         <view class='add-sub'>
-          <text bindtap="sub" class='sub'>-</text>
-          <text class='num'>{{num}}</text>
-          <text bindtap="add" class='add'>+</text>
+          <image hidden="{{item.num<=0}}" bindtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>
+          <text hidden="{{item.num<=0}}" class='num'>{{item.num}}</text>
+          <image bindtap="add" data-index="{{idx}}" class='add' src="../../image/add.png"/>
         </view>
       </view>
     </view>
   </view>
+  <view class='padding-86'></view>
 </scroll-view>
+<view bindtap="showCarInfo" class='car-bar'>
+  <view class='car-icon active'>
+    <image src="../../image/shop-car.png"/>
+  </view>
+  <view class='car-money'>
+    <text class='car-total-money'>合计金额:180元</text>
+    <text class='delivery-money'>配送费:0元</text>
+  </view>
+  <view catchtap="topay" class='to-pay'>去结算</view>
+</view>
+<!--购物车详情-->
+<view class='car-info-wrapper' hidden="{{!showCarInfoFlag}}" catchtap="hideCarInfo">
+  <view class='car-info-content clearfix' catchtap="preventTapParent">
+    <view class='car-icon active'>
+      <image src="../../image/shop-car.png"/>
+    </view>
 
+    <scroll-view class="scrollview"  scroll-y >
+      <view class='goods clearfix'>
+        <view wx:for="{{carList}}" wx:for-index="idx" wx:key="idx" class='good'>
+          <view catchtap="selectGood" class='select-icon'></view>
+          <image src="{{item.imgurl}}"/>
+          <view class='good-info'>
+            <text class='good-name'>{{item.name}}</text>
+            <text class='good-price'>￥{{item.price}}</text>
+          </view>
+          <view class='add-sub'>
+            <image hidden="{{item.num<=0}}" catchtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>
+            <text hidden="{{item.num<=0}}" class='num'>{{item.num}}</text>
+            <image catchtap="add" data-index="{{idx}}" class='add' src="../../image/add.png"/>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class='car-info-head'>
+      <view class='select' catchtap="selectAll">
+        <view class='select-icon'></view>
+        <view class='has-selected'>全选<text>(已选3件)</text></view>
+      </view>
+      <view class='clear-car'>
+        <image src="../../image/clear.png"/>
+        <text>清空购物车</text>
+      </view>
+    </view>
+
+    <view bindtap="showCarInfo" class='car-bar'>
+      <view class='car-money'>
+        <text class='car-total-money'>合计金额:180元</text>
+        <text class='delivery-money'>配送费:0元</text>
+      </view>
+      <view catchtap="topay" class='to-pay'>去结算</view>
+    </view>
+  </view>
+</view>
 <!--返回顶部-->
 <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>

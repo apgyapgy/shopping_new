@@ -33,11 +33,23 @@ var getAjax = function(options){
       title: '加载中',
     })
   }
+  console.log("options:",options);
+  if(options.token){
+    var _header  = {
+      'content-type': 'application/json',
+      'Cookie': 'JSESSIONID=' + options.token
+    };
+  }else{
+    var _header = {
+      'content-type': 'application/json'
+    }
+  }
   return wx.request({
     url: baseUrl + options.url,
     data: options.params,
     method: options.method?options.method:'GET',
     success: options.success,
+    header: _header,
     fail: function (res) {
       if(options.fail){
         options.fail(res)

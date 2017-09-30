@@ -7,17 +7,70 @@ Page({
   data: {
     backTopIconShowFlag: false,
     scrollTop: 0,
-    num:2
+    goodsList:[
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:1},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:3},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:14},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:91},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:5},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:11},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:13},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:20},
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 1 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 3 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 14 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 91 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 5 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 11 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 13 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 20 }
+    ],
+    carList: [
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 1 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 3 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 14 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 91 },
+      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 5 }
+    ],
+    showCarInfoFlag:true
   },
-  sub:function(){
+  sub:function(e){
+    var _idx = e.target.dataset.index;
+    var _goodsList = this.data.goodsList;
+    _goodsList[_idx]['num']--;
     this.setData({
-      num:this.data.num-1
+      goodsList: _goodsList
     });
   },
-  add:function(){
+  add:function(e){
+    var _idx = e.target.dataset.index;
+    var _goodsList = this.data.goodsList;
+    _goodsList[_idx]['num']++;
     this.setData({
-      num:this.data.num+1
+      goodsList:_goodsList
     });
+  },
+  showCarInfo:function(){
+    this.setData({
+      showCarInfoFlag: true
+    });
+  },
+  hideCarInfo: function () {
+    this.setData({
+      showCarInfoFlag: false
+    });
+  },
+  selectAll:function(){//全选
+
+  },
+  selectGood:function(){//选择商品
+
+  },
+  topay:function(){
+
+  },
+  preventTapParent:function(){//阻止 事件冒泡
+
   },
   /**
    * 生命周期函数--监听页面加载

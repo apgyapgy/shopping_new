@@ -6,13 +6,14 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
+    var _this = this;
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
           this.globalData.code = res.code;
+          console.log("login:",res);
           wx.request({
             url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
             data:{
@@ -20,6 +21,7 @@ App({
             },
             success:function(re){
               if(re.data.code == 200){
+                _this.globalData.token = re.data.data.token;
                 //wx.redirectTo({ url: "/pages/index/index"});
               }else if(re.data.code == 40101){
                 wx.redirectTo({ url: "/pages/login/login"});
@@ -37,12 +39,12 @@ App({
       success: res => {
         console.log("getSetting:",res);
         if (res.authSetting['scope.userInfo']) {
-          this.globalData.userInfoAuth = true;
+          _this.globalData.userInfoAuth = true;
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo;
+              _this.globalData.userInfo = res.userInfo;
 
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
@@ -55,20 +57,21 @@ App({
           wx.authorize({
             scope:'scope.userInfo',
             success:function(re){
-              this.globalData.userInfoAuth = true;
+              _this.globalData.userInfoAuth = true;
               console.log("authorize success:",re);
             },
             fail:function(re){
-              this.globalData.userInfoAuth = false;
+              _this.globalData.userInfoAuth = false;
             }
           });
         }
       }
-    })
+    });
   },
   globalData: {
     userInfo: null,
     code:'',
-    userInfoAuth:false
+    userInfoAuth:false,
+    token:''
   }
 })

@@ -203,6 +203,7 @@ Page({
   loginBind:function(__code){//登录绑定
     var _mobile = this.data.mobile.trim();
     var _code = this.data.yzm.trim();
+    var _this = this;
     common.getAjax({
       url: 'wx_we/api/oauth/bind',
       params: {
@@ -213,6 +214,7 @@ Page({
       success: function (re) {
         console.log("登录认证绑定success:", re);
         if (re.data.code == 200) {
+          app.globalData.token = re.data.data.token;
           wx.redirectTo({
             url: '/pages/index/index',
           });

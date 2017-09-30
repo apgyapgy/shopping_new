@@ -126,12 +126,14 @@ Page({
   },
   initData: function () {//初始化页面数据
     var _this = this;
+    console.log("globalData:",app.globalData);
     common.getAjax({
       url: 'wx_we/home',
       params: {
         bmapLng: _this.data.longitude,
         bmapLat: _this.data.latitude
       },
+      token:app.globalData.token,
       success: function (res) {
         console.log("首页:", res);
         if (res.data.code == 200) {
@@ -162,30 +164,64 @@ Page({
   chooseLocation: function () {//弹出地图选择定位
     this.checkUserInfoAuth();
     var _this = this;
-    wx.chooseLocation({
-      success:function(res){
-        console.log("choose location success:",res);
-        _this.setData({
-          latitude: res.latitude,
-          longitude: res.longitude
-        });
-        _this.saveLocation();
-        _this.initData();
-      },
-      cancel: function () {
-        console.log("choose location cancel:", res);
-      },
-      fail:function(){}
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userLocation'] && res.authSetting['scope.userLocation']==true) {
+          console.log("in")
+          wx.chooseLocation({
+            success: function (res) {
+              console.log("choose location success:", res);
+              _this.setData({
+                latitude: res.latitude,
+                longitude: res.longitude
+              });
+              _this.saveLocation();
+              _this.initData();
+            },
+            cancel: function () {
+              console.log("choose location cancel:", res);
+            },
+            fail: function () { }
+          });
+        } else {
+          console.log("out")
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success: function (re) {
+              wx.chooseLocation({
+                success: function (res) {
+                  console.log("choose location success:", res);
+                  _this.setData({
+                    latitude: res.latitude,
+                    longitude: res.longitude
+                  });
+                  _this.saveLocation();
+                  _this.initData();
+                }
+              });
+            }
+          });
+        }
+      }
     });
   },
   jumpShopInfo: function () {//点店铺跳转
-    this.checkUserInfoAuth();
+    this.checkUserInfoAuth(function(){
+      wx.navigateTo({
+        url: '/pages/shop/shop'
+      });
+    });
+
   },
-  checkUserInfoAuth: function () {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
+  checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
     if (!app.globalData.userInfoAuth){
       wx.redirectTo({
         url: '/pages/login/login',
       });
+    }else{
+      if(fn){
+        fn();
+      }
     }
   },
   saveLocation:function(){//保存定位
