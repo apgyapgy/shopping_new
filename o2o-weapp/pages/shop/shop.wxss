@@ -1,0 +1,150 @@
+/* pages/shop/shop.wxss */
+/*common*/
+.clearfix:after{
+  clear:both;
+  content:'';
+  display:block;
+  visibility:hidden;
+  width:0;
+  height:0;
+}
+
+.scrollview{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  right:0; 
+  bottom:0;
+}
+/*返回顶部*/
+.top{
+  display:none;
+  position:fixed;
+  bottom:280rpx;
+  right:30rpx;
+  width:80rpx;
+  height:80rpx;
+  border-radius:50%;
+}
+.top.active{
+  display:block;
+}
+
+/*shop head*/
+.shop-head{
+  padding-top:20rpx;
+  width:750rpx;
+  height:150rpx;
+  background:#665754;
+}
+.shop-head image{
+  display:block;
+  margin:0 auto;
+  width:80rpx;
+  height:80rpx;
+  border:2rpx solid #bebcb7;
+  border-radius:5rpx;
+}
+.shop-head .shop-name{
+  display:block;
+  width:750rpx;
+  height:52rpx;
+  line-height:52rpx;
+  font-size:32rpx;
+  font-weight:bold;
+  text-align:center;
+  color:#fff;
+}
+/*goods wrapper*/
+.goods-wrapper{
+  width:750rpx;
+}
+.goods-wrapper .wrapper-title{
+  width:750rpx;
+  height:74rpx;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.wrapper-title text{
+  float:left;
+  margin-left:30rpx;
+  margin-top:20rpx;
+  height:50rpx;
+  line-height:50rpx;
+  font-size:32rpx;
+  color:#26b1fe;
+  font-weight:bold;
+  border-bottom:5rpx solid #26b1fe;
+}
+/*good*/
+.good{
+  position:relative;
+  height:195rpx;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.good image{
+  float:left;
+  margin-top:22rpx;
+  margin-left:28rpx;
+  margin-right:22rpx;
+  width:145rpx;
+  height:145rpx;
+  border:2rpx solid #e5e7e2;
+  border-radius:10rpx;
+}
+.good .good-info{
+  float:left;
+  width:550rpx;
+}
+.good .good-info text{
+  display:block;
+  font-weight:bold;
+}
+.good .good-info .good-name{
+  margin-top:22rpx;
+  line-height:42rpx;
+  font-size:30rpx;
+  height:108rpx;
+  color:#000;
+}
+.good .good-info .good-price{
+  height:48rpx;
+  font-size:28rpx;
+  line-height:48rpx;
+  color:#fa3e2d;
+}
+.good .add-sub{
+  position:absolute;
+  right:30rpx;
+  bottom:28rpx;
+}
+.good .add-sub text{
+  float:left;
+  font-size:34rpx;
+  font-weight:bold;
+  text-align:center;
+}
+.good .add-sub .add,
+.good .add-sub .sub{
+  border-radius:50%;
+  text-align:center;
+}
+.good .add-sub .sub{
+  width:46rpx;
+  height:46rpx;
+  line-height:40rpx;
+  border:2rpx solid #26b1fe;
+  color:#26b1fe;
+}
+.good .add-sub .num{
+  width:60rpx;
+  height:50rpx;
+  line-height:50rpx;
+  color:#333;
+}
+.good .add-sub .add{
+  width:50rpx;
+  height:50rpx;
+  line-height:50rpx;
+  background:#26b1fe;
+  color:#fff;
+}

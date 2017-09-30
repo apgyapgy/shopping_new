@@ -1,0 +1,30 @@
+<!--pages/shop/shop.wxml-->
+<scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+  <view class="shop-head">
+    <image src="../../image/shop-icon.png"/>
+    <view class="shop-name">黑牛农庄（农家鲜蔬）</view>
+  </view>
+
+  <view class="goods-wrapper clearfix">
+    <view class="wrapper-title">
+      <text>商品</text>
+    </view>
+    <view class='goods clearfix'>
+      <view class='good'>
+        <image src="../../image/good.png"/>
+        <view class='good-info'>
+          <text class='good-name'>上海本地蕃茄500g</text>
+          <text class='good-price'>￥1.8</text>
+        </view>
+        <view class='add-sub'>
+          <text bindtap="sub" class='sub'>-</text>
+          <text class='num'>{{num}}</text>
+          <text bindtap="add" class='add'>+</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!--返回顶部-->
+<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>

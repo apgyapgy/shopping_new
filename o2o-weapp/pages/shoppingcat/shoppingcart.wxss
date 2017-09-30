@@ -1,0 +1,176 @@
+/* pages/shoppingcat/shoppingcart.wxss */
+page{
+  background:#f2f2f2;
+}
+.scrollview{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  right:0; 
+  bottom:0;
+}
+.car-area{
+  margin-top:30rpx;
+  width:750rpx;
+}
+.area-name{
+  width:750rpx;
+  height:88rpx;
+  background:#fff;
+  border-top:1rpx solid #e5e5e5;
+}
+.area-name-wrap{
+  float:left;
+  position:relative;
+  left:50%;
+}
+.area-name image{
+  position:relative;
+  right:50%;
+  float:left;
+  margin-top:26rpx;
+  margin-right:14rpx;
+  width:30rpx;
+  height:37rpx;
+}
+.area-name text{
+  position:relative;
+  right:50%;
+  float:left;
+  height:88rpx;
+  line-height:88rpx;
+  font-size:28rpx;
+  color:#000;
+}
+.area-name.active text{
+  color:#24affd;
+}
+/*car-order*/
+.car-order{
+  background:#f2f2f2;
+}
+.car-name{
+  float:left;
+  width:750rpx;
+  height:88rpx;
+  border-top:1rpx solid #e5e5e5;
+  border-bottom:1rpx solid #e5e5e5;
+}
+.car-name image{
+  float:left;
+  margin:25rpx 10rpx 0 30rpx;
+  width:45rpx;
+  height:45rpx;
+}
+.car-name text{
+  float:left;
+  height:88rpx;
+  font-size:30rpx;
+  line-height:88rpx;
+}
+.car-name text.s-name{
+  color:#333;
+}
+.car-name text.gt{
+  margin-left:15rpx;
+  color:#9f9f9f;
+}
+.car-name text.order-success{
+  margin-right:30rpx;
+  float:right;
+  color:#3fb8fc;
+}
+
+.car-goods-list{
+  float:left;
+  background:#fff;
+}
+.car-goods-list .car-good{
+  width:750rpx;
+  height:196rpx;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.car-goods-list .car-good image{
+  float:left;
+  margin-top:22rpx;
+  margin-left:28rpx;
+  width:145rpx;
+  height:145rpx;
+  border-radius:10rpx;
+  border:2rpx solid #e5e7e2;
+}
+.car-goods-list .car-good .car-good-name{
+  float:left;
+  padding-left:20rpx;
+  margin-top:22rpx;
+  width:450rpx;
+  height:174rpx;
+  font-size:30rpx;
+  line-height:40rpx;
+  color:#000;
+  font-weight:bold;
+}
+.car-good-info{
+  float:left;
+  width:100rpx;
+}
+.car-good-info .car-good-price{
+  display:block;
+  margin-top:22rpx;
+  height:40rpx;
+  line-height:40rpx;
+  font-size:30rpx;
+  font-weight:bold;
+  color:#fa3e2d;
+}
+.car-good-info .car-good-num{
+  margin-top:60rpx;
+  display:block;
+  width:100rpx;
+  text-align:center;
+  font-size:26rpx;
+  color:#333;
+}
+.clear-invalid{
+  margin-top:30rpx;
+  padding-top:30rpx;
+  width:750rpx;
+  height:114rpx;
+  background:#fff;
+}
+.clear-invalid button{
+  margin:0 auto;
+  width:700rpx;
+  height:80rpx;
+  text-align:center;
+  color:#fff;
+  font-size:30rpx;
+  line-height:80rpx;
+  border-radius:10rpx;
+  background:#0fa8ff;
+}
+
+/*返回顶部*/
+.top{
+  display:none;
+  position:fixed;
+  bottom:280rpx;
+  right:30rpx;
+  width:80rpx;
+  height:80rpx;
+  border-radius:50%;
+}
+.top.active{
+  display:block;
+}
+
+/*footer*/
+@import '../footer/footer.wxss';
+.clearfix:after{
+  clear:both;
+  content:'';
+  display:block;
+  visibility:hidden;
+  width:0;
+  height:0;
+}

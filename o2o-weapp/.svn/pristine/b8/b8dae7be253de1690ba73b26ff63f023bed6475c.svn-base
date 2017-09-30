@@ -1,0 +1,38 @@
+<!--pages/mycoupons/mycoupons.wxml-->
+<view class="coupon-head">
+  <view bindtap="changeTab" data-index="1" class="not-used {{activeTab==1?'active':''}}">未使用</view>
+  <view bindtap="changeTab" data-index="2" class="used {{activeTab==2?'active':''}}">已使用</view>
+  <view bindtap="changeTab" data-index="3" class="expired {{activeTab==3?'active':''}}">已过期</view> 
+</view>
+<view class="padding-20"></view>
+<view wx:if="{{couponsList.length>0}}" class="coupon-body">
+  <view class="coupon">
+    <view class="coupon-left">
+      <view class="select"></view>
+      <view class="coupon-price">￥20</view>
+      <view class='coupon-condition'>满100元使用</view>
+      <view class="coupon-vld">有效期到:2017-12-30</view>
+    </view>
+    <view class="coupon-right">
+      <view class='coupon-name'>富友商圈优惠券</view>
+      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
+    </view>
+  </view>
+  <view class="coupon">
+    <view class="coupon-left">
+      <view class="select active"></view>
+      <view class="coupon-price">￥20</view>
+      <view class='coupon-condition'>满100元使用</view>
+      <view class="coupon-vld">有效期到:2017-12-30</view>
+    </view>
+    <view class="coupon-right">
+      <view class='coupon-name'>富友商圈优惠券</view>
+      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
+    </view>
+  </view>
+</view>
+<view wx:else class="no-coupons">
+  <text>暂无优惠券</text>
+</view>

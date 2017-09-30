@@ -1,0 +1,27 @@
+<view class="weui-tabbar">
+    <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+      <view class="weui-tabbar__icon">
+        <image src="../../image/home_active.png" alt=""/>
+      </view>
+      <view class="weui-tabbar__label">首页</view>
+    </a>
+    <a href="javascript:;" class="weui-tabbar__item">
+      <text class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</text>
+      <view class="weui-tabbar__icon">
+        <image src="../../image/car.png" alt=""/>
+      </view>
+      <view class="weui-tabbar__label">购物车</view>
+    </a>
+    <a href="javascript:;" class="weui-tabbar__item">
+      <view class="weui-tabbar__icon">
+        <image src="../../image/order.png" alt=""/>
+      </view>
+      <view class="weui-tabbar__label">订单</view>
+    </a>
+    <a href="javascript:;" class="weui-tabbar__item">
+      <view class="weui-tabbar__icon">
+        <image src="../../image/my.png" alt=""/>
+      </view>
+      <view class="weui-tabbar__label">我的</view>
+    </a>
+</view>

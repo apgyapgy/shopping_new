@@ -1,0 +1,55 @@
+<!--pages/order/order.wxml-->
+<view class="order-head">
+  <view bindtap="changeTab" data-index="1" class="not-used {{activeTab==1?'active':''}}">待付款</view>
+  <view bindtap="changeTab" data-index="2" class="used {{activeTab==2?'active':''}}">待配送</view>
+  <view bindtap="changeTab" data-index="3" class="expired {{activeTab==3?'active':''}}">待取货</view> 
+  <view bindtap="changeTab" data-index="4" class="expired {{activeTab==3?'active':''}}">已完成</view> 
+</view>
+<!--padding-->
+<view class='padding-20'></view>
+
+<!--order body-->
+<view wx:if="{{orderList.length>0}}" class='order-body'>
+  <view class='shop-order clearfix'>
+
+    <view class='shop-name'>
+      <image src="../../image/nearby.png"/>
+      <text>XXX商户</text>
+    </view>
+
+    <view class='shop-goods-list clearfix'>
+      <view class='shop-good'>
+        <image src="../../image/good.png"/>
+        <text class="shop-good-name">上海本地蕃茄500g</text>
+        <view class='shop-good-info'>
+          <text class='shop-good-price'>￥1.8</text>
+          <text class='shop-good-num'>X2</text>
+        </view>
+      </view>
+      <view class='shop-good'>
+        <image src="../../image/good.png"/>
+        <text class="shop-good-name">上海本地蕃茄500g</text>
+        <view class='shop-good-info'>
+          <text class='shop-good-price'>￥1.8</text>
+          <text class='shop-good-num'>X2</text>
+        </view>
+      </view>
+    </view>
+
+    <view class='shop-order-info'>
+      <view class='shop-order-coupon-used'>已使用:满20减5</view>
+      <view class='shop-order-price'>共2件商品，实际支付￥<text>4.8</text></view>
+    </view>
+
+    <view class='order-pay'>
+      <button class='pay'>立即付款</button>
+    </view>
+  </view>
+</view>
+<view wx:else class="no-order">
+  <text>你还没有相关订单哦</text>
+</view>
+
+<!--footer-->
+<import src="../footer/footer.wxml"/>
+<template is="footer" data="{{tabbarArray}}"></template>

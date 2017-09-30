@@ -1,0 +1,49 @@
+/* pages/footer/footer.wxss */
+/*footer*/
+.footer{
+  position:fixed;
+  left:0;
+  bottom:0;
+  display:flex;
+  width:750rpx;
+  height:98rpx;
+  background:#f7f7fa;
+  border-top:1rpx solid #eee;
+}
+.footer navigator{
+  flex:1;
+  height:98rpx;
+}
+.footer navigator image{
+  display:block;
+  margin:20rpx auto 0;
+  width:40rpx;
+  height:40rpx;
+}
+.footer navigator text{
+  display:block;
+  color:#7f8389;
+  font-size:24rpx;
+  height:34rpx;
+  width:100%;
+  text-align:center;
+}
+.footer navigator.car{
+  position:relative;
+}
+.footer navigator.car .shopcart-num{
+  position:absolute;
+  left:100rpx;
+  top:15rpx;
+  height:40rpx;
+  width:40rpx;
+  line-height:40rpx;
+  background:#f12c20;
+  color:#fff;
+  font-size:20rpx;
+  text-align:center;
+  border-radius:50%;
+}
+.footer navigator.active text{
+  color:#6ab3fe;
+}

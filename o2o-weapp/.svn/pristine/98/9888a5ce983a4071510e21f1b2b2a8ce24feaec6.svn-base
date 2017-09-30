@@ -1,0 +1,233 @@
+<!--index.wxml-->
+
+  <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+    <!--banner-->
+    <swiper class="banner" indicator-dots="{{indicatorDots}}"
+      autoplay="{{autoplay}}" >
+      <block wx:for="{{bannerImgs}}" wx:key="*this">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image"/>
+        </swiper-item>
+      </block>
+    </swiper>
+
+    <!--定位-->
+    <view class="location">
+      <image class="location-icon" src="../../image/location.png"/>
+      <text class="location-name">申江豪城</text>
+      <image class="location-down-icon" src="../../image/down.png"/>
+    </view>
+
+    <!--title-->
+    <view class="con-title">
+      <view class="title-wrapper">
+        <image src='../../image/nearby.png'/>
+        <text>附近的商户</text>
+      </view>
+    </view>
+
+    <!--店铺-->
+    <view class='shops'>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'><text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text></view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view><view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'><text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text></view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view><view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>南北干货（五谷杂粮）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>下班不逛南北干货,五谷杂粮送到家</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view class="shop">
+        <view class='shop-left'>
+          <image src='../../image/shop-img.png'/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>世纪华联（食品百货）</view>
+          </view>
+          <view class='shop-intro-wrapper'>
+            <text class='shop-intro'>上班逛超市,快递柜帮你收</text>
+          </view>
+          <text class='shop-send'>0元起送，0元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+    </view>
+
+    <!--暂无商铺-->
+    <view wx:if="{{false}}" class="no-shop">
+      <image src="../../image/no-shop.png"/>
+      <text>该小区附近暂无商铺(收件宝快递柜）</text>
+      <text>请尝试切换其他小区</text>
+    </view>
+  </scroll-view>
+    <!--返回顶部-->
+    {{item.active==true?'active':''}}
+    <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+
+    <!--footer template模板-->
+    <import src="../footer/footer.wxml"/>
+    <template is="footer" data="{{tabbarArray}}"/>
+

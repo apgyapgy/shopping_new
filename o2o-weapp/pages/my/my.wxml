@@ -1,0 +1,27 @@
+<!--pages/my/my.wxml-->
+<view class="my-container">
+  <view class="user-info">
+    <image class="user-icon" src="../../image/user.png"/>
+    <text class="user-phone">15316117950</text>
+  </view>
+  <view class="my-list">
+    <view catchtap="toCoupon" class="list">
+      <image class="my-coupon" src="../../image/my-coupon.png"/>
+      <text>我的优惠券</text>
+    </view>
+    <view catchtap="showConcat" class="list">
+      <image class="my-concat" src="../../image/my-concat.png"/>
+      <text>联系客服</text>
+    </view>
+  </view>
+</view>
+<!--footer template模板-->
+<import src="../footer/footer.wxml"/>
+<template is="footer" data="{{tabbarArray}}"/>
+
+<view class="shadow {{concatShowFlag==true?'active':''}}">
+    <view class="concat-wrapper">
+      <view catchtap="concat" class="concat-phone">{{concatPhone}}</view>
+      <view catchtap="hideConcat" class="concat-cancel">取消</view>
+    </view>
+</view>
