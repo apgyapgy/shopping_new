@@ -55,7 +55,13 @@
     <!--返回顶部-->
     <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 
-    <!--footer template模板-->
-    <import src="../footer/footer.wxml"/>
-    <template is="footer" data="{{tabbarArray}}"/>
+    <!--footer模板-->
+    <view class='padding-100'></view>
+    <view class='footer'>
+      <view bindtap="naviTo" wx:for="{{tabbarArray}}" wx:key="{{item.id}}" class="navi {{item.cls}} {{item.active==true?'active':''}}" data-naviUrl="{{item.url}}" hover-class="navigator-hover">
+        <text wx:if="{{item.shopCartNum}}" class="shopcart-num">{{item.shopCartNum}}</text>
+        <image src="{{item.active==true?item.active_src:item.src}}"/>
+        <text>{{item.text}}</text>
+      </view>
+    </view>
 

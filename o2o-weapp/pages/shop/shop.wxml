@@ -39,7 +39,7 @@
 <!--购物车详情-->
 <view class='car-info-wrapper' hidden="{{!showCarInfoFlag}}" catchtap="hideCarInfo">
   <view class='car-info-content clearfix' catchtap="preventTapParent">
-    <view class='car-icon active'>
+    <view catchtap="hideCarInfo" class='car-icon active'>
       <image src="../../image/shop-car.png"/>
     </view>
 

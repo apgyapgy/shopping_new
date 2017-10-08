@@ -241,6 +241,9 @@
 .car-info-wrapper image{
   margin-left:15rpx;
 }
+.car-info-wrapper .car-icon image{
+  margin-left:0;
+}
 .car-info-wrapper .good .good-info{
   width:470rpx;
 }

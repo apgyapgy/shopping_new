@@ -1,0 +1,246 @@
+/* pages/checkOrder/checkOrder.wxss */
+page{
+  background:#fff;
+}
+.clearfix:after{
+  clear:both;
+  content:'';
+  display:block;
+  visibility:hidden;
+  width:0;
+  height:0;
+}
+.scrollview{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  right:0; 
+  bottom:0;
+}
+/*顶部订单信息*/
+.order-head{
+  padding-top:26rpx;
+  padding-bottom:35rpx;
+  width:750rpx;
+  height:260rpx;
+  background:#f2f2f2;
+  border-top:1rpx solid #e5e5e5;
+}
+.order-head .order-area,
+.order-head .order-cloth,
+.order-head .order-phone{
+  height:87rpx;
+  line-height:87rpx;
+  border-bottom:1rpx solid #e5e5e5;
+  background:#fff;
+}
+.order-head .order-area image{
+  float:left;
+  margin-top:28rpx;
+  margin-left:30rpx;
+  margin-right:12rpx;
+  width:36rpx;
+  height:30rpx;
+}
+.order-head .order-area text{
+  float:left;
+  height:87rpx;
+  line-height:87rpx;
+  font-size:30rpx;
+}
+.order-head .order-cloth,
+.order-head .order-phone{
+  padding-left:70rpx;
+  font-size:26rpx;
+  overflow:hidden;
+}
+
+/*底部购物车*/
+.car-bar{
+  position:fixed;
+  left:0;
+  bottom:0;
+  width:750rpx;
+  height:86rpx;
+  border-top:1rpx solid #eee;
+  background:#fff;
+}
+.car-icon{
+  position:absolute;
+  left:20rpx;
+  top:-10rpx;
+  width:90rpx;
+  height:90rpx;
+  background:#999;
+  text-align:center;
+  border-radius:50%;
+  box-shadow: rgba(0,0,0,0.2) 0 -1rpx 10rpx;
+}
+.car-icon image{
+  display:inline-block;
+  margin-top:20rpx;
+  width:56rpx;
+  height:56rpx;
+}
+.car-icon.active{
+  background:#26b1fe;
+}
+.car-info-wrapper .car-icon{
+  top:-100rpx;
+}
+.car-money{
+  margin-left:120rpx;
+  float:left;
+  width:440rpx;
+}
+.car-money .car-total-money,
+.car-money .delivery-money{
+  display:block;
+  color:#f33;
+}
+.car-money .car-total-money{
+  margin-top:10rpx;
+  height:40rpx;
+  line-height:40rpx;
+  font-size:30rpx;
+  font-weight:bold;
+}
+.car-money .delivery-money{
+  height:34rpx;
+  line-height:34rpx;
+  font-size:24rpx;
+}
+.to-pay.active{
+ 
+  background:#26b1fe;
+}
+.to-pay{ 
+  float:right;
+  width:190rpx;
+  height:86rpx;
+  line-height:86rpx;
+  text-align:center;
+  font-size:30rpx;
+  font-weight:bold;
+  color:#fff;
+  background:#999;
+}
+/*order-wrappper*/
+.order-wrapper{
+  background:#fff;
+}
+/*订单商品列表*/
+.order-goods-list{
+  float:left;
+  background:#fff;
+}
+/*商品*/
+.order-goods-list .order-good{
+  width:750rpx;
+  height:196rpx;
+  border-top:2rpx solid #e5e7e2;
+}
+.order-good .order-good-right{
+  float:left;
+  width:540rpx;
+}
+.order-good image{
+  float:left;
+  margin-top:22rpx;
+  margin-left:15rpx;
+  margin-right:20rpx;
+  width:145rpx;
+  height:145rpx;
+  border-radius:10rpx;
+  border:2rpx solid #e5e7e2;
+}
+.order-good-right .order-good-name{
+  float:left;
+  margin-top:22rpx;
+  width:450rpx;
+  height:110rpx;
+  font-size:30rpx;
+  line-height:40rpx;
+  color:#000;
+  font-weight:bold;
+}
+.order-good-right .order-good-info{
+  float:left;
+  width:550rpx;
+  height:50rpx;
+}
+.order-good-right .order-good-info .order-good-price{
+  float:left;
+  height:50rpx;
+  line-height:50rpx;
+  font-size:30rpx;
+  font-weight:bold;
+  color:#fa3e2d;
+}
+.order-good-right .order-good-info .order-good-num{
+  float:right;
+  margin-right:5rpx;
+  width:100rpx;
+  height:46rpx;
+  line-height:46rpx;
+  text-align:center;
+  font-size:26rpx;
+  color:#414141;
+}
+/*到达时间*/
+.order-wrapper .arrive-time{
+  float:left;
+  padding-top:18rpx;
+  width:750rpx;
+  color:#26b1fe;
+  border-top:2rpx solid #e5e7e2;
+}
+.order-wrapper .arrive-time,
+.order-wrapper .discount text{
+  padding-left:30rpx;
+  height:44rpx;
+  font-size:28rpx;
+  line-height:44rpx;
+}
+/*商家优惠*/
+.order-wrapper .discount{
+  float:left;
+  width:750rpx;
+  height:44rpx;
+}
+.order-wrapper .discount text{
+  float:left;
+  color:#000;
+}
+.order-wrapper .discount .discount-price{
+  float:right;
+  margin-right:30rpx;
+  height:44rpx;
+  font-size:28rpx;
+  line-height:44rpx;
+  color:#fa3e2d;
+}
+.order-wrapper .discount .discount-price text{
+  float:none;
+  font-weight:bold;
+  color:#000;
+}
+
+/*优惠券*/
+.order-coupon{
+  position:fixed;
+  left:0;
+  bottom:86rpx;
+  width:750rpx;
+  height:787rpx;
+  background:rgba(0,0,0,0.7);
+  padding-bottom:20rpx;
+}
+.order-coupon .coupon{
+  margin-top:20rpx;
+  margin-left:30rpx;
+  width:690rpx;
+  height:206rpx;
+  background:#fff;
+  border-radius:10rpx;
+}

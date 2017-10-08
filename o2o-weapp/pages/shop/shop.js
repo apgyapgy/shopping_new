@@ -32,7 +32,7 @@ Page({
       { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 91 },
       { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 5 }
     ],
-    showCarInfoFlag:true
+    showCarInfoFlag:false
   },
   sub:function(e){
     var _idx = e.target.dataset.index;
@@ -67,7 +67,9 @@ Page({
 
   },
   topay:function(){
-
+    wx.navigateTo({
+      url: '/pages/checkOrder/checkOrder',
+    });
   },
   preventTapParent:function(){//阻止 事件冒泡
 
@@ -76,7 +78,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var _shopid = options.shopid;
   },
 
   /**

@@ -162,56 +162,57 @@ Page({
     });
   },
   chooseLocation: function () {//弹出地图选择定位
-    this.checkUserInfoAuth();
     var _this = this;
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userLocation'] && res.authSetting['scope.userLocation']==true) {
-          console.log("in")
-          wx.chooseLocation({
-            success: function (res) {
-              console.log("choose location success:", res);
-              _this.setData({
-                latitude: res.latitude,
-                longitude: res.longitude
-              });
-              _this.saveLocation();
-              _this.initData();
-            },
-            cancel: function () {
-              console.log("choose location cancel:", res);
-            },
-            fail: function () { }
-          });
-        } else {
-          console.log("out")
-          wx.authorize({
-            scope: 'scope.userLocation',
-            success: function (re) {
-              wx.chooseLocation({
-                success: function (res) {
-                  console.log("choose location success:", res);
-                  _this.setData({
-                    latitude: res.latitude,
-                    longitude: res.longitude
-                  });
-                  _this.saveLocation();
-                  _this.initData();
-                }
-              });
-            }
-          });
+    this.checkUserInfoAuth(function (_this){
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userLocation'] && res.authSetting['scope.userLocation'] == true) {
+            console.log("in")
+            wx.chooseLocation({
+              success: function (res) {
+                console.log("choose location success:", res);
+                _this.setData({
+                  latitude: res.latitude,
+                  longitude: res.longitude
+                });
+                _this.saveLocation();
+                _this.initData();
+              },
+              cancel: function () {
+                console.log("choose location cancel:", res);
+              },
+              fail: function () { }
+            });
+          } else {
+            console.log("out")
+            wx.authorize({
+              scope: 'scope.userLocation',
+              success: function (re) {
+                wx.chooseLocation({
+                  success: function (res) {
+                    console.log("choose location success:", res);
+                    _this.setData({
+                      latitude: res.latitude,
+                      longitude: res.longitude
+                    });
+                    _this.saveLocation();
+                    _this.initData();
+                  }
+                });
+              }
+            });
+          }
         }
-      }
-    });
-  },
-  jumpShopInfo: function () {//点店铺跳转
-    this.checkUserInfoAuth(function(){
-      wx.navigateTo({
-        url: '/pages/shop/shop'
       });
-    });
-
+    }(_this));
+  },
+  jumpShopInfo: function (e) {//点店铺跳转
+    var _url = e.currentTarget.dataset.naviurl;
+    this.checkUserInfoAuth(function (_url) {
+      wx.navigateTo({
+        url: '/pages/shop/shop?shopid=111'
+      });
+    }(_url));
   },
   checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
     if (!app.globalData.userInfoAuth){
@@ -230,5 +231,13 @@ Page({
   },
   getStorageLocation: function () {//从缓存中获取定位
     return wx.getStorageSync("location");
+  },
+  naviTo:function(e){
+    var _url = e.currentTarget.dataset.naviurl;
+    this.checkUserInfoAuth(function(_url){
+      wx.redirectTo({
+        url: _url,
+      });
+    }(_url));
   }
 });

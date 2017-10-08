@@ -124,5 +124,33 @@ Page({
   },
   clearInvalid:function(){//清空失效商品
 
+  },
+  jumpShop:function(e){//点击店铺或商品跳到店铺
+    var _shopid = e.currentTarget.dataset.shopid;
+    var _active = e.currentTarget.dataset.active;
+    if(_active){
+      var _url = _shopid ? '/pages/shop/shop?shopid=' + _shopid : '/pages/shop/shop';
+      wx.navigateTo({
+        url: _url
+      });
+    }else{
+      this.showModal("请先将定位切换至该小区",function(){
+        console.log("去定位去");
+      });
+    }
+    console.log("jumpshop:",e);
+  },
+  showModal:function(txt,fn){
+    wx.showModal({
+      title: '提示',
+      content: txt,
+      showCancel: false,
+      success:function(){
+        if(fn){
+          fn();
+        }
+      }
+    });
   }
-})
+  
+});

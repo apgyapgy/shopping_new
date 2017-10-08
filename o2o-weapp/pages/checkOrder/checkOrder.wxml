@@ -1,0 +1,64 @@
+<!--pages/pay/pay.wxml-->
+
+<!--顶部信息-->
+<scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+  <view class="order-head">
+    <view class='order-area'>
+      <image src="../../image/area_active.png"/>
+      <text>浦东新区-508小区</text>
+    </view>
+    <view class='order-cloth'>布放地：上海市虹口区曲阳路街道中山北一路865弄19号402室</view>
+    <view class='order-phone'>手机：13625625040</view>
+  </view>
+
+  <view class="order-wrapper clearfix">
+    <view class='order-goods-list clearfix'>
+      <view class='order-good'>
+        <image src="../../image/good.png"/>
+        <view class='order-good-right'>
+          <text class="order-good-name">上海本地蕃茄500g</text>
+          <view class='order-good-info'>
+            <text class='order-good-price'>￥1.8</text>
+            <text class='order-good-num'>X2</text>
+          </view>
+        </view>
+      </view>
+      <view class='order-good'>
+        <image src="../../image/good.png"/>
+        <view class='order-good-right'>
+          <text class="order-good-name">上海本地蕃茄500g</text>
+          <view class='order-good-info'>
+            <text class='order-good-price'>￥1.8</text>
+            <text class='order-good-num'>X2</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class='arrive-time'>到达时间：今日17：30-18：00</view>
+    <view bindtap="showCoupon" class='discount'>
+      <text>商家优惠</text>
+      <view class='discount-price'>20元<text>></text></view>
+    </view>
+  </view>
+  <view class='padding-86'></view>
+</scroll-view>
+
+<!--优惠券-->
+<scroll-view hidden="{{!couponShowFlag}}" class="order-coupon clearfix" scroll-y >
+  <view class='coupon'></view>
+  <view class='coupon'></view>
+  <view class='coupon'></view>
+  <view class='coupon'></view>
+</scroll-view>
+<!--去结算-->
+<view class='car-bar'>
+  <view class='car-icon active'>
+    <image src="../../image/shop-car.png"/>
+  </view>
+  <view class='car-money'>
+    <text class='car-total-money'>合计金额:180元</text>
+    <text class='delivery-money'>配送费:0元</text>
+  </view>
+  <view catchtap="topay" class="to-pay {{isPayAble?'active':''}}">去结算</view>
+</view>
