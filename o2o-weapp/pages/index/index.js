@@ -51,19 +51,20 @@ Page({
     shopList:[],
     location:{
      
-    }
+    },
+    jumpUrl:""
   }, 
   onLoad: function () {
     var _this = this;
     var _location = this.getStorageLocation();
-    if (_location){//保存的有定位获取店铺
+    if (_location) {//保存的有定位获取店铺
       var _locArr = _location.split("#");
       this.setData({
         latitude: _locArr[0],
         longitude: _locArr[1]
       });
       this.initData();
-    }else{//未保存定位重新获取定位
+    } else {//未保存定位重新获取定位
       wx.getLocation({
         type: 'wgs84',
         success: function (res) {
@@ -74,7 +75,11 @@ Page({
           _this.initData();
         }
       });
-    }
+    }    
+  },
+  userInfoReadyCallback:function(){
+    var _this = this; 
+    
   },
   getUserInfo: function(e) {
    
@@ -124,7 +129,7 @@ Page({
       showCancel: false
     });
   },
-  initData: function () {//初始化页面数据
+  initData: function (fn) {//初始化页面数据
     var _this = this;
     console.log("globalData:",app.globalData);
     common.getAjax({
@@ -158,19 +163,98 @@ Page({
           });
           _this.showModal(res.data.desc);
         }
+        if(fn){
+          fn();
+        }
       }
     });
   },
   chooseLocation: function () {//弹出地图选择定位
     var _this = this;
-    this.checkUserInfoAuth(function (_this){
-      wx.getSetting({
-        success: res => {
-          if (res.authSetting['scope.userLocation'] && res.authSetting['scope.userLocation'] == true) {
-            console.log("in")
+    this.checkLocationAuth();
+  },
+  jumpShopInfo: function (e) {//点店铺跳转
+    var _shopId = e.currentTarget.dataset.shopid;
+    var _url = _shopId?"/pages/shop/shop?shopid="+_shopId:"/pages/shop/shop";
+    if(_url){
+      var _this = this;
+      this.setData({
+        jumpUrl: _url
+      });
+      this.checkUserInfoAuth(function () {
+        console.log("commit fn", _this);
+        wx.navigateTo({
+          url: _this.data.jumpUrl
+        });
+      });
+    }
+  },
+  checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
+    console.log("userInfoAuth:",app.globalData.userInfoAuth);
+    if (!app.globalData.userInfoAuth){//未授权获取用户信息
+      console.log("checkUserInfoAuth未授权");
+      wx.getUserInfo({
+        success: function (res) {
+          console.log("获取用户信息成功:", res);
+          app.globalData.userInfoAuth = true;
+          if (fn) {
+            fn();
+          }
+        },
+        fail: function (res) {
+          console.log("获取用户信息失败:", res);
+          app.globalData.userInfoAuth = false;
+          wx.showModal({
+            title: '提示',
+            content: '到柜需要获取您的"用户信息"授权方能正常使用',
+            showCancel: false,
+            success: function (res) {
+              wx.openSetting({
+                success: function (data) {
+                  if (data) {
+                    if (data.authSetting["scope.userInfo"] == true) {
+                      wx.getUserInfo({
+                        withCredentials: false,
+                        success: function (data) {
+                          app.globalData.userInfoAuth = true;
+                          if (fn) {
+                            fn();
+                          }
+                        },
+                        fail: function () {
+                          console.info("3授权失败返回数据");
+                          app.globalData.userInfoAuth = false;
+                        }
+                      });
+                    } else {
+                      app.globalData.userInfoAuth = false;
+                    }
+                  }
+                },
+                fail: function () {
+                  console.info("设置失败返回数据");
+                  app.globalData.userInfoAuth = false;
+                }
+              });
+            }
+          });
+        }
+      });
+    }else{
+      console.log("checkUserInfoAuth已授权")
+      if(fn){
+        fn();
+      }
+    }
+  },
+  checkLocationAuth:function(){
+    var _this = this;
+    wx.getSetting({
+      complete:res=>{
+        if (res.authSetting['scope.userLocation']) {
+          if (res.authSetting['scope.userLocation'] == true) {
             wx.chooseLocation({
               success: function (res) {
-                console.log("choose location success:", res);
                 _this.setData({
                   latitude: res.latitude,
                   longitude: res.longitude
@@ -179,51 +263,48 @@ Page({
                 _this.initData();
               },
               cancel: function () {
-                console.log("choose location cancel:", res);
               },
               fail: function () { }
             });
-          } else {
-            console.log("out")
-            wx.authorize({
-              scope: 'scope.userLocation',
-              success: function (re) {
-                wx.chooseLocation({
-                  success: function (res) {
-                    console.log("choose location success:", res);
-                    _this.setData({
-                      latitude: res.latitude,
-                      longitude: res.longitude
-                    });
-                    _this.saveLocation();
-                    _this.initData();
-                  }
-                });
-              }
-            });
           }
+        } else {
+          wx.openSetting({
+            success: function (data) {
+              console.log("openSetting:",data);
+              if (data) {
+                if (data.authSetting["scope.userInfo"] == true) {
+                  if (app.globalData.userInfoAuth==false){
+                    app.globalData.userInfoAuth = true;
+                  }
+                }else{
+                  if (app.globalData.userInfoAuth == true){
+                    app.globalData.userInfoAuth = false;
+                  }
+                }
+                if (data.authSetting["scope.userLocation"] == true) {
+                  wx.chooseLocation({
+                    success: function (res) {
+                      _this.setData({
+                        latitude: res.latitude,
+                        longitude: res.longitude
+                      });
+                      _this.saveLocation();
+                      _this.initData();
+                    },
+                    cancel: function () {
+                    },
+                    fail: function () { }
+                  });
+                }
+              }
+            },
+            fail: function (res) {
+              console.info("设置失败返回数据",res);
+            }
+          });
         }
-      });
-    }(_this));
-  },
-  jumpShopInfo: function (e) {//点店铺跳转
-    var _url = e.currentTarget.dataset.naviurl;
-    this.checkUserInfoAuth(function (_url) {
-      wx.navigateTo({
-        url: '/pages/shop/shop?shopid=111'
-      });
-    }(_url));
-  },
-  checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
-    if (!app.globalData.userInfoAuth){
-      wx.redirectTo({
-        url: '/pages/login/login',
-      });
-    }else{
-      if(fn){
-        fn();
       }
-    }
+    });
   },
   saveLocation:function(){//保存定位
     var _location = this.data.latitude + "#" + this.data.longitude;
@@ -232,12 +313,72 @@ Page({
   getStorageLocation: function () {//从缓存中获取定位
     return wx.getStorageSync("location");
   },
-  naviTo:function(e){
+  naviTo:function(e){//底部banner跳转
     var _url = e.currentTarget.dataset.naviurl;
-    this.checkUserInfoAuth(function(_url){
-      wx.redirectTo({
-        url: _url,
+    if(_url){
+      var _this = this;
+      this.setData({
+        jumpUrl:_url
       });
-    }(_url));
+      this.checkUserInfoAuth(function (_url) {
+        wx.redirectTo({
+          url: _this.data.jumpUrl,
+        });
+      });
+    }
+  },
+  onPullDownRefresh: function () {
+    console.log("onPullDownRefresh");
+    wx.showNavigationBarLoading();
+    this.refresh();
+    setTimeout(function () { 
+      wx.hideNavigationBarLoading(); 
+      wx.stopPullDownRefresh(); 
+    }, 2000);
+  },
+  refresh:function(){
+    wx.showToast({
+      title: '刷新中',
+      icon: 'loading',
+      duration: 3000
+    });
+
+    var _this = this;
+    var _location = this.getStorageLocation();
+    if (_location) {//保存的有定位获取店铺
+      var _locArr = _location.split("#");
+      this.setData({
+        latitude: _locArr[0],
+        longitude: _locArr[1]
+      });
+      this.initData(function(){
+        setTimeout(function () {
+          wx.showToast({
+            title: '刷新成功',
+            icon: 'success',
+            duration: 2000
+          })
+        }, 3000)
+      });
+    } else {//未保存定位重新获取定位
+      wx.getLocation({
+        type: 'wgs84',
+        success: function (res) {
+          _this.setData({
+            latitude: res.latitude,
+            longitude: res.longitude
+          });
+          _this.initData(function(){
+            setTimeout(function () {
+              wx.showToast({
+                title: '刷新成功',
+                icon: 'success',
+                duration: 2000
+              })
+            }, 3000)
+          });
+        }
+      });
+    }    
   }
 });

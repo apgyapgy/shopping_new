@@ -33,19 +33,32 @@ App({
         }
       }
     });
-
+    this.authUserInfo();
+  },
+  authUserInfo:function(){
+    var _this = this;
+    wx.getUserInfo({
+      success:function(res){
+        console.log("获取用户信息成功:",res);
+        _this.globalData.userInfoAuth = true;
+      },
+      fail: function (res) {
+        console.log("获取用户信息失败:", res);
+        _this.globalData.userInfoAuth = false;
+      }
+    });
     // 获取用户信息
-    wx.getSetting({
+    /*wx.getSetting({
       success: res => {
-        console.log("getSetting:",res);
+        //console.log("getSetting:", res);
         if (res.authSetting['scope.userInfo']) {
+          console.log("app.js用户授权用户信息");
           _this.globalData.userInfoAuth = true;
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               _this.globalData.userInfo = res.userInfo;
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -53,20 +66,51 @@ App({
               }
             }
           })
-        }else{
+        } else {
+          console.log("app.js用户拒绝授权用户信息");
+          _this.globalData.userInfoAuth = false;
           wx.authorize({
-            scope:'scope.userInfo',
-            success:function(re){
+            scope: 'scope.userInfo',
+            success: function (re) {
               _this.globalData.userInfoAuth = true;
-              console.log("authorize success:",re);
+              console.log("authorize success:", re);
             },
-            fail:function(re){
+            fail: function (re) {
+              console.log("授权用户信息失败");
               _this.globalData.userInfoAuth = false;
+              wx.showModal({
+                title: '提示',
+                content: '到柜需要获取您的用户信息方能正常使用',
+                showCancel:false,
+                success: function (res) {
+                  wx.openSetting({
+                    success: function (data) {
+                      if (data) {
+                        if (data.authSetting["scope.userInfo"] == true) {
+                          _this.globalData.userInfoAuth = true;
+                          wx.getUserInfo({
+                            withCredentials: false,
+                            success: function (res) {
+                              _this.globalData.userInfo = res.userInfo;
+                            },
+                            fail: function () {
+                              console.info("3授权失败返回数据");
+                            }
+                          });
+                        }
+                      }
+                    },
+                    fail: function () {
+                      console.info("设置失败返回数据");
+                    }
+                  });   
+                }
+              });              
             }
           });
         }
       }
-    });
+    });*/
   },
   globalData: {
     userInfo: null,

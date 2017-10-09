@@ -8,7 +8,9 @@
 <view wx:if="{{couponsList.length>0}}" class="coupon-body">
   <view class="coupon">
     <view class="coupon-left">
-      <view class="select"></view>
+      <view class="select">
+        <image src="../../image/success.png"/>
+      </view>
       <view class="coupon-price">￥20</view>
       <view class='coupon-condition'>满100元使用</view>
       <view class="coupon-vld">有效期到:2017-12-30</view>
@@ -21,7 +23,9 @@
   </view>
   <view class="coupon">
     <view class="coupon-left">
-      <view class="select active"></view>
+      <view class="select active">
+        <image src="../../image/success.png"/>
+      </view>
       <view class="coupon-price">￥20</view>
       <view class='coupon-condition'>满100元使用</view>
       <view class="coupon-vld">有效期到:2017-12-30</view>

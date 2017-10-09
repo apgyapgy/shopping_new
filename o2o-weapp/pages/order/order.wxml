@@ -44,8 +44,8 @@
     </view>
 
     <view wx:if="{{activeTab==1||activeTab==3}}" class='order-pay'>
-      <button wx:if="{{activeTab==1}}" class='pay'>立即付款</button>
-      <button wx:elif="{{activeTab==3}}" class='open-box'>开箱</button>
+      <button wx:if="{{activeTab==1}}" bindtap="showPayModel" class='pay'>立即付款</button>
+      <button wx:elif="{{activeTab==3}}" bindtap="openBox" class='open-box'>开箱</button>
     </view>
   </view>
   <view class='shop-order clearfix'>
@@ -82,14 +82,29 @@
     </view>
 
     <view hidden="{{activeTab==2||activeTab==4}}" class='order-pay'>
-      <button hidden="{{activeTab!=1}}" class='pay'>立即付款</button>
-      <button hidden="{{activeTab!=3}}" class='open-box'>开箱</button>
+      <button hidden="{{activeTab!=1}}" bindtap="showPayModel" class='pay'>立即付款</button>
+      <button hidden="{{activeTab!=3}}" bindtap="showPayModel" class='open-box'>开箱</button>
     </view>
   </view>
 </view>
 <view wx:else class="no-order">
   <text>你还没有相关订单哦</text>
 </view>
+
+<view hidden="{{!showPayModel}}" class='pay-info-wrapper'>
+  <view class="pay-info">
+    <view bindtap="closePayModel" class='close'>X</view>
+    <view class='pay-info-title'>支付</view>
+    <view class='pay-info-body'>
+      <view class='pay-info-company'>上海富友电子商务有限公司</view>
+      <view class='pay-info-money'>500</view>
+    </view>
+    <view class='pay-info-pay'>
+      <text bindtap="topay" class='topay'>确认支付</text>
+    </view>
+  </view>
+</view>
+
 <!--footer-->
 <import src="../footer/footer.wxml"/>
 <template is="footer" data="{{tabbarArray}}"></template>

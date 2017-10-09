@@ -46,7 +46,9 @@
     <scroll-view class="scrollview"  scroll-y >
       <view class='goods clearfix'>
         <view wx:for="{{carList}}" wx:for-index="idx" wx:key="idx" class='good'>
-          <view catchtap="selectGood" class='select-icon'></view>
+          <view catchtap="selectGood" class='select-icon active'>
+            <image src="../../image/success.png"/>
+          </view>
           <image src="{{item.imgurl}}"/>
           <view class='good-info'>
             <text class='good-name'>{{item.name}}</text>
@@ -63,7 +65,9 @@
 
     <view class='car-info-head'>
       <view class='select' catchtap="selectAll">
-        <view class='select-icon'></view>
+        <view class='select-icon'>
+          <image src="../../image/success.png"/>
+        </view>
         <view class='has-selected'>全选<text>(已选3件)</text></view>
       </view>
       <view class='clear-car'>

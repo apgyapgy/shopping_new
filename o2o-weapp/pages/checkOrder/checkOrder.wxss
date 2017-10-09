@@ -39,7 +39,7 @@ page{
   margin-top:28rpx;
   margin-left:30rpx;
   margin-right:12rpx;
-  width:36rpx;
+  width:30rpx;
   height:30rpx;
 }
 .order-head .order-area text{
@@ -230,17 +230,162 @@ page{
 .order-coupon{
   position:fixed;
   left:0;
+  padding-top:20rpx;
   bottom:86rpx;
   width:750rpx;
   height:787rpx;
   background:rgba(0,0,0,0.7);
-  padding-bottom:20rpx;
 }
 .order-coupon .coupon{
-  margin-top:20rpx;
+  margin-bottom:20rpx;
   margin-left:30rpx;
   width:690rpx;
   height:206rpx;
   background:#fff;
   border-radius:10rpx;
+}
+/*.order-coupon .coupon:first-of-type{
+  margin-top:20rpx;
+}*/
+.coupon .coupon-left{
+  position:relative;
+  float:left;
+  width:330rpx;
+  height:208rpx;
+}
+.coupon .coupon-left .select{
+  position:absolute;
+  top:14rpx;
+  left:12rpx;
+  width:36rpx;
+  height:36rpx;
+  border-radius:50%;
+  border:2rpx solid #26b1fe;
+}
+.coupon .coupon-left .select.active{
+  background:#26b1fe;
+}
+.coupon .coupon-left .select image{
+  display:none;
+  float:left;
+  margin:6rpx auto 0;
+  width:30rpx;
+  height:26rpx;
+}
+.coupon .coupon-left .select.active image{
+  display:block;
+}
+.coupon .coupon-right{
+  float:left;
+  width:360rpx;
+  height:208rpx;
+  overflow-y:hidden;
+}
+.coupon-price{
+  margin-left:75rpx;
+  margin-top:36rpx;
+  height:58rpx;
+  line-height:58rpx;
+  font-size:40rpx;
+  color:#fa3e2d;
+}
+.coupon-condition{
+  margin-left:48rpx;
+  height:38rpx;
+  line-height:38rpx;
+  font-size:24rpx;
+  color:#666;
+}
+.coupon-vld{
+  margin-top:10rpx;
+  margin-left:18rpx;
+  height:62rpx;
+  line-height:62rpx;
+  color:#999;
+  font-size:20rpx;
+}
+.coupon-name{
+  margin-top:24rpx;
+  height:44rpx;
+  line-height:44rpx;
+  font-size:30rpx;
+  font-weight:bold;
+  color:#666;
+}
+.coupon-info{
+  height:30rpx;
+  line-height:30rpx;
+  font-size:24rpx;
+  color:#666;
+}
+/*点击去支付的弹窗*/
+.pay-info-wrapper{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.1);
+}
+.pay-info-wrapper .pay-info{
+  position:relative;
+  margin:400rpx auto 0;
+  width:500rpx;
+  height:300rpx;
+  background:#fff;
+}
+.pay-info-wrapper .pay-info .close{
+  position:absolute;
+  top:10rpx;
+  left:20rpx;
+  width:36rpx;
+  height:36rpx;
+  border-radius:50%;
+  border:2rpx solid #676767;
+  font-size:26rpx;
+  text-align:center;
+  line-height:36rpx;
+  color:#676767;
+}
+.pay-info-title{
+  width:100%;
+  height:60rpx;
+  line-height:60rpx;
+  font-size:30rpx;
+  color:#333;
+  text-align:center;
+  border-bottom:1rpx solid #bcbcbc;
+}
+.pay-info-body{
+  width:100%;
+  height:140rpx;
+  border-bottom:1rpx solid #bcbcbc;
+}
+.pay-info-body .pay-info-company,
+.pay-info-body .pay-info-money{
+  width:100%;
+  height:70rpx;
+  line-height:70rpx;
+  font-size:30rpx;
+  text-align:center;
+}
+.pay-info-body .pay-info-money{
+  line-height:60rpx;
+}
+.pay-info-pay{
+  width:100%;
+  height:100rpx;
+}
+.pay-info-pay .pay{
+  display:block;
+  margin:20rpx auto;
+  width:180rpx;
+  height:50rpx;
+  background:#26b1fe;
+  line-height:50rpx;
+  font-size:30rpx;
+  color:#fff;
+  border-radius:5rpx;
+  text-align:center;
 }

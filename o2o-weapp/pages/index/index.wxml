@@ -1,6 +1,6 @@
 <!--index.wxml-->
 
-  <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+  <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true">
     <!--banner-->
     <swiper class="banner" indicator-dots="{{indicatorDots}}"
       autoplay="{{autoplay}}" >
@@ -42,6 +42,35 @@
           <text class='enter'>立即进入 ></text>
         </view>
       </view>
+
+      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
+        <view class='shop-left'>
+          <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>{{item.shopNm}}</view>
+          </view>
+          <view class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
+          <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
+      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
+        <view class='shop-left'>
+          <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
+        </view>
+        <view class='shop-right'>
+          <view class='shop-top'>
+            <view class='brand'>品牌</view>
+            <view class='name'>{{item.shopNm}}</view>
+          </view>
+          <view class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
+          <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
+          <text class='enter'>立即进入 ></text>
+        </view>
+      </view>
      
     </view>
 
@@ -51,12 +80,13 @@
       <text>该小区附近暂无商铺(收件宝快递柜）</text>
       <text>请尝试切换其他小区</text>
     </view>
+    
+    <view class='padding-100'></view>
   </scroll-view>
     <!--返回顶部-->
     <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 
     <!--footer模板-->
-    <view class='padding-100'></view>
     <view class='footer'>
       <view bindtap="naviTo" wx:for="{{tabbarArray}}" wx:key="{{item.id}}" class="navi {{item.cls}} {{item.active==true?'active':''}}" data-naviUrl="{{item.url}}" hover-class="navigator-hover">
         <text wx:if="{{item.shopCartNum}}" class="shopcart-num">{{item.shopCartNum}}</text>

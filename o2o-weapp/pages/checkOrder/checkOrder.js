@@ -7,7 +7,22 @@ Page({
   data: {
     scrollTop: 0,
     couponShowFlag:false,
-    isPayAble:true
+    couponsList:[
+      {
+        select:false
+      },
+      {
+        select: true
+      },
+      {
+        select: false
+      }
+    ],
+    isPayAble:true,
+    showPayModel:false,
+    payPrice:180,
+    origiPrice:200,
+    couponPrice:20  
   },
 
   /**
@@ -27,6 +42,33 @@ Page({
     this.setData({
       couponShowFlag:false,
       isPayAble:true
+    });
+  },
+  selectCoupon:function(e){//选择优惠券
+    var _index = e.currentTarget.dataset.idx;
+    var _couponList = this.data.couponsList;
+    for(var key in _couponList){
+      if(_index == key){
+        _couponList[key]["select"] = !_couponList[key]["select"];
+      }else{
+        _couponList[key]["select"] = false;
+      }
+    }
+    this.setData({
+      couponsList:_couponList
+    });
+  },
+  topay:function(){//点击去结算
+    console.log("to pay");
+  },
+  showPayModel:function(){
+    this.setData({
+      showPayModel: true
+    });
+  },
+  closePayModel:function(){
+    this.setData({
+      showPayModel:false
     });
   },
   /**
@@ -54,27 +96,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
   
   }
 })

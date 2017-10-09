@@ -2,7 +2,7 @@
 <template name="footer">
   <view class='padding-100'></view>
   <view class='footer'>
-      <navigator wx:for="{{tabbarArray}}" wx:key="{{item.id}}" class="{{item.cls}} {{item.active==true?'active':''}}" url="{{item.url}}" hover-class="navigator-hover">
+      <navigator wx:for="{{tabbarArray}}" wx:key="{{item.id}}" class="{{item.cls}} {{item.active==true?'active':''}}" url="{{item.url}}" open-type="redirect" hover-class="navigator-hover">
         <text wx:if="{{item.shopCartNum}}" class="shopcart-num">{{item.shopCartNum}}</text>
         <image src="{{item.active==true?item.active_src:item.src}}"/>
         <text>{{item.text}}</text>

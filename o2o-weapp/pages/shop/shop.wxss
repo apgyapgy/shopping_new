@@ -264,6 +264,24 @@
   border-radius:50%;
   border:2rpx solid #26b1fe;
 }
+.select-icon image{
+  display:none;
+  float:left;
+  margin-top:6rpx;
+  margin-left:5rpx;
+  width:30rpx;
+  height:26rpx;
+  border:0;
+}
+.select .select-icon image{
+  margin-left:3rpx;
+}
+.select-icon.active image{
+  display:block;
+}
+.select-icon.active{
+  background:#26b1fe;
+}
 .good .select-icon{
   margin-left:26rpx;
   margin-top:77rpx;

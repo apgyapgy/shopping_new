@@ -64,20 +64,18 @@ page{
   border-radius:50%;
   border:2rpx solid #26b1fe;
 }
-.coupon .coupon-left .select image{
-  margin-top:8rpx;
-  margin-left:10rpx;
-  width:20rpx;
-  height:16rpx;
-}
-.coupon .coupon-left .select icon{
-  float:left;
-  width:36rpx;
-  height:36rpx;
-  color:#26b1fe;
-}
 .coupon .coupon-left .select.active{
   background:#26b1fe;
+}
+.coupon .coupon-left .select image{
+  display:none;
+  float:left;
+  margin:6rpx auto 0;
+  width:30rpx;
+  height:26rpx;
+}
+.coupon .coupon-left .select.active image{
+  display:block;
 }
 .coupon .coupon-right{
   float:left;

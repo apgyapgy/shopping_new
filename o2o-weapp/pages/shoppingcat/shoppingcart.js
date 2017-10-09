@@ -123,7 +123,7 @@ Page({
     }
   },
   clearInvalid:function(){//清空失效商品
-
+    console.log("清空失效商品");
   },
   jumpShop:function(e){//点击店铺或商品跳到店铺
     var _shopid = e.currentTarget.dataset.shopid;

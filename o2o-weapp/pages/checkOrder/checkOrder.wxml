@@ -45,11 +45,22 @@
 </scroll-view>
 
 <!--优惠券-->
-<scroll-view hidden="{{!couponShowFlag}}" class="order-coupon clearfix" scroll-y >
-  <view class='coupon'></view>
-  <view class='coupon'></view>
-  <view class='coupon'></view>
-  <view class='coupon'></view>
+<scroll-view catchtap="hideCoupon" hidden="{{!couponShowFlag}}" class="order-coupon clearfix" scroll-y >
+  <view wx:for="{{couponsList}}" wx:for-index="id" wx:key="{{id}}" class='coupon'>
+    <view class="coupon-left">
+      <view catchtap="selectCoupon" class="select {{item.select?'active':''}}" data-idx="{{id}}">
+        <image src="../../image/success.png"/>
+      </view>
+      <view class="coupon-price">￥{{couponPrice}}</view>
+      <view class='coupon-condition'>满100元使用</view>
+      <view class="coupon-vld">有效期到:2017-12-30</view>
+    </view>
+    <view class="coupon-right">
+      <view class='coupon-name'>富友商圈优惠券</view>
+      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
+    </view>
+  </view>
 </scroll-view>
 <!--去结算-->
 <view class='car-bar'>
@@ -57,8 +68,22 @@
     <image src="../../image/shop-car.png"/>
   </view>
   <view class='car-money'>
-    <text class='car-total-money'>合计金额:180元</text>
+    <text class='car-total-money'>合计金额:{{payPrice}}元</text>
     <text class='delivery-money'>配送费:0元</text>
   </view>
-  <view catchtap="topay" class="to-pay {{isPayAble?'active':''}}">去结算</view>
+  <view catchtap="showPayModel" class="to-pay {{isPayAble?'active':''}}">去结算</view>
+</view>
+
+<view hidden="{{!showPayModel}}" class='pay-info-wrapper'>
+  <view class="pay-info">
+    <view bindtap="closePayModel" class='close'>X</view>
+    <view class='pay-info-title'>支付</view>
+    <view class='pay-info-body'>
+      <view class='pay-info-company'>上海富友电子商务有限公司</view>
+      <view class='pay-info-money'>500</view>
+    </view>
+    <view class='pay-info-pay'>
+      <text bindtap="topay" class='pay'>确认支付</text>
+    </view>
+  </view>
 </view>
