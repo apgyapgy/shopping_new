@@ -19,8 +19,8 @@
 }
 .inputView{
   width:100%;
-   float:left;
-   border:1px solid #ccc;
+  float:left;
+  border:1px solid #ccc;
   height:40px;
   border-radius: 5px;
   margin-bottom:15px; 
@@ -46,9 +46,18 @@
   background:#9ed99d;
 }
 .mobile,.inputYzm{
+  width:440rpx;
   height:40px;
   line-height: 40px;
   padding-left:5px; 
+  font-size:30rpx;
+  font-weight:normal;
+  font-family:"microsoft yahei";
+}
+.place{
+  font-size:30rpx;
+  line-height:40rpx;
+  font-family:"microsoft yahei";
 }
 .confirm{
   width: 100%;

@@ -33,7 +33,6 @@ var getAjax = function(options){
       title: '加载中',
     })
   }
-  console.log("options:",options);
   if(options.token){
     var _header  = {
       'content-type': 'application/json',

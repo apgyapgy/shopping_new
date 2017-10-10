@@ -1,6 +1,6 @@
 <!--index.wxml-->
 
-  <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true">
+  <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true" bindscrolltoupper="refresh">
     <!--banner-->
     <swiper class="banner" indicator-dots="{{indicatorDots}}"
       autoplay="{{autoplay}}" >
@@ -41,37 +41,7 @@
           <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
           <text class='enter'>立即进入 ></text>
         </view>
-      </view>
-
-      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
-        <view class='shop-left'>
-          <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
-        </view>
-        <view class='shop-right'>
-          <view class='shop-top'>
-            <view class='brand'>品牌</view>
-            <view class='name'>{{item.shopNm}}</view>
-          </view>
-          <view class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
-          <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
-          <text class='enter'>立即进入 ></text>
-        </view>
-      </view>
-      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
-        <view class='shop-left'>
-          <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
-        </view>
-        <view class='shop-right'>
-          <view class='shop-top'>
-            <view class='brand'>品牌</view>
-            <view class='name'>{{item.shopNm}}</view>
-          </view>
-          <view class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
-          <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
-          <text class='enter'>立即进入 ></text>
-        </view>
-      </view>
-     
+      </view>     
     </view>
 
     <!--暂无商铺-->

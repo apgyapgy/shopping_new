@@ -1,13 +1,13 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/login/login",
+    "pages/shoppingcat/shoppingcart",
     "pages/order/order",
     "pages/checkOrder/checkOrder",
-    "pages/shoppingcat/shoppingcart",
     "pages/shop/shop",
     "pages/template/tabbar",
     "pages/logs/logs",
-    "pages/login/login",
     "pages/mycoupons/mycoupons",
     "pages/footer/footer",
     "pages/my/my"

@@ -131,43 +131,64 @@ Page({
   },
   initData: function (fn) {//初始化页面数据
     var _this = this;
-    console.log("globalData:",app.globalData);
-    common.getAjax({
-      url: 'wx_we/home',
-      params: {
-        bmapLng: _this.data.longitude,
-        bmapLat: _this.data.latitude
-      },
-      token:app.globalData.token,
-      success: function (res) {
-        console.log("首页:", res);
-        if (res.data.code == 200) {
-          var _data = res.data.data;
-          _this.setData({
-            bannerImgs: _data.banners,
-            shopList: _data.shops,
-            location: _data.location
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code
+            },
+            success: function (re) {
+              if (re.data.code == 200) {
+                common.getAjax({
+                  url: 'wx_we/home',
+                  params: {
+                    bmapLng: _this.data.longitude,
+                    bmapLat: _this.data.latitude
+                  },
+                  token: re.data.data.token,
+                  success: function (res) {
+                    console.log("首页:", res);
+                    if (res.data.code == 200) {
+                      var _data = res.data.data;
+                      _this.setData({
+                        bannerImgs: _data.banners,
+                        shopList: _data.shops,
+                        location: _data.location
+                      });
+                    } else if (res.data.code == 40201) {
+                      _this.setData({
+                        bannerImgs: ['../../image/banner.png'],
+                        shopList: [],
+                        location: {}
+                      });
+                      _this.showModal(res.data.desc);
+                    } else {
+                      _this.setData({
+                        bannerImgs: ['../../image/banner.png'],
+                        shopList: [],
+                        location: {}
+                      });
+                      _this.showModal(res.data.desc);
+                    }
+                    if (fn) {
+                      fn();
+                    }
+                  }
+                });
+              }else if(re.data.code == 40110){
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
           });
-        } else if(res.data.code == 40201){
-          _this.setData({
-            bannerImgs: ['../../image/banner.png'],
-            shopList: [],
-            location: {}
-          });
-          _this.showModal(res.data.desc);
-        }else{
-          _this.setData({
-            bannerImgs: ['../../image/banner.png'],
-            shopList: [],
-            location: {}
-          });
-          _this.showModal(res.data.desc);
-        }
-        if(fn){
-          fn();
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
         }
       }
     });
+    
   },
   chooseLocation: function () {//弹出地图选择定位
     var _this = this;
@@ -190,9 +211,7 @@ Page({
     }
   },
   checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
-    console.log("userInfoAuth:",app.globalData.userInfoAuth);
     if (!app.globalData.userInfoAuth){//未授权获取用户信息
-      console.log("checkUserInfoAuth未授权");
       wx.getUserInfo({
         success: function (res) {
           console.log("获取用户信息成功:", res);
@@ -327,14 +346,8 @@ Page({
       });
     }
   },
-  onPullDownRefresh: function () {
-    console.log("onPullDownRefresh");
-    wx.showNavigationBarLoading();
-    this.refresh();
-    setTimeout(function () { 
-      wx.hideNavigationBarLoading(); 
-      wx.stopPullDownRefresh(); 
-    }, 2000);
+  refresh: function () {//下拉刷新
+    this.onLoad();
   },
   refresh:function(){
     wx.showToast({

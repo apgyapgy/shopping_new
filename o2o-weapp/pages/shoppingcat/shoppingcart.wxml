@@ -2,139 +2,42 @@
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class='car-body'>
 
-    <view class='car-area clearfix'>
-      <view class='area-name active'>
+    <view wx:for="{{shoppingCartList}}" wx:for-index="idx" wx:key="idx" class='car-area clearfix'>
+      <view class="area-name {{item.isActive?'active':''}}">
         <view class='area-name-wrap'>
-          <image src="../../image/area_active.png"/>
-          <text>浦东新区-508小区</text>
+          <image src="{{item.isActive?'../../image/area_active.png':'../../image/area.png'}}"/>
+          <text>{{item.area}}</text>
         </view>
       </view>
-      <view bindtap="jumpShop" data-shopid="111" data-active="active" class='car-order active clearfix'>
+      <view wx:for="{{item.shops}}" wx:for-item="shop" wx:for-index="shopidx" wx:key="shopidx"  bindtap="jumpShop" data-shopid="{{shop.shopId}}" data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
         <view class='car-name'>
           <image src="../../image/nearby.png"/>
-          <text class='s-name'>XXX商户</text>
+          <text class='s-name'>{{shop.name}}</text>
           <text class='gt'>></text>
         </view>
         <view class='car-goods-list clearfix'>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
+
+          <view wx:for="{{shop.goodsList}}"
+                wx:for-item="good" wx:for-index="goodidx" 
+                wx:key="goodidx" class="car-container {{good.isTouchMove ? 'touch-move-active' : ''}}"
+                data-index="{{idx+'#'+shopidx+'#'+goodidx}}" 
+                bindtouchstart="touchstart" bindtouchmove="touchmove" >
+            <view class='car-good'>
+              <image src="{{good.img}}"/>
+              <text class="car-good-name">{{good.name}}</text>
+              <view class='car-good-info'>
+                <text class='car-good-price'>￥{{good.price}}</text>
+                <text class='car-good-num'>X{{good.num}}</text>
+              </view>
             </view>
+            <view class="del" catchtap="del" data-index="{{index}}">删除</view>
           </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
+
         </view>
       </view>
+
     </view>
 
-    <view class='car-area clearfix'>
-      <view class='area-name'>
-        <view class='area-name-wrap'>
-          <image src="../../image/area.png"/>
-          <text>虹口区-中山北一路865弄小区</text>
-        </view>
-      </view>
-      <view bindtap="jumpShop" data-shopid="222" class='car-order clearfix'>
-        <view class='car-name'>
-          <image src="../../image/nearby.png"/>
-          <text class='s-name'>XXX商户</text>
-          <text class='gt'>></text>
-        </view>
-        <view class='car-goods-list clearfix'>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class='car-area clearfix'>
-      <view class='area-name'>
-        <view class='area-name-wrap'>
-          <image src="../../image/area.png"/>
-          <text>虹口区-中山北一路865弄小区</text>
-        </view>
-      </view>
-      <view bindtap="jumpShop" data-shopid="333" class='car-order clearfix'>
-        <view class='car-name'>
-          <image src="../../image/nearby.png"/>
-          <text class='s-name'>XXX商户</text>
-          <text class='gt'>></text>
-        </view>
-        <view class='car-goods-list clearfix'>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-          <view class='car-good'>
-            <image src="../../image/good.png"/>
-            <text class="car-good-name">上海本地蕃茄500g</text>
-            <view class='car-good-info'>
-              <text class='car-good-price'>￥1.8</text>
-              <text class='car-good-num'>X2</text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
     <view class='clear-invalid'>
       <button bindtap="clearInvalid">清空失效商品</button>
     </view>
