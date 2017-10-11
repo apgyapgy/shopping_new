@@ -11,10 +11,10 @@
     </view>
     <view class='goods clearfix'>
       <view wx:for="{{goodsList}}" wx:for-index="idx" wx:key="idx" class='good'>
-        <image src="{{item.imgurl}}"/>
+        <image src="{{item.goodsImgLogo}}"/>
         <view class='good-info'>
-          <text class='good-name'>{{item.name}}</text>
-          <text class='good-price'>￥{{item.price}}</text>
+          <text class='good-name'>{{item.goodsNm}}</text>
+          <text class='good-price'>￥{{item.goodsAmt/100}}</text>
         </view>
         <view class='add-sub'>
           <image hidden="{{item.num<=0}}" bindtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>

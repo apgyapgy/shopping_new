@@ -209,7 +209,9 @@ Page({
       params: {
         mobile: _mobile,
         smsCode: _code,
-        code: __code
+        code: __code,
+        bmapLng: app.globalData.longitude,
+        bmapLat: app.globalData.latitude 
       },
       success: function (re) {
         console.log("登录认证绑定success:", re);

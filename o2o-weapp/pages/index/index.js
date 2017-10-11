@@ -55,7 +55,6 @@ Page({
     jumpUrl:""
   }, 
   onLoad: function () {
-    console.log("index onload");
     var _this = this;
     wx.login({
       success: ress => {
@@ -64,11 +63,14 @@ Page({
           wx.request({
             url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
             data: {
-              code: ress.code
+              code: ress.code,
+              bmapLng: app.globalData.longitude,
+              bmapLat: app.globalData.latitude 
             },
             success: function (re) {
               if (re.data.code == 200) {
-                console.log("200")
+                app.globalData.loginId = re.data.data.loginId;
+                app.globalData.hostId = re.data.data.hostId;
                 var _location = _this.getStorageLocation();
                 if (_location) {//保存的有定位获取店铺
                   var _locArr = _location.split("#");
@@ -104,19 +106,7 @@ Page({
                         });
                       }
                     }
-                  });
-                  /*_this.checkLocationAuth(function(){
-                    wx.getLocation({
-                      type: 'wgs84',
-                      success: function (res) {
-                        _this.setData({
-                          latitude: res.latitude,
-                          longitude: res.longitude
-                        });
-                        _this.initData();
-                      }
-                    });
-                  }); */                 
+                  });     
                 }   
               } else if (re.data.code == 40110) {
                 wx.redirectTo({ url: "/pages/login/login" });
@@ -176,7 +166,6 @@ Page({
   },
   initData: function (fn) {//初始化页面数据
     var _this = this;
-    console.log("initData")
     wx.login({
       success: ress => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -184,10 +173,14 @@ Page({
           wx.request({
             url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
             data: {
-              code: ress.code
+              code: ress.code,
+              bmapLng: app.globalData.longitude,
+              bmapLat:app.globalData.latitude 
             },
             success: function (re) {
               if (re.data.code == 200) {
+                app.globalData.loginId = re.data.data.loginId;
+                app.globalData.hostId = re.data.data.hostId;
                 common.getAjax({
                   url: 'wx_we/home',
                   params: {

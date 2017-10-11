@@ -2,6 +2,8 @@
 var common = require('js/common.js');
 App({
   onLaunch: function () {
+    //wx.setStorageSync("location","31.230286683682#121.55711567154");
+
     /*// 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -34,7 +36,78 @@ App({
         }
       }
     });*/
+    //this.authUserInfo();
+  },
+  onShow:function(){
     this.authUserInfo();
+  },
+  checkUserInfoAuth: function (fn) {
+    //判断用户是否授权获取用户信息,未授权点任何位置跳转授权页面
+    var _this = this;
+    wx.showModal({
+      title: '提示',
+      content: '到柜需要获取您的"用户信息"授权方能正常使用',
+      showCancel: false,
+      success: function (res) {
+        wx.openSetting({
+          success: function (data) {
+            if (data) {
+              if (data.authSetting["scope.userInfo"] == true) {
+                if(fn){
+                  fn();
+                }
+              } else {
+                _this.globalData.userInfoAuth = false;
+                _this.checkUserInfoAuth(fn);
+              }
+            }
+          },
+          fail: function () {
+            console.info("设置失败返回数据");
+            _this.globalData.userInfoAuth = false;
+          }
+        });
+      }
+    });
+  },
+  checkLocationAuth:function (fun) {//判断是否授权地理位置
+    var _this = this;
+    //判断用户是否授权获取地理,未授权点任何位置跳转授权页面
+    wx.showModal({
+      title: '提示',
+      content: '到柜需要获取您的"地理位置"授权方能正常使用',
+      showCancel: false,
+      success: function (res) {
+        wx.openSetting({
+          success: function (data) {
+            console.log("openSetting:", data);
+            if (data) {
+              //判断是否授权获取用户信息
+              if (data.authSetting["scope.userInfo"] == true) {
+                if (_this.globalData.userInfoAuth == false) {
+                  _this.globalData.userInfoAuth = true;
+                }
+              } else {
+                if (_this.globalData.userInfoAuth == true) {
+                  _this.globalData.userInfoAuth = false;
+                }
+              }
+              //判断是否授权地理位置
+              if (data.authSetting["scope.userLocation"] == true) {
+                if (fun) {
+                  fun();
+                }
+              }else{
+                _this.checkLocationAuth(fun);
+              }
+            }
+          },
+          fail: function (res) {
+            console.info("设置失败返回数据", res);
+          }
+        });
+      }
+    });
   },
   authUserInfo:function(){
     var _this = this;
@@ -42,17 +115,51 @@ App({
       success:function(res){
         console.log("获取用户信息成功:",res);
         _this.globalData.userInfoAuth = true;
+        _this.getLocation();
       },
       fail: function (res) {
         console.log("获取用户信息失败:", res);
         _this.globalData.userInfoAuth = false;
+        if (res.errMsg == "getUserInfo:fail auth deny"){
+          _this.checkUserInfoAuth(function(){
+              _this.authUserInfo();
+            }
+          );
+        }
       }
     });
+  },
+  getLocation:function(){
+    var _this = this;
+    console.log("in getLocation");
+    wx.getLocation({
+      type: 'wgs84',
+      success: function (res) {
+        console.log("getLocation success:",res);
+        _this.globalData.latitude = res.latitude;
+        _this.globalData.longitude = res.longitude;
+      },
+      fail:function(res){
+        console.log("getLocation fail:",res);
+        if (res.errMsg == "getLocation:fail auth deny"){
+          _this.checkLocationAuth(function(){
+            _this.getLocation();
+          });
+        }
+      },
+      complete:function(res){
+        console.log("getLocation complete:",res);
+      }
+    })
   },
   globalData: {
     userInfo: null,
     code:'',
     userInfoAuth:false,
-    token:''
+    token:'',
+    loginId:'',
+    hostId:'',
+    latitude:'',
+    longitude:''
   }
 })
