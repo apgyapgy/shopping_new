@@ -6,7 +6,22 @@ Page({
    */
   data: {
     activeTab:1,
-    couponsList:[1]
+    couponsList:[
+      {
+        id:1,
+        name:'富友商圈优惠券',
+        couponMin:10000,
+        endTime:'2017-12-30',
+        coupon:2000
+      }, 
+      {
+        id: 2,
+        name: '富友商圈优惠券',
+        couponMin: 10,
+        endTime: '2018-12-30',
+        coupon: 200
+      }
+    ]
   },
 
   /**

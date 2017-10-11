@@ -6,36 +6,20 @@
 </view>
 <view class="padding-20"></view>
 <view wx:if="{{couponsList.length>0}}" class="coupon-body">
-  <view class="coupon">
+
+  <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" class="coupon">
     <view class="coupon-left">
-      <view class="select">
-        <image src="../../image/success.png"/>
-      </view>
-      <view class="coupon-price">￥20</view>
-      <view class='coupon-condition'>满100元使用</view>
-      <view class="coupon-vld">有效期到:2017-12-30</view>
+      <view class="coupon-price">￥{{item.coupon/100}}</view>
+      <view class='coupon-condition'>满{{item.couponMin/100}}元使用</view>
+      <view class="coupon-vld">有效期到:{{item.endTime}}</view>
     </view>
     <view class="coupon-right">
-      <view class='coupon-name'>富友商圈优惠券</view>
+      <view class='coupon-name'>{{item.name}}</view>
       <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
       <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
     </view>
   </view>
-  <view class="coupon">
-    <view class="coupon-left">
-      <view class="select active">
-        <image src="../../image/success.png"/>
-      </view>
-      <view class="coupon-price">￥20</view>
-      <view class='coupon-condition'>满100元使用</view>
-      <view class="coupon-vld">有效期到:2017-12-30</view>
-    </view>
-    <view class="coupon-right">
-      <view class='coupon-name'>富友商圈优惠券</view>
-      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
-      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
-    </view>
-  </view>
+
 </view>
 <view wx:else class="no-coupons">
   <text>暂无优惠券</text>

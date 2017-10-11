@@ -55,34 +55,83 @@ Page({
     jumpUrl:""
   }, 
   onLoad: function () {
+    console.log("index onload");
     var _this = this;
-    var _location = this.getStorageLocation();
-    if (_location) {//保存的有定位获取店铺
-      var _locArr = _location.split("#");
-      this.setData({
-        latitude: _locArr[0],
-        longitude: _locArr[1]
-      });
-      this.initData();
-    } else {//未保存定位重新获取定位
-      wx.getLocation({
-        type: 'wgs84',
-        success: function (res) {
-          _this.setData({
-            latitude: res.latitude,
-            longitude: res.longitude
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code
+            },
+            success: function (re) {
+              if (re.data.code == 200) {
+                console.log("200")
+                var _location = _this.getStorageLocation();
+                if (_location) {//保存的有定位获取店铺
+                  var _locArr = _location.split("#");
+                  _this.setData({
+                    latitude: _locArr[0],
+                    longitude: _locArr[1]
+                  });
+                  _this.initData();
+                } else {//未保存定位重新获取定位
+                  wx.getLocation({
+                    type: 'wgs84',
+                    success: function (res) {
+                      _this.setData({
+                        latitude: res.latitude,
+                        longitude: res.longitude
+                      });
+                      _this.initData();
+                    },
+                    fail:function(res){
+                      console.log("location fail:",res);
+                      if (res.errMsg == "getLocation:fail auth deny"){
+                        _this.checkLocationAuth(function () {
+                          wx.getLocation({
+                            type: 'wgs84',
+                            success: function (res) {
+                              _this.setData({
+                                latitude: res.latitude,
+                                longitude: res.longitude
+                              });
+                              _this.initData();
+                            }
+                          });
+                        });
+                      }
+                    }
+                  });
+                  /*_this.checkLocationAuth(function(){
+                    wx.getLocation({
+                      type: 'wgs84',
+                      success: function (res) {
+                        _this.setData({
+                          latitude: res.latitude,
+                          longitude: res.longitude
+                        });
+                        _this.initData();
+                      }
+                    });
+                  }); */                 
+                }   
+              } else if (re.data.code == 40110) {
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
           });
-          _this.initData();
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
         }
-      });
-    }    
+      }
+    }); 
   },
-  userInfoReadyCallback:function(){
-    var _this = this; 
-    
+  userInfoReadyCallback:function(){    
   },
   getUserInfo: function(e) {
-   
   },
   getOpenId:function(){
     wx.request({
@@ -98,11 +147,7 @@ Page({
       }
     })
   },
-  //返回顶部
-  goTop:function(){
-    /*wx.pageScrollTo({
-      scrollTop: 0
-    });*/
+  goTop: function () { //返回顶部
     this.setData({
       scrollTop:0
     });
@@ -122,7 +167,7 @@ Page({
       }
     }
   },
-  showModal: function (cont) {//显示弹窗
+  showModal: function (cont) {//显示弹窗,cont为显示的内容 
     wx.showModal({
       title: '提示',
       content: cont,
@@ -131,6 +176,7 @@ Page({
   },
   initData: function (fn) {//初始化页面数据
     var _this = this;
+    console.log("initData")
     wx.login({
       success: ress => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -197,20 +243,18 @@ Page({
   jumpShopInfo: function (e) {//点店铺跳转
     var _shopId = e.currentTarget.dataset.shopid;
     var _url = _shopId?"/pages/shop/shop?shopid="+_shopId:"/pages/shop/shop";
-    if(_url){
-      var _this = this;
-      this.setData({
-        jumpUrl: _url
+    var _this = this;
+    this.setData({
+      jumpUrl: _url
+    });
+    this.checkUserInfoAuth(function () {
+      wx.navigateTo({
+        url: _this.data.jumpUrl
       });
-      this.checkUserInfoAuth(function () {
-        console.log("commit fn", _this);
-        wx.navigateTo({
-          url: _this.data.jumpUrl
-        });
-      });
-    }
+    });
   },
-  checkUserInfoAuth: function (fn) {//判断用户是否授权获取用户信息,用于没授权点任何位置跳转授权页面
+  checkUserInfoAuth: function (fn) {
+    //判断用户是否授权获取用户信息,未授权点任何位置跳转授权页面
     if (!app.globalData.userInfoAuth){//未授权获取用户信息
       wx.getUserInfo({
         success: function (res) {
@@ -266,12 +310,14 @@ Page({
       }
     }
   },
-  checkLocationAuth:function(){
+  checkLocationAuth:function(fun){//判断是否授权地理位置
     var _this = this;
     wx.getSetting({
       complete:res=>{
-        if (res.authSetting['scope.userLocation']) {
-          if (res.authSetting['scope.userLocation'] == true) {
+        if (res.authSetting['scope.userLocation'] && res.authSetting['scope.userLocation'] == true) {
+          if(fun){
+            fun();
+          }else{
             wx.chooseLocation({
               success: function (res) {
                 _this.setData({
@@ -283,42 +329,57 @@ Page({
               },
               cancel: function () {
               },
-              fail: function () { }
+              fail: function () {
+              }
             });
           }
         } else {
-          wx.openSetting({
-            success: function (data) {
-              console.log("openSetting:",data);
-              if (data) {
-                if (data.authSetting["scope.userInfo"] == true) {
-                  if (app.globalData.userInfoAuth==false){
-                    app.globalData.userInfoAuth = true;
+          wx.showModal({
+            title: '提示',
+            content: '到柜需要获取您的"地理位置"授权方能正常使用',
+            showCancel: false,
+            success: function (res) {
+              wx.openSetting({
+                success: function (data) {
+                  console.log("openSetting:", data);
+                  if (data) {
+                    //判断是否授权获取用户信息
+                    if (data.authSetting["scope.userInfo"] == true) {
+                      if (app.globalData.userInfoAuth == false) {
+                        app.globalData.userInfoAuth = true;
+                      }
+                    } else {
+                      if (app.globalData.userInfoAuth == true) {
+                        app.globalData.userInfoAuth = false;
+                      }
+                    }
+                    //判断是否授权地理位置
+                    if (data.authSetting["scope.userLocation"] == true) {
+                      if (fun) {
+                        fun();
+                      } else {
+                        wx.chooseLocation({
+                          success: function (res) {
+                            _this.setData({
+                              latitude: res.latitude,
+                              longitude: res.longitude
+                            });
+                            _this.saveLocation();
+                            _this.initData();
+                          },
+                          cancel: function () {
+                          },
+                          fail: function () {
+                          }
+                        });
+                      }
+                    }
                   }
-                }else{
-                  if (app.globalData.userInfoAuth == true){
-                    app.globalData.userInfoAuth = false;
-                  }
+                },
+                fail: function (res) {
+                  console.info("设置失败返回数据", res);
                 }
-                if (data.authSetting["scope.userLocation"] == true) {
-                  wx.chooseLocation({
-                    success: function (res) {
-                      _this.setData({
-                        latitude: res.latitude,
-                        longitude: res.longitude
-                      });
-                      _this.saveLocation();
-                      _this.initData();
-                    },
-                    cancel: function () {
-                    },
-                    fail: function () { }
-                  });
-                }
-              }
-            },
-            fail: function (res) {
-              console.info("设置失败返回数据",res);
+              });
             }
           });
         }
@@ -348,14 +409,13 @@ Page({
   },
   refresh: function () {//下拉刷新
     this.onLoad();
-  },
+  }/*,
   refresh:function(){
     wx.showToast({
       title: '刷新中',
       icon: 'loading',
       duration: 3000
     });
-
     var _this = this;
     var _location = this.getStorageLocation();
     if (_location) {//保存的有定位获取店铺
@@ -393,5 +453,5 @@ Page({
         }
       });
     }    
-  }
+  }*/
 });

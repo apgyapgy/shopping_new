@@ -254,10 +254,11 @@ Page({
   },
   //删除事件
   del: function (e) {//删除购物车数据
-    this.data.items.splice(e.currentTarget.dataset.index, 1)
+    var _index = e.currentTarget.dataset.index;
+    /*this.data.items.splice(e.currentTarget.dataset.index, 1)
     this.setData({
       items: this.data.items
-    })
+    });*/
   }
   //测试左滑删除end
   

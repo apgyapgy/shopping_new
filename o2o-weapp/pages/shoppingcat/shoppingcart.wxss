@@ -88,7 +88,6 @@ page{
 .car-goods-list .car-good{
   width:750rpx;
   height:196rpx;
-  border-bottom:2rpx solid #e5e7e2;
   /*为测试左滑删除新加 begin*/
   margin-right:0;
   -webkit-transition: all 0.4s;
@@ -98,27 +97,27 @@ page{
   margin-left: -180rpx
 }
 .car-container{
- font-size: 30rpx;
- display: flex;
- justify-content: space-between;
- width: 100%;
- overflow: hidden;
+  font-size: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  overflow: hidden;
+  border-bottom:2rpx solid #e5e7e2;
 }
 .del {
- flex-direction: column;
- align-items: center;
- justify-content: center;
- background-color: orangered;
- width: 180rpx;
- height:196rpx;
- display: flex;
- color: #fff;
- letter-spacing: 10rpx;
- -webkit-transform: translateX(180rpx);
- transform: translateX(180rpx);
- -webkit-transition: all 0.4s;
- transition: all 0.4s;
- border-bottom:2rpx solid #e5e7e2;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: orangered;
+  width: 180rpx;
+  height:196rpx;
+  display: flex;
+  color: #fff;
+  letter-spacing: 10rpx;
+  -webkit-transform: translateX(180rpx);
+  transform: translateX(180rpx);
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
 }
 .touch-move-active .car-good,
 .touch-move-active .del{
