@@ -141,14 +141,9 @@ App({
       },
       fail:function(res){
         console.log("getLocation fail:",res);
-        if (res.errMsg == "getLocation:fail auth deny"){
           _this.checkLocationAuth(function(){
             _this.getLocation();
           });
-        }
-      },
-      complete:function(res){
-        console.log("getLocation complete:",res);
       }
     })
   },

@@ -401,7 +401,7 @@ Page({
     }
   },
   refresh: function () {//下拉刷新
-    this.onLoad();
+    //this.onLoad();
   }/*,
   refresh:function(){
     wx.showToast({

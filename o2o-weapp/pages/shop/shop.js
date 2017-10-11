@@ -10,24 +10,7 @@ Page({
   data: {
     backTopIconShowFlag: false,
     scrollTop: 0,
-    goodsList:[
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:1},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:3},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:14},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:91},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:5},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:11},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:13},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num:20},
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 1 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 3 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 14 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 91 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 5 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 11 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 13 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 20 }
-    ],
+    goodsList:[],
     carList: [
       { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 1 },
       { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 3 },
