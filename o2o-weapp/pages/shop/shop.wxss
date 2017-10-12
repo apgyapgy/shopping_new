@@ -171,6 +171,19 @@
   border-radius:50%;
   box-shadow: rgba(0,0,0,0.2) 0 -1rpx 10rpx;
 }
+.car-icon .car-num{
+  position:absolute;
+  left:60rpx;
+  top:-10rpx;
+  background:#f12c20;
+  height:40rpx;
+  width:40rpx;
+  line-height:40rpx;
+  color:#fff;
+  font-size:20rpx;
+  text-align:center;
+  border-radius:50%;
+}
 .car-icon image{
   display:inline-block;
   margin-top:20rpx;
@@ -215,6 +228,9 @@
   font-weight:bold;
   color:#fff;
   background:#26b1fe;
+}
+.to-pay.disabled{
+  background:#999;
 }
 /*购物车详情*/
 .car-info-wrapper{

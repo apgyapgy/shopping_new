@@ -58,6 +58,9 @@ var getAjax = function(options){
       if (wx.hideLoading) {
         wx.hideLoading()//关闭提示
       }
+      if(options.complete){
+        options.complete();
+      }
     }
   });
 }

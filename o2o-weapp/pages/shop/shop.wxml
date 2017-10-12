@@ -1,8 +1,8 @@
 <!--pages/shop/shop.wxml-->
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class="shop-head">
-    <image src="../../image/shop-icon.png"/>
-    <view class="shop-name">黑牛农庄（农家鲜蔬）</view>
+    <image src="{{options.shopLogo?options.shopLogo:'../../image/shop-icon.png'}}"/>
+    <view class="shop-name">{{options.shopNm}}</view>
   </view>
 
   <view class="goods-wrapper clearfix">
@@ -17,47 +17,54 @@
           <text class='good-price'>￥{{item.goodsAmt/100}}</text>
         </view>
         <view class='add-sub'>
-          <image hidden="{{item.num<=0}}" bindtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>
-          <text hidden="{{item.num<=0}}" class='num'>{{item.num}}</text>
-          <image bindtap="add" data-index="{{idx}}" class='add' src="../../image/add.png"/>
+          <!--<image hidden="{{item.num<=0}}" bindtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>
+          <text hidden="{{item.num<=0}}" class='num'>{{item.num}}</text>-->
+          <image 
+            data-goodsno="{{item.goodsNo}}" data-goodsamt="{{item.goodsAmt}}" bindtap="saveCart" data-index="{{idx}}" class='add' src="../../image/add.png"/>
         </view>
       </view>
     </view>
   </view>
   <view class='padding-86'></view>
 </scroll-view>
+
+<!--底部购物车-->
 <view bindtap="showCarInfo" class='car-bar'>
-  <view class='car-icon active'>
+  <view class="car-icon {{cartInfo.orderNums>0?'active':''}}">
+    <text hidden="{{cartInfo.orderNums<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
     <image src="../../image/shop-car.png"/>
   </view>
   <view class='car-money'>
-    <text class='car-total-money'>合计金额:180元</text>
+    <text class='car-total-money'>合计金额:{{cartInfo.totalAmt/100}}元</text>
     <text class='delivery-money'>配送费:0元</text>
   </view>
-  <view catchtap="topay" class='to-pay'>去结算</view>
+  <view catchtap="topay" class="to-pay {{cartInfo.orderNums>0?'':'disabled'}}">去结算</view>
 </view>
+
 <!--购物车详情-->
 <view class='car-info-wrapper' hidden="{{!showCarInfoFlag}}" catchtap="hideCarInfo">
   <view class='car-info-content clearfix' catchtap="preventTapParent">
-    <view catchtap="hideCarInfo" class='car-icon active'>
+    <view catchtap="hideCarInfo" class="car-icon {{cartInfo.orderNums>0?'active':''}}">
+      <text hidden="{{cartInfo.orderNums<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
       <image src="../../image/shop-car.png"/>
     </view>
 
     <scroll-view class="scrollview"  scroll-y >
       <view class='goods clearfix'>
-        <view wx:for="{{carList}}" wx:for-index="idx" wx:key="idx" class='good'>
+        <view wx:for="{{cartList}}" wx:for-index="idx" wx:key="idx" class='good'>
           <view catchtap="selectGood" class='select-icon active'>
             <image src="../../image/success.png"/>
           </view>
-          <image src="{{item.imgurl}}"/>
+          <!-- <image src="{{item.goodsImgLogo}}"/>-->
+          <image src="../../image/good.png"/>
           <view class='good-info'>
-            <text class='good-name'>{{item.name}}</text>
-            <text class='good-price'>￥{{item.price}}</text>
+            <text class='good-name'>{{item.goodsNm}}</text>
+            <text class='good-price'>￥{{item.goodsAmt/100}}</text>
           </view>
           <view class='add-sub'>
-            <image hidden="{{item.num<=0}}" catchtap="sub" data-index="{{idx}}" class='sub' src="../../image/sub.png"/>
-            <text hidden="{{item.num<=0}}" class='num'>{{item.num}}</text>
-            <image catchtap="add" data-index="{{idx}}" class='add' src="../../image/add.png"/>
+            <image hidden="{{item.orderNum<=0}}" data-goodsNo="{{item.goodsNo}}" catchtap="addsub" data-type="sub" data-num="{{item.orderNum}}" class='sub' src="../../image/sub.png"/>
+            <text hidden="{{item.orderNum<=0}}" class='num'>{{item.orderNum}}</text>
+            <image catchtap="addsub" data-type="add" data-goodsNo="{{item.goodsNo}}"  data-num="{{item.orderNum}}" class='add' src="../../image/add.png"/>
           </view>
         </view>
       </view>
@@ -70,7 +77,7 @@
         </view>
         <view class='has-selected'>全选<text>(已选3件)</text></view>
       </view>
-      <view class='clear-car'>
+      <view bindtap="emptyCart" class='clear-car'>
         <image src="../../image/clear.png"/>
         <text>清空购物车</text>
       </view>
@@ -78,10 +85,10 @@
 
     <view bindtap="showCarInfo" class='car-bar'>
       <view class='car-money'>
-        <text class='car-total-money'>合计金额:180元</text>
+        <text class='car-total-money'>合计金额:{{cartInfo.totalAmt/100}}元</text>
         <text class='delivery-money'>配送费:0元</text>
       </view>
-      <view catchtap="topay" class='to-pay'>去结算</view>
+      <view catchtap="topay" class="to-pay {{cartInfo.orderNums>0?'':'disabled'}}">去结算</view>
     </view>
   </view>
 </view>

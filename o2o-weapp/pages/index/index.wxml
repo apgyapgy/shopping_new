@@ -28,7 +28,7 @@
 
     <!--店铺-->
     <view wx:if="{{shopList.length}}" class='shops'>
-      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
+      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-idx="{{idx}}" bindtap="jumpShopInfo">
         <view class='shop-left'>
           <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
         </view>

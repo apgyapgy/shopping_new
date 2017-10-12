@@ -1,11 +1,8 @@
 // pages/shoppingcat/shoppingcart.js
+var app = getApp();
+import common from '../../js/common.js';
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
     backTopIconShowFlag: false,
     scrollTop: 0, tabbarArray: [
       {
@@ -111,35 +108,29 @@ Page({
         ]
       }
     ],
+    sendList:[],
+    unSendList:[],
     //测试左滑删除begin
     startX:0,
-    startY:0
-    //测试左滑删除end
+    startY:0,
+    //测试左滑删除end,
+    token:''
   },
-
   /*生命周期函数--监听页面加载*/
   onLoad: function (options) {
-  },
-  /*生命周期函数--监听页面初次渲染完成*/
-  onReady: function () {
-  },
-  /*生命周期函数--监听页面显示*/
-  onShow: function () {
-  },
-  /*生命周期函数--监听页面隐藏*/
-  onHide: function () {
-  },
-  /*生命周期函数--监听页面卸载*/
-  onUnload: function () {
-  },
-  /*页面相关事件处理函数--监听用户下拉动作*/
-  onPullDownRefresh: function () {
-  },
-  /*页面上拉触底事件的处理函数*/
-  onReachBottom: function () {
+    if(!app.globalData.location.cellCd){
+      app.globalData.location = { 
+        bmapLat: "31.228522821982", 
+        bmapLng: "121.56115068654", 
+        cellCd: "A2100224063", 
+        hostId: "70000030" 
+      };
+      app.globalData.loginId = "15316117950";
+    }
+    this.getShopList();
   },
   //返回顶部
-  goTop: function () {
+  goTop: function () {//返回顶部
     this.setData({
       scrollTop: 0
     });
@@ -177,7 +168,7 @@ Page({
     }
     console.log("jumpshop:",e);
   },
-  showModal:function(txt,fn){
+  showModal:function(txt,fn){//显示弹窗 
     wx.showModal({
       title: '提示',
       content: txt,
@@ -259,7 +250,68 @@ Page({
     this.setData({
       items: this.data.items
     });*/
-  }
+  },
   //测试左滑删除end
-  
+  getShopList:function(){//获取购物车在的商品
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/qryUserCart',
+      params: {
+        loginId: app.globalData.loginId,
+        cellCd: app.globalData.location.cellCd
+      },
+      success: function (res) {
+        console.log("qryUserCart:", res);
+        if (res.data.code == 200) {
+          var _lists = [];
+          for(var key in res.data.data.list){
+            var _list = res.data.data.list[key];
+            
+          }
+          _this.setData({
+            sendList:res.data.data.list,
+            unSendList:res.data.data.unSendList
+          });
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.getShopList();
+          });
+        }else{
+          _this.showModel("加载购物车数据失败!");
+        }
+      }
+    });
+  },
+  getToken: function (fn) {//如果用户token过期，重新获取token，并获取数据
+    var _this = this;
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code
+            },
+            success: function (re) {
+              console.log("in shop page oauth:", re);
+              if (re.data.code == 200) {
+                app.globalData.loginId = re.data.data.loginId;
+                _this.setData({
+                  token: re.data.data.token
+                });
+                if (fn) {
+                  fn();
+                }
+              } else if (re.data.code == 40110) {
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
+          });
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
+    });
+  }
 });

@@ -197,6 +197,7 @@ Page({
                         shopList: _data.shops,
                         location: _data.location
                       });
+                      app.globalData.location = _data.location;
                     } else if (res.data.code == 40201) {
                       _this.setData({
                         bannerImgs: ['../../image/banner.png'],
@@ -210,6 +211,7 @@ Page({
                         shopList: [],
                         location: {}
                       });
+                      app.globalData.location = {};
                       _this.showModal(res.data.desc);
                     }
                     if (fn) {
@@ -234,8 +236,12 @@ Page({
     this.checkLocationAuth();
   },
   jumpShopInfo: function (e) {//点店铺跳转
-    var _shopId = e.currentTarget.dataset.shopid;
-    var _url = _shopId?"/pages/shop/shop?shopid="+_shopId:"/pages/shop/shop";
+    var _idx = e.currentTarget.dataset.idx;
+    var _shop = this.data.shopList[_idx];
+    var _trans = "mchId=" + _shop.mchId + "&shopId=" + _shop.shopId
+      + "&shopNm=" + _shop.shopNm + "&shopLogo=" + _shop.shopLogo
+      +"&cellCd="+this.data.location.cellCd;
+    var _url = "/pages/shop/shop?"+_trans;
     var _this = this;
     this.setData({
       jumpUrl: _url
@@ -251,14 +257,12 @@ Page({
     if (!app.globalData.userInfoAuth){//未授权获取用户信息
       wx.getUserInfo({
         success: function (res) {
-          console.log("获取用户信息成功:", res);
           app.globalData.userInfoAuth = true;
           if (fn) {
             fn();
           }
         },
         fail: function (res) {
-          console.log("获取用户信息失败:", res);
           app.globalData.userInfoAuth = false;
           wx.showModal({
             title: '提示',
@@ -278,7 +282,6 @@ Page({
                           }
                         },
                         fail: function () {
-                          console.info("3授权失败返回数据");
                           app.globalData.userInfoAuth = false;
                         }
                       });
@@ -288,7 +291,6 @@ Page({
                   }
                 },
                 fail: function () {
-                  console.info("设置失败返回数据");
                   app.globalData.userInfoAuth = false;
                 }
               });
@@ -297,7 +299,6 @@ Page({
         }
       });
     }else{
-      console.log("checkUserInfoAuth已授权")
       if(fn){
         fn();
       }

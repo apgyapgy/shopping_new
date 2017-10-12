@@ -11,39 +11,109 @@ Page({
     backTopIconShowFlag: false,
     scrollTop: 0,
     goodsList:[],
-    carList: [
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 1 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 3 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 14 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 91 },
-      { imgurl: '../../image/good.png', price: 1.8, name: '上海本地蕃茄500g', num: 5 }
-    ],
+    cartList: [],
     showCarInfoFlag:false,
     token:'',
-    shopId:'6000000545'
+    cartInfo: {
+      orderNums: 0,
+      totalAmt: 0
+    },
+    options:{
+      mchId:"80001828",
+      shopId:"6000000545",
+      shopLogo:"",
+      shopNm:"视不会后悔",
+      cellCd:'A2100224063'
+    },
+    clickable:true
   },
-  sub:function(e){
-    var _idx = e.target.dataset.index;
-    var _goodsList = this.data.goodsList;
-    _goodsList[_idx]['num']--;
-    this.setData({
-      goodsList: _goodsList
+  /*生命周期函数--监听页面加载*/
+  onLoad: function (options) {
+    if(options.shopId){
+      this.setData({
+        options: options
+      });
+    }else{
+      app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
+    }
+    this.getGoodsList();
+    this.getCartList();
+  },
+  addsub:function(e){//加减购物车商品
+    if (this.data.clickable) {
+      var _goodsNo = e.target.dataset.goodsno;
+      var _type = e.target.dataset.type;
+      var _num = e.target.dataset.num;
+      this.setData({
+        clickable: false
+      });
+      this.updateOrderNum(_goodsNo,_num, _type);
+    }
+  },
+  saveCart:function(e){//将商品加入购物车，用于购物车中未有该商品
+    if (this.data.clickable){
+      this.setData({
+        clickable:false
+      });
+      var _this = this;
+      var _idx = e.target.dataset.index;
+      var _goodsNo = e.target.dataset.goodsno;
+      var _goodsAmt = e.target.dataset.goodsamt;
+      this.saveCartAjax(_goodsNo, _goodsAmt);
+    } 
+  },
+  saveCartAjax: function (_goodsNo, _goodsAmt,fn){//商品加入购物车请求
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/saveCart',
+      params: {
+        userId : app.globalData.loginId,
+        loginId: app.globalData.loginId,
+        mchId : _this.data.options.mchId,
+        shopId : _this.data.options.shopId,
+        goodsNo : _goodsNo,
+        goodsAmt : _goodsAmt,
+        orderNum : 1,
+        orderAmt : _goodsAmt,
+        operator: app.globalData.loginId
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          console.log("add cart success:",res);
+          _this.getCartList();
+          if (fn) {
+            fn();
+          }
+        }else if (res.data.code == 201){
+          wx.showModal({
+            title: '提示',
+            content: '该商品已加入购物车',
+            showCancel:false,
+            success: function (res) {
+            }
+          });
+        }else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.saveCartAjax(_goodsNo, _goodsAmt, fn);
+          });
+        }
+      },
+      complete:function(){
+        _this.setData({
+          clickable: true
+        });
+      }
     });
   },
-  add:function(e){
-    var _idx = e.target.dataset.index;
-    var _goodsList = this.data.goodsList;
-    _goodsList[_idx]['num']++;
-    this.setData({
-      goodsList:_goodsList
-    });
+  showCarInfo:function(){//显示购物车信息
+    if (this.data.cartInfo.orderNums>0){
+      this.setData({
+        showCarInfoFlag: true
+      });
+    }
   },
-  showCarInfo:function(){
-    this.setData({
-      showCarInfoFlag: true
-    });
-  },
-  hideCarInfo: function () {
+  hideCarInfo: function () {//隐藏购物车信息
     this.setData({
       showCarInfoFlag: false
     });
@@ -52,13 +122,12 @@ Page({
   },
   selectGood:function(){//选择商品
   },
-  topay:function(){
+  topay:function(){//去支付
     wx.navigateTo({
       url: '/pages/checkOrder/checkOrder',
     });
   },
-  //返回顶部
-  goTop: function () {
+  goTop: function () {//返回顶部
     this.setData({
       scrollTop: 0
     });
@@ -80,43 +149,101 @@ Page({
   },
   preventTapParent:function(){//阻止 事件冒泡
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    //var _shopid = options.shopid;
+  getGoodsList:function(){//获取店铺中的商品
     var _this = this;
-    /*this.setData({
-      shopId:_shopid
-    });*/
-    this.getToken(function(){
-      common.getAjax({
-        url: 'wx_we/queryShopGoods',
-        params: {
-          loginId: app.globalData.loginId,
-          shopId: _this.data.shopId
-        },
-        token: _this.data.token,
-        success: function (res) {
-          console.log("店铺页面:", res);
-          if(res.data.code == 200){
-            var _goodsList = [];
-            if(res.data.data.list){
-              _goodsList = res.data.data.list;
+    common.getAjax({
+      url: 'wx_we/queryShopGoods',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _this.data.options.shopId
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          var _goodsList = [];
+          if (res.data.data.list) {
+            _goodsList = res.data.data.list;
+            if (res.data.data.cartInfo){//如果购物车中有内容 
+              for (var key in _goodsList) {
+                _goodsList[key].num = 0;
+                //图片拼接
+                /*if (_goodsList[key].goodsImgLogo){
+                  _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
+                }*/
+                _goodsList[key].goodsImgLogo = '../../image/good.png';
+              }
               _this.setData({
-                goodsList:_goodsList
+                goodsList: _goodsList,
+                cartInfo:res.data.data.cartInfo
               });
-              console.log("goodsList:",_this.data.goodsList);
+            } else {//购物车中无商品
+              for (var key in _goodsList) {//无商品将商品的num即加入购物车中的数据置0
+                _goodsList[key].num = 0;
+                //图片拼接
+                /*if (_goodsList[key].goodsImgLogo){
+                  _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
+                }*/
+                _goodsList[key].goodsImgLogo = '../../image/good.png';
+              }
+              _this.setData({
+                goodsList: _goodsList,
+                cartInfo:{
+                  orderNums:0,
+                  totalAmt:0
+                }
+              });
             }
+          }else if(res.data.code == 40101){
+            _this.getToken(function () {
+              _this.getGoodsList();
+            });
           }
-        },
-        fail:function(res){
-          console.log("获取店铺数据失败了:",res);
         }
-      });
+      },
+      fail: function (res) {
+        console.log("获取店铺数据失败了:", res);
+      }
     });
   },
-  getToken:function(fn){
+  getCartList:function(){//获取购物车中的商品
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/queryShopCart',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _this.data.options.shopId
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          if(res.data.data.cartInfo){
+            var _cartInfo = res.data.data.cartInfo;
+          }else{
+            var _cartInfo = {
+              orderNums: 0,
+              totalAmt: 0
+            };
+          }
+          _this.setData({
+            cartList:res.data.data.list,
+            cartInfo:_cartInfo
+          });
+          if(!_this.data.cartList.length){
+            _this.setData({
+              showCarInfoFlag:false
+            });
+          }
+        }else if(res.data.code == 40101){
+          _this.getToken(function(){
+            _this.getCartList();
+          });
+        }
+      },
+      fail: function (res) {
+      }
+    });
+  },
+  getToken:function(fn){//如果用户token过期，重新获取token，并获取数据
     var _this = this;
     wx.login({
       success: ress => {
@@ -145,6 +272,97 @@ Page({
         } else {
           console.log('获取用户登录态失败！' + ress.errMsg)
         }
+      }
+    });
+  },
+  updateOrderNum:function(_goodsNo,_num,_type){//加减购物车数据
+    var _this = this;
+    if(_num==1&&_type=='sub'){
+      _this.deleteCart(_goodsNo);
+    }
+    common.getAjax({
+      url: 'wx_we/updateOrderNum',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _this.data.options.shopId,
+        goodsNo:_goodsNo,
+        type:_type=='add'?0:1
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          _this.getCartList();
+          _this.setData({
+            cartList: res.data.data.list
+          });
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.updateOrderNum(_goodsNo,_num, _type);
+          });
+        }
+      },
+      complete:function(){
+        _this.setData({
+          clickable:true
+        });
+      }
+    });
+  },
+  deleteCart:function(_goodsNo){//删除购物车中的某个商品
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/deleteCart',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _this.data.options.shopId,
+        goodsNo: _goodsNo
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          _this.getCartList();
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.deleteCart(_goodsNo);
+          });
+        }
+      },
+      complete: function () {
+        _this.setData({
+          clickable: true
+        });
+      }
+    });
+  },
+  emptyCart:function(){//清空购物车
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/clearCart',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _this.data.options.shopId
+      },
+      token: _this.data.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          _this.setData({
+            cartList:[],
+            cartInfo: {
+              orderNums: 0,
+              totalAmt: 0
+            },
+            showCarInfoFlag:false
+          });
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.emptyCart();
+          });
+        }
+      },
+      complete: function () {
+        _this.setData({
+          clickable: true
+        });
       }
     });
   }

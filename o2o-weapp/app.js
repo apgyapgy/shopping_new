@@ -49,24 +49,26 @@ App({
       content: '到柜需要获取您的"用户信息"授权方能正常使用',
       showCancel: false,
       success: function (res) {
-        wx.openSetting({
-          success: function (data) {
-            if (data) {
-              if (data.authSetting["scope.userInfo"] == true) {
-                if(fn){
-                  fn();
+        setTimeout(function(){
+          wx.openSetting({
+            success: function (data) {
+              if (data) {
+                if (data.authSetting["scope.userInfo"] == true) {
+                  if (fn) {
+                    fn();
+                  }
+                } else {
+                  _this.globalData.userInfoAuth = false;
+                  _this.checkUserInfoAuth(fn);
                 }
-              } else {
-                _this.globalData.userInfoAuth = false;
-                _this.checkUserInfoAuth(fn);
               }
+            },
+            fail: function () {
+              console.info("设置失败返回数据");
+              _this.globalData.userInfoAuth = false;
             }
-          },
-          fail: function () {
-            console.info("设置失败返回数据");
-            _this.globalData.userInfoAuth = false;
-          }
-        });
+          });
+        },100);
       }
     });
   },
@@ -78,34 +80,36 @@ App({
       content: '到柜需要获取您的"地理位置"授权方能正常使用',
       showCancel: false,
       success: function (res) {
-        wx.openSetting({
-          success: function (data) {
-            console.log("openSetting:", data);
-            if (data) {
-              //判断是否授权获取用户信息
-              if (data.authSetting["scope.userInfo"] == true) {
-                if (_this.globalData.userInfoAuth == false) {
-                  _this.globalData.userInfoAuth = true;
+        setTimeout(function(){
+          wx.openSetting({
+            success: function (data) {
+              console.log("openSetting:", data);
+              if (data) {
+                //判断是否授权获取用户信息
+                if (data.authSetting["scope.userInfo"] == true) {
+                  if (_this.globalData.userInfoAuth == false) {
+                    _this.globalData.userInfoAuth = true;
+                  }
+                } else {
+                  if (_this.globalData.userInfoAuth == true) {
+                    _this.globalData.userInfoAuth = false;
+                  }
                 }
-              } else {
-                if (_this.globalData.userInfoAuth == true) {
-                  _this.globalData.userInfoAuth = false;
+                //判断是否授权地理位置
+                if (data.authSetting["scope.userLocation"] == true) {
+                  if (fun) {
+                    fun();
+                  }
+                } else {
+                  _this.checkLocationAuth(fun);
                 }
               }
-              //判断是否授权地理位置
-              if (data.authSetting["scope.userLocation"] == true) {
-                if (fun) {
-                  fun();
-                }
-              }else{
-                _this.checkLocationAuth(fun);
-              }
+            },
+            fail: function (res) {
+              console.info("设置失败返回数据", res);
             }
-          },
-          fail: function (res) {
-            console.info("设置失败返回数据", res);
-          }
-        });
+          });
+        },100);
       }
     });
   },
@@ -131,16 +135,13 @@ App({
   },
   getLocation:function(){
     var _this = this;
-    console.log("in getLocation");
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
-        console.log("getLocation success:",res);
         _this.globalData.latitude = res.latitude;
         _this.globalData.longitude = res.longitude;
       },
       fail:function(res){
-        console.log("getLocation fail:",res);
           _this.checkLocationAuth(function(){
             _this.getLocation();
           });
@@ -155,6 +156,8 @@ App({
     loginId:'',
     hostId:'',
     latitude:'',
-    longitude:''
+    longitude:'',
+    imgPre:'https://static.fuiou.com/',
+    location:{}
   }
 })

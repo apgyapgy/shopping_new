@@ -111,7 +111,6 @@ page{
   font-size:24rpx;
 }
 .to-pay.active{
- 
   background:#26b1fe;
 }
 .to-pay{ 
