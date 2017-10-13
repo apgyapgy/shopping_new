@@ -180,7 +180,7 @@ Page({
             success: function (re) {
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
-                app.globalData.hostId = re.data.data.hostId;
+                app.globalData.hostId = re.data.data.hostId; 
                 common.getAjax({
                   url: 'wx_we/home',
                   params: {

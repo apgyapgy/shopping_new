@@ -153,11 +153,12 @@ App({
     code:'',
     userInfoAuth:false,
     token:'',
-    loginId:'',
-    hostId:'',
+    hostId: '',
+    openId: '',
     latitude:'',
     longitude:'',
     imgPre:'https://static.fuiou.com/',
-    location:{}
+    location:{},
+    src:3
   }
 })

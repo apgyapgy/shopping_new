@@ -47,8 +47,7 @@
 
 ## 查询店铺商品与购物车信息 /wx_we/queryShopGoods
     1、基本参数
-    示例参考 https://dswx-test.fuiou.com/o2o/wx_we/queryShopGoods?loginId=15555555555
-    &shopId=6000000689
+            示例参考 https://dswx-test.fuiou.com/o2o/wx_we/queryShopGoods?loginId=15555555555&shopId=6000000689
         | loginId            | string   |  not null  |登录账号
         | shopId             | string   |  not null  |店铺id
     2、返回字段
@@ -60,26 +59,24 @@
 
 ## 查询用户加入店铺的购物车所有商品 /wx_we/queryShopCart
     1、基本参数
-    示例参考 https://dswx-test.fuiou.com/o2o/wx_we/queryShopCart?loginId=15555555555
-    &shopId=6000000689
+           示例参考 https://dswx-test.fuiou.com/o2o/wx_we/queryShopCart?loginId=15555555555&shopId=6000000689
         | loginId            | string   |  not null  |登录账号
         | shopId             | string   |  not null  |店铺id
     2、返回字段
     	
     3、返回示例   
-    	{"code":200,"data":{"list":[{"crtTs":"2017-09-27 17:14:22.433055000","goodsAmt":500,"goodsImgLogo":"sys/o2o2/o2oGoods_702013032731850.jpg","goodsNm":"鸡蛋","goodsNo":"52001143","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":3,"remark":"","shopId":6000000689,"updTs":"2017-10-10 17:04:51.410733000","userId":"15555555555"},{"crtTs":"2017-09-27 17:13:34.322088000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":4,"remark":"","shopId":6000000689,"updTs":"2017-10-10 17:04:29.641020000","userId":"15555555555"}]},"desc":"成功"}
+    	{"code":200,"data":{"cartInfo":{"orderNums":"10","totalAmt":"3400"},"list":[{"crtTs":"2017-09-27 17:14:22.433055000","goodsAmt":500,"goodsImgLogo":"sys/o2o2/o2oGoods_702013032731850.jpg","goodsNm":"鸡蛋","goodsNo":"52001143","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":6,"remark":"","shopId":6000000689,"updTs":"2017-10-11 16:33:32.488426000","userId":"15555555555"},{"crtTs":"2017-09-27 17:13:34.322088000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":4,"remark":"","shopId":6000000689,"updTs":"2017-10-10 17:04:29.641020000","userId":"15555555555"}]},"desc":"成功"}
  
    
 ## 用户查询购物车  /wx_we/qryUserCart
     1、基本参数
-    示例参考 https://dswx-test.fuiou.com/o2o/wx_we/qryUserCart?loginId=15555555555
-    &cellCd=A2100224063
+           示例参考 https://dswx-test.fuiou.com/o2o/wx_we/qryUserCart?loginId=15555555555&hostId=70000030
         | loginId            | string   |  not null  |登录账号
         | cellCd             | string   |  not null  |定位选择的小区code
     2、返回字段
     	
     3、返回示例   
-    {"code":200,"data":{"list":[],"unSendList":[{"areaNm":"上海小区","cellCd":"A2100224063","crtTs":"2017-09-27 17:13:34.322088000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","goodsSt":"0","hostId":"70000030","isExpire":"0","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":4,"remark":"","shopId":6000000689,"shopNm":"视不会后悔","updTs":"2017-10-10 17:04:29.641020000","userId":"15555555555"},{"areaNm":"上海小区","cellCd":"A2100224063","crtTs":"2017-09-27 17:14:22.433055000","goodsAmt":500,"goodsImgLogo":"sys/o2o2/o2oGoods_702013032731850.jpg","goodsNm":"鸡蛋","goodsNo":"52001143","goodsSt":"1","hostId":"70000030","isExpire":"1","loginId":"15555555555","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":4,"remark":"","shopId":6000000689,"shopNm":"视不会后悔","updTs":"2017-10-10 17:14:25.728756000","userId":"15555555555"}]},"desc":"成功"}
+    {"code":200,"data":{"sendList":[{"areaNm":"上海小区","hostId":"70000030","list":[{"hostId":"70000030","list":[{"crtTs":"2017-10-12 22:45:08.711413000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","goodsSt":"1","isExpire":"1","loginId":"15316117950","mchId":80001819,"operator":"15316117950","orderAmt":100,"orderNum":3,"remark":"","shopId":6000001740,"updTs":"2017-10-13 14:00:04.570331000","userId":"15316117950"}],"mchId":"80001819","shopId":"6000001740","shopNm":"clutter3213"},{"hostId":"70000030","list":[{"crtTs":"2017-10-13 16:32:03.111957000","goodsAmt":500,"goodsImgLogo":"sys/o2o2/o2oGoods_702013032731850.jpg","goodsNm":"鸡蛋","goodsNo":"52001143","goodsSt":"1","isExpire":"1","loginId":"15316117950","mchId":80001828,"operator":"15316117950","orderAmt":500,"orderNum":3,"remark":"","shopId":6000000545,"updTs":"2017-10-13 16:54:12.631260000","userId":"15316117950"},{"crtTs":"2017-10-13 16:57:53.810552000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","goodsSt":"1","isExpire":"1","loginId":"15316117950","mchId":80001828,"operator":"15316117950","orderAmt":100,"orderNum":1,"remark":"","shopId":6000000545,"updTs":"2017-10-13 16:57:53.810552000","userId":"15316117950"}],"mchId":"80001828","shopId":"6000000545","shopNm":"视不会后悔"}]}],"unSendList":[{"areaNm":"富友508","hostId":"60255406","list":[{"hostId":"60255406","list":[{"crtTs":"2017-09-27 17:14:22.433055000","goodsAmt":500,"goodsImgLogo":"sys/o2o2/o2oGoods_702013032731850.jpg","goodsNm":"鸡蛋","goodsNo":"52001143","goodsSt":"1","isExpire":"1","loginId":"15316117950","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":6,"remark":"","shopId":6000000689,"updTs":"2017-10-11 16:33:32.488426000","userId":"15316117950"},{"crtTs":"2017-09-27 17:13:34.322088000","goodsAmt":100,"goodsImgLogo":"sys/o2o2/o2oGoods_115513000141214.jpg","goodsNm":"鹅蛋","goodsNo":"52001226","goodsSt":"1","isExpire":"1","loginId":"15316117950","mchId":80001828,"operator":"15555555555","orderAmt":4,"orderNum":4,"remark":"","shopId":6000000689,"updTs":"2017-10-10 17:04:29.641020000","userId":"15316117950"}],"mchId":"80001828","shopId":"6000000689","shopNm":"视不会后悔"}]}]},"desc":"成功"}
     
     
 ## 新增购物车 /wx_we/saveCart
@@ -121,8 +118,7 @@
     
 ## 用户清空某店铺购物车所有商品  /wx_we/clearCart
     1、基本参数
-    示例参考 https://dswx-test.fuiou.com/o2o/wx_we/clearCart?loginId=15555555555
-    &shopId=6000000689
+            示例参考  https://dswx-test.fuiou.com/o2o/wx_we/clearCart?loginId=15555555555&shopId=6000000689
         | loginId            | string   |  not null  |登录账号
         | shopId             | string   |  not null  |店铺id
     2、返回字段
@@ -142,7 +138,7 @@
     2、返回字段
     	
     3、返回示例     
-	
+	{"code":200,"data":{},"desc":"成功"}
 
 
      
@@ -163,7 +159,7 @@
 
 
     
-## 商品信息查询/api/user/goodsQry
+## 商品信息查询/user/goodsQry
 	 1、请求参数
 		 | shopId          	 | string(32)   |            |店铺id 必传
          | goodsSt	  		 | string(32)   |            |0待上架出售 1已上架销售中  2下架

@@ -1,7 +1,8 @@
 <!--pages/shop/shop.wxml-->
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class="shop-head">
-    <image src="{{options.shopLogo?options.shopLogo:'../../image/shop-icon.png'}}"/>
+    <!--<image src="{{options.shopLogo?options.shopLogo:'../../image/shop-icon.png'}}"/>-->
+    <image src="../../image/shop.png"/>
     <view class="shop-name">{{options.shopNm}}</view>
   </view>
 
@@ -30,21 +31,21 @@
 
 <!--底部购物车-->
 <view bindtap="showCarInfo" class='car-bar'>
-  <view class="car-icon {{cartInfo.orderNums>0?'active':''}}">
-    <text hidden="{{cartInfo.orderNums<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
+  <view class="car-icon {{cartList.length>0?'active':''}}">
+    <text hidden="{{cartList.length<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
     <image src="../../image/shop-car.png"/>
   </view>
   <view class='car-money'>
-    <text class='car-total-money'>合计金额:{{cartInfo.totalAmt/100}}元</text>
+    <text class='car-total-money'>合计金额:{{selectInfo.selectAmt/100}}元</text>
     <text class='delivery-money'>配送费:0元</text>
   </view>
-  <view catchtap="topay" class="to-pay {{cartInfo.orderNums>0?'':'disabled'}}">去结算</view>
+  <view catchtap="topay" class="to-pay {{cartList.length>0?'':'disabled'}}">去结算</view>
 </view>
 
 <!--购物车详情-->
 <view class='car-info-wrapper' hidden="{{!showCarInfoFlag}}" catchtap="hideCarInfo">
   <view class='car-info-content clearfix' catchtap="preventTapParent">
-    <view catchtap="hideCarInfo" class="car-icon {{cartInfo.orderNums>0?'active':''}}">
+    <view catchtap="hideCarInfo" class="car-icon {{cartList.length>0?'active':''}}">
       <text hidden="{{cartInfo.orderNums<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
       <image src="../../image/shop-car.png"/>
     </view>
@@ -52,7 +53,8 @@
     <scroll-view class="scrollview"  scroll-y >
       <view class='goods clearfix'>
         <view wx:for="{{cartList}}" wx:for-index="idx" wx:key="idx" class='good'>
-          <view catchtap="selectGood" class='select-icon active'>
+          <view catchtap="selectGood" data-goodsNo="{{item.goodsNo}}"
+            class="select-icon {{item.isSelected?'active':''}}">
             <image src="../../image/success.png"/>
           </view>
           <!-- <image src="{{item.goodsImgLogo}}"/>-->
@@ -71,11 +73,11 @@
     </scroll-view>
 
     <view class='car-info-head'>
-      <view class='select' catchtap="selectAll">
-        <view class='select-icon'>
+      <view class='select' catchtap="selectAll"> 
+        <view class="select-icon {{selectInfo.selectAll?'active':''}}">
           <image src="../../image/success.png"/>
         </view>
-        <view class='has-selected'>全选<text>(已选3件)</text></view>
+        <view class='has-selected'>全选<text>(已选{{selectInfo.selectNums}}件)</text></view>
       </view>
       <view bindtap="emptyCart" class='clear-car'>
         <image src="../../image/clear.png"/>
@@ -85,10 +87,10 @@
 
     <view bindtap="showCarInfo" class='car-bar'>
       <view class='car-money'>
-        <text class='car-total-money'>合计金额:{{cartInfo.totalAmt/100}}元</text>
+        <text class='car-total-money'>合计金额:{{selectInfo.selectAmt/100}}元</text>
         <text class='delivery-money'>配送费:0元</text>
       </view>
-      <view catchtap="topay" class="to-pay {{cartInfo.orderNums>0?'':'disabled'}}">去结算</view>
+      <view catchtap="topay" class="to-pay {{cartList.length>0?'':'disabled'}}">去结算</view>
     </view>
   </view>
 </view>

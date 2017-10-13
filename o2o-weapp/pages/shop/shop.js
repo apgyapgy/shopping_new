@@ -25,7 +25,13 @@ Page({
       shopNm:"视不会后悔",
       cellCd:'A2100224063'
     },
-    clickable:true
+    clickable:true,
+    selectInfo:{
+      selectAll:false,
+      selectNums:0,
+      selectAmt:0
+    },
+    selectIds:[]
   },
   /*生命周期函数--监听页面加载*/
   onLoad: function (options) {
@@ -36,6 +42,11 @@ Page({
     }else{
       app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
     }
+    /*var _selectId = wx.getStorageSync(this.data.options.shopId);
+    _selectId = _selectId ? _selectId : '';
+    this.setData({
+      _selectId:_selectId
+    });*/
     this.getGoodsList();
     this.getCartList();
   },
@@ -107,7 +118,7 @@ Page({
     });
   },
   showCarInfo:function(){//显示购物车信息
-    if (this.data.cartInfo.orderNums>0){
+    if (this.data.cartList.length>0){
       this.setData({
         showCarInfoFlag: true
       });
@@ -118,9 +129,38 @@ Page({
       showCarInfoFlag: false
     });
   },
-  selectAll:function(){//全选
+  selectAll:function(){//全选或取消购物车中商品
+    var _selectIds = this.data.selectIds;
+    var _cartList = this.data.cartList;
+    if (_selectIds.length == _cartList.length){
+      this.setData({
+        selectIds:[]
+      });
+      this.computedCartInfo();
+    }else{
+      this.getSelectInfo(_cartList);
+    }
   },
-  selectGood:function(){//选择商品
+  selectGood:function(e){//选择或取消购物车中商品
+    var _goodsNo = e.currentTarget.dataset.goodsno;
+    var _selectIds = this.data.selectIds;
+    var _index=-1;
+    for (var key in _selectIds){
+      if (_goodsNo == _selectIds[key]){
+        _index = key;
+        break;
+      }
+    }
+    if (_index!=-1){
+      var _index = _selectIds.indexOf(_goodsNo);
+      _selectIds.splice(_index, 1);
+    }else{
+      _selectIds.push(_goodsNo);
+    }
+    this.setData({
+      selectIds: _selectIds
+    });
+    this.computedCartInfo();
   },
   topay:function(){//去支付
     wx.navigateTo({
@@ -173,8 +213,7 @@ Page({
                 _goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
-                goodsList: _goodsList,
-                cartInfo:res.data.data.cartInfo
+                goodsList: _goodsList
               });
             } else {//购物车中无商品
               for (var key in _goodsList) {//无商品将商品的num即加入购物车中的数据置0
@@ -186,11 +225,7 @@ Page({
                 _goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
-                goodsList: _goodsList,
-                cartInfo:{
-                  orderNums:0,
-                  totalAmt:0
-                }
+                goodsList: _goodsList
               });
             }
           }else if(res.data.code == 40101){
@@ -216,18 +251,17 @@ Page({
       token: _this.data.token,
       success: function (res) {
         if (res.data.code == 200) {
-          if(res.data.data.cartInfo){
-            var _cartInfo = res.data.data.cartInfo;
-          }else{
-            var _cartInfo = {
-              orderNums: 0,
-              totalAmt: 0
-            };
+          var _cartInfo = {
+            orderNums:0,
+            totalAmt:0
+          };
+          if (res.data.data.cartInfo){
+            _cartInfo = res.data.data.cartInfo
           }
           _this.setData({
-            cartList:res.data.data.list,
             cartInfo:_cartInfo
           });
+          _this.getSelectInfo(res.data.data.list);
           if(!_this.data.cartList.length){
             _this.setData({
               showCarInfoFlag:false
@@ -279,34 +313,32 @@ Page({
     var _this = this;
     if(_num==1&&_type=='sub'){
       _this.deleteCart(_goodsNo);
-    }
-    common.getAjax({
-      url: 'wx_we/updateOrderNum',
-      params: {
-        loginId: app.globalData.loginId,
-        shopId: _this.data.options.shopId,
-        goodsNo:_goodsNo,
-        type:_type=='add'?0:1
-      },
-      token: _this.data.token,
-      success: function (res) {
-        if (res.data.code == 200) {
-          _this.getCartList();
+    }else{
+      common.getAjax({
+        url: 'wx_we/updateOrderNum',
+        params: {
+          loginId: app.globalData.loginId,
+          shopId: _this.data.options.shopId,
+          goodsNo:_goodsNo,
+          type:_type=='add'?0:1
+        },
+        token: _this.data.token,
+        success: function (res) {
+          if (res.data.code == 200) {
+            _this.getCartList();
+          } else if (res.data.code == 40101) {
+            _this.getToken(function () {
+              _this.updateOrderNum(_goodsNo,_num, _type);
+            });
+          }
+        },
+        complete:function(){
           _this.setData({
-            cartList: res.data.data.list
-          });
-        } else if (res.data.code == 40101) {
-          _this.getToken(function () {
-            _this.updateOrderNum(_goodsNo,_num, _type);
+            clickable:true
           });
         }
-      },
-      complete:function(){
-        _this.setData({
-          clickable:true
-        });
-      }
-    });
+      }); 
+    }
   },
   deleteCart:function(_goodsNo){//删除购物车中的某个商品
     var _this = this;
@@ -351,7 +383,13 @@ Page({
               orderNums: 0,
               totalAmt: 0
             },
-            showCarInfoFlag:false
+            showCarInfoFlag: false, 
+            selectInfo: {
+              selectAll: false,
+              selectNums: 0,
+              selectAmt: 0
+            },
+            selectIds: []
           });
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
@@ -365,5 +403,44 @@ Page({
         });
       }
     });
+  },
+  computedCartInfo:function (cartList) {//计算购物车信息
+    if(cartList){
+      var _cartList = cartList;
+    }else{
+      var _cartList = this.data.cartList;
+    }
+    var _num = 0,_totalAmt=0;
+    var _selectId = this.data.selectIds;
+    for(var key in _cartList){
+      if (_selectId.indexOf(_cartList[key].goodsNo)!=-1) {
+        _num += _cartList[key].orderNum;
+        _totalAmt += _cartList[key].orderAmt*_cartList[key].orderNum;
+        _cartList[key].isSelected = true;
+      } else {
+        _cartList[key].isSelected = false;
+      }
+    }
+    //console.log(_selectId,_seArr,_seArr.length,_cartList.length)
+    this.setData({
+      selectInfo:{
+        selectAll: _selectId.length==_cartList.length?true:false,
+        selectNums:_num,
+        selectAmt:_totalAmt
+      },
+      cartList:_cartList
+    });
+  },
+  getSelectInfo:function(cartList){//获取购物车选中信息列表
+    if(!this.data.selectIds.length){//一开始未选 中商品
+      var _selectIdArr = [];
+      for (var key in cartList){
+        _selectIdArr.push(cartList[key].goodsNo);
+      }
+      this.setData({
+        selectIds: _selectIdArr
+      });
+    }
+    this.computedCartInfo(cartList);
   }
-})
+})                                                                                                                             

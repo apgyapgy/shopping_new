@@ -4,7 +4,8 @@ import common from '../../js/common.js';
 Page({
   data: {
     backTopIconShowFlag: false,
-    scrollTop: 0, tabbarArray: [
+    scrollTop: 0, 
+    tabbarArray: [
       {
         id: 1,
         cls: 'home',
@@ -40,72 +41,6 @@ Page({
         active_src: '../../image/my_active.png',
         text: '我的',
         active: false
-      }
-    ],
-    shoppingCartList:[
-      {
-        area:'浦东新区-508小区',
-        isActive:true,
-        shops: [
-          {
-            shopId: '111',
-            name: 'XXX商户',
-            goodsList: [
-              {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              },
-              {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              }, {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              }
-            ]
-          }
-        ]
-      },
-      {
-        area: '虹口区-中山北一路865弄小区',
-        isActive: false,
-        shops: [
-          {
-            shopId: '222',
-            name: 'XXX商户',
-            goodsList: [
-              {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              },
-              {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              }, {
-                img: '../../image/good.png',
-                name: '上海本地蕃茄500g',
-                price: 1.8,
-                num: 2,
-                isTouchMove: false
-              }
-            ]
-          }
-        ]
       }
     ],
     sendList:[],
@@ -258,18 +193,13 @@ Page({
       url: 'wx_we/qryUserCart',
       params: {
         loginId: app.globalData.loginId,
-        cellCd: app.globalData.location.cellCd
+        hostId: app.globalData.location.hostId
       },
       success: function (res) {
-        console.log("qryUserCart:", res);
         if (res.data.code == 200) {
-          var _lists = [];
-          for(var key in res.data.data.list){
-            var _list = res.data.data.list[key];
-            
-          }
+          console.log("getShopList:",res);
           _this.setData({
-            sendList:res.data.data.list,
+            sendList:res.data.data.sendList,
             unSendList:res.data.data.unSendList
           });
         } else if (res.data.code == 40101) {
