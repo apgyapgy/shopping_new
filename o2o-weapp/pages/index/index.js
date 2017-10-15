@@ -49,9 +49,7 @@ Page({
     latitude:'',//纬度
     longitude:'',//经度
     shopList:[],
-    location:{
-     
-    },
+    location:{},
     jumpUrl:""
   }, 
   onLoad: function () {

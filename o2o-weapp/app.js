@@ -139,6 +139,8 @@ App({
       success: function (res) {
         _this.globalData.latitude = res.latitude;
         _this.globalData.longitude = res.longitude;
+        var _location = res.latitude + "#" + res.longitude;
+        wx.setStorageSync("location", _location);
       },
       fail:function(res){
           _this.checkLocationAuth(function(){
