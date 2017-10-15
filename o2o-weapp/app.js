@@ -117,7 +117,6 @@ App({
     var _this = this;
     wx.getUserInfo({
       success:function(res){
-        console.log("获取用户信息成功:",res);
         _this.globalData.userInfoAuth = true;
         _this.getLocation();
       },

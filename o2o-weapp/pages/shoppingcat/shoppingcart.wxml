@@ -1,52 +1,19 @@
 <!--pages/shoppingcat/shoppingcart.wxml-->
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class='car-body'>
-    <!--可用小区开始-->
-    <view wx:for="{{sendList}}" wx:for-index="area" wx:key="area" class='car-area clearfix'>
-      <view class="area-name active">
-        <view class='area-name-wrap'>
-          <image src="../../image/area_active.png"/>
-          <text>{{item.areaNm}}</text>
-        </view>
-      </view>
-      <view wx:for="{{item.shops}}" wx:for-item="shop" wx:key="{{shop.shopId}}"  bindtap="jumpShop" data-shopid="{{shop.shopId}}" data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
-        <view class='car-name'>
-          <image src="../../image/nearby.png"/>
-          <text class='s-name'>{{shop.shopNm}}</text>
-          <text class='gt'>></text>
-        </view>
-        <view class='car-goods-list clearfix'>
-
-          <view wx:for="{{shop.goodsList}}"
-                wx:for-item="good"
-                wx:key="{{good.goodsNo}}" class="car-container {{good.isTouchMove ? 'touch-move-active' : ''}}"
-                data-index="{{item.cellCd+'#'+shop.shopId+'#'+good.goodsNo}}" 
-                bindtouchstart="touchstart" bindtouchmove="touchmove" >
-            <view class='car-good'>
-              <image src="{{good.img}}"/>
-              <text class="car-good-name">{{good.goodsNm}}</text>
-              <view class='car-good-info'>
-                <text class='car-good-price'>￥{{good.goodsAmt}}</text>
-                <text class='car-good-num'>X{{good.orderNum}}</text>
-              </view>
-            </view>
-            <view class="del" catchtap="del" data-index="{{item.cellCd+'#'+shop.shopId+'#'+good.goodsNo}}">删除</view>
-          </view>
-
-        </view>
-      </view>
-
-    </view>
-    <!--可用小区结束-->
     <!--不可用小区开始-->
-    <view wx:for="{{sendList}}" wx:for-index="area" wx:key="area" class='car-area clearfix'>
-      <view class="area-name active">
+    <view wx:for="{{shoppingCartList}}" wx:for-index="area" wx:key="area" class='car-area clearfix'>
+      <view class="area-name {{item.isActive?'active':''}}">
         <view class='area-name-wrap'>
           <image src="{{item.isActive?'../../image/area_active.png':'../../image/area.png'}}"/>
           <text>{{item.areaNm}}</text>
         </view>
       </view>
-      <view wx:for="{{item.shops}}" wx:for-item="shop" wx:key="{{shop.shopId}}"  bindtap="jumpShop" data-shopid="{{shop.shopId}}" data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
+      <view wx:for="{{item.list}}" wx:for-item="shop" wx:for-index="shopidx" 
+        wx:key="{{shop.shopId}}"  catchtap="jumpShop" data-shopid="{{shop.shopId}}" 
+        data-mchid="{{shop.mchId}}" data-shoplogo="{{shop.shopLogo}}"
+        data-shopnm="{{shop.shopNm}}" 
+        data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
         <view class='car-name'>
           <image src="../../image/nearby.png"/>
           <text class='s-name'>{{shop.shopNm}}</text>
@@ -54,20 +21,22 @@
         </view>
         <view class='car-goods-list clearfix'>
 
-          <view wx:for="{{shop.goodsList}}"
+          <view wx:for="{{shop.list}}"
                 wx:for-item="good"
                 wx:key="{{good.goodsNo}}" class="car-container {{good.isTouchMove ? 'touch-move-active' : ''}}"
-                data-index="{{item.cellCd+'#'+shop.shopId+'#'+good.goodsNo}}" 
+                wx:for-index="goodidx"
+                data-index="{{area+'#'+shopidx+'#'+goodidx}}" 
                 bindtouchstart="touchstart" bindtouchmove="touchmove" >
             <view class='car-good'>
-              <image src="{{good.img}}"/>
+              <!--<image src="{{good.goodsImgLogo}}"/>-->
+              <image src="../../image/good.png"/>
               <text class="car-good-name">{{good.goodsNm}}</text>
               <view class='car-good-info'>
-                <text class='car-good-price'>￥{{good.goodsAmt}}</text>
+                <text class='car-good-price'>￥{{good.goodsAmt/100}}</text>
                 <text class='car-good-num'>X{{good.orderNum}}</text>
               </view>
             </view>
-            <view class="del" catchtap="del" data-index="{{item.cellCd+'#'+shop.shopId+'#'+good.goodsNo}}">删除</view>
+            <view class="del" catchtap="del" data-index="{{area+'#'+shopidx+'#'+goodidx}}">删除</view>
           </view>
 
         </view>
@@ -75,7 +44,7 @@
 
     </view>
     <!--不可用小区结束-->
-    <view class='clear-invalid'>
+    <view hidden="{{!shoppingCartList.length}}" class='clear-invalid'>
       <button bindtap="clearInvalid">清空失效商品</button>
     </view>
   </view>

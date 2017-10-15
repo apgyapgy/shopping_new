@@ -140,7 +140,15 @@
   color:#333;
   text-align:center;
 }
-
+.nogood{
+  margin-top:400rpx;
+  width:750rpx;
+  height:32rpx;
+  line-height:32rpx;
+  text-align:center;
+  font-size:30rpx;
+  color:#8f8f8f;
+}
 /*padding*/
 .padding-86{
   width:750rpx;

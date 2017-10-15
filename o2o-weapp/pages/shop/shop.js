@@ -42,11 +42,6 @@ Page({
     }else{
       app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
     }
-    /*var _selectId = wx.getStorageSync(this.data.options.shopId);
-    _selectId = _selectId ? _selectId : '';
-    this.setData({
-      _selectId:_selectId
-    });*/
     this.getGoodsList();
     this.getCartList();
   },

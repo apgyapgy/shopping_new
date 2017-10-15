@@ -7,23 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    activeTab:1,
-    couponsList:[
-      {
-        id:1,
-        name:'富友商圈优惠券',
-        couponMin:10000,
-        endTime:'2017-12-30',
-        coupon:2000
-      }, 
-      {
-        id: 2,
-        name: '富友商圈优惠券',
-        couponMin: 10,
-        endTime: '2018-12-30',
-        coupon: 200
-      }
-    ],
+    activeTab:0,
+    couponsList:[],
     coupons:[],
     token:''
   },
@@ -63,6 +48,7 @@ Page({
           _this.setData({
             coupons:res.data.data.datas
           });
+          _this.getShowCoupon();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.getCoupons();
@@ -103,18 +89,29 @@ Page({
       }
     });
   },
-  getShowCoupon:function(){
-    var activeTab = this.data.activeTab;
+  getShowCoupon: function () {
+    var _activeTab = this.data.activeTab;
+    var _st = ['未使用', '已使用', '已过期'];
     var _list = [];
-    var _st = ['未使用','已使用','已过期'];
-    for(var key in this.data.coupons){
-      if(this.data.coupons[key].coupon){}
+    var _activeText = _st[_activeTab];
+    var _coupons = this.data.coupons;
+    for(var key in _coupons){
+      if (_coupons[key].couponStDesc == _activeText){
+        var _expireDt = _coupons[key].expireDt+"";
+        _expireDt = _expireDt.substring(0, 4) + '-' + _expireDt.substring(4, 6) + '-' + _expireDt.substring(6);
+        _coupons[key].expireDt = _expireDt;
+        _list.push(_coupons[key]);
+      }
     }
+    this.setData({
+      couponsList:_list
+    });
   },
   changeTab:function(e){
     var _index = e.target.dataset.index;
     this.setData({
       activeTab:_index
     });
+    this.getShowCoupon();
   }
 })

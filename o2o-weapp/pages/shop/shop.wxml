@@ -2,7 +2,7 @@
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class="shop-head">
     <!--<image src="{{options.shopLogo?options.shopLogo:'../../image/shop-icon.png'}}"/>-->
-    <image src="../../image/shop.png"/>
+    <image src="../../image/shop-icon.png"/>
     <view class="shop-name">{{options.shopNm}}</view>
   </view>
 
@@ -24,6 +24,9 @@
             data-goodsno="{{item.goodsNo}}" data-goodsamt="{{item.goodsAmt}}" bindtap="saveCart" data-index="{{idx}}" class='add' src="../../image/add.png"/>
         </view>
       </view>
+    </view>
+    <view hidden="{{goodsList.length}}" class='nogood'>
+      暂无商品
     </view>
   </view>
   <view class='padding-86'></view>

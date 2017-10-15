@@ -1,22 +1,22 @@
 <!--pages/mycoupons/mycoupons.wxml-->
 <view class="coupon-head">
-  <view bindtap="changeTab" data-index="0" class="not-used {{activeTab==1?'active':''}}">未使用</view>
-  <view bindtap="changeTab" data-index="1" class="used {{activeTab==2?'active':''}}">已使用</view>
-  <view bindtap="changeTab" data-index="2" class="expired {{activeTab==3?'active':''}}">已过期</view> 
+  <view bindtap="changeTab" data-index="0" class="not-used {{activeTab==0?'active':''}}">未使用</view>
+  <view bindtap="changeTab" data-index="1" class="used {{activeTab==1?'active':''}}">已使用</view>
+  <view bindtap="changeTab" data-index="2" class="expired {{activeTab==2?'active':''}}">已过期</view> 
 </view>
 <view class="padding-20"></view>
 <view wx:if="{{couponsList.length>0}}" class="coupon-body">
 
   <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" class="coupon">
     <view class="coupon-left">
-      <view class="coupon-price">￥{{item.coupon/100}}</view>
-      <view class='coupon-condition'>满{{item.couponMin/100}}元使用</view>
-      <view class="coupon-vld">有效期到:{{item.endTime}}</view>
+      <view class="coupon-price">￥{{item.couponAmt/100}}</view>
+      <view class='coupon-condition'>满{{item.couponAmtMin/100}}元使用</view>
+      <view class="coupon-vld">有效期到:{{item.expireDt}}</view>
     </view>
     <view class="coupon-right">
-      <view class='coupon-name'>{{item.name}}</view>
-      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
-      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-name'>{{item.couponNm}}</view>
+      <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
     </view>
   </view>
 

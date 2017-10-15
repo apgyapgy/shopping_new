@@ -43,22 +43,36 @@ Page({
         active: false
       }
     ],
-    sendList:[],
-    unSendList:[],
     //测试左滑删除begin
     startX:0,
     startY:0,
     //测试左滑删除end,
-    token:''
+    token:'',
+    shoppingCartList:[],
+    expiredId:'',
+    jumpFlag:true,
+    clickable:true
   },
   /*生命周期函数--监听页面加载*/
-  onLoad: function (options) {
+  /*onLoad: function (options) {
     if(!app.globalData.location.cellCd){
       app.globalData.location = { 
         bmapLat: "31.228522821982", 
         bmapLng: "121.56115068654", 
         cellCd: "A2100224063", 
         hostId: "70000030" 
+      };
+      app.globalData.loginId = "15316117950";
+    }
+    this.getShopList();
+  },*/
+  onShow: function (options) {
+    if (!app.globalData.location.cellCd) {
+      app.globalData.location = {
+        bmapLat: "31.228522821982",
+        bmapLng: "121.56115068654",
+        cellCd: "A2100224063",
+        hostId: "70000030"
       };
       app.globalData.loginId = "15316117950";
     }
@@ -86,22 +100,65 @@ Page({
     }
   },
   clearInvalid:function(){//清空失效商品
-    console.log("清空失效商品");
-  },
-  jumpShop:function(e){//点击店铺或商品跳到店铺
-    var _shopid = e.currentTarget.dataset.shopid;
-    var _active = e.currentTarget.dataset.active;
-    if(_active){
-      var _url = _shopid ? '/pages/shop/shop?shopid=' + _shopid : '/pages/shop/shop';
-      wx.navigateTo({
-        url: _url
+    if (this.data.clickable) {
+      var _expiredId = this.data.expiredId;
+      var _this = this;
+      this.setData({
+        clickable: false
       });
-    }else{
-      this.showModal("请先将定位切换至该小区",function(){
-        console.log("去定位去");
+      console.log("失效商品id:", _expiredId);
+      var _this = this;
+      common.getAjax({
+        url: 'wx_we/deleteExpireCart',
+        params: {
+          loginId: app.globalData.loginId,
+          goodsNoStr: _expiredId
+        },
+        success: function (res) {
+          if (res.data.code == 200) {
+            _this.getShopList();
+          } else if (res.data.code == 40101) {
+            _this.getToken(function () {
+              _this.deleteCart(_shopId, _goodId);
+            });
+          } else {
+            _this.showModel("清除购物车失效商品失败!");
+          }
+        },
+        complete:function(){
+          _this.setData({
+            clickable: false
+          });
+        }
       });
     }
-    console.log("jumpshop:",e);
+  },
+  jumpShop:function(e){//点击店铺或商品跳到店铺
+    if(this.data.jumpFlag){
+      var _dataset = e.currentTarget.dataset;
+      var _shopid = _dataset.shopid,
+          _mchid = _dataset.mchid,
+          _shoplogo = _dataset.shoplogo ? _dataset.shoplogo:'',
+          _shopnm = _dataset.shopnm;
+      var _active = _dataset.active;
+      if (_active) {
+        var _url = "/pages/shop/shop";
+        if(_shopid){
+          _url = _url+'?shopId='+_shopid+'&mchId='+_mchid+'&shopNm='+_shopnm+'&shopLogo='+_shoplogo;
+          wx.navigateTo({
+            url: _url
+          });
+        }
+      } else {
+        this.showModal("请先将定位切换至该小区", function () {
+          console.log("去定位去");
+        });
+      }
+    }else{
+      this.setData({
+        jumpFlag:true
+      });
+    }
   },
   showModal:function(txt,fn){//显示弹窗 
     wx.showModal({
@@ -121,10 +178,10 @@ Page({
     //开始触摸时 重置所有删除
     var _cartList = this.data.shoppingCartList;
     for (var area in _cartList){
-      for (var shop in _cartList[area].shops){
-        for (var good in _cartList[area].shops[shop].goodsList){
-          if (_cartList[area].shops[shop].goodsList[good].isTouchMove){
-            _cartList[area].shops[shop].goodsList[good].isTouchMove = false;
+      for (var shop in _cartList[area].list){
+        for (var good in _cartList[area].list[shop].list){
+          if (_cartList[area].list[shop].list[good].isTouchMove){
+            _cartList[area].list[shop].list[good].isTouchMove = false;
           }
         }
       }
@@ -148,16 +205,20 @@ Page({
     var _indexArr = index.split("#");
     var _cartList = this.data.shoppingCartList;
     for (var area in _cartList) {
-      for (var shop in _cartList[area].shops) {
-        for (var good in _cartList[area].shops[shop].goodsList) {
-          _cartList[area].shops[shop].goodsList[good].isTouchMove = false;
+      for (var shop in _cartList[area].list) {
+        for (var good in _cartList[area].list[shop].list) {
+          _cartList[area].list[shop].list[good].isTouchMove = false;
           if (Math.abs(angle) > 30) 
             return;
           if (area == _indexArr[0] && shop == _indexArr[1] && good == _indexArr[2]) {
             if (touchMoveX > startX) //右滑
-              _cartList[area].shops[shop].goodsList[good].isTouchMove = false;
-            else //左滑
-              _cartList[area].shops[shop].goodsList[good].isTouchMove = true;
+              _cartList[area].list[shop].list[good].isTouchMove = false;
+            else{ //左滑
+              _cartList[area].list[shop].list[good].isTouchMove = true;
+              that.setData({
+                jumpFlag:false
+              });
+            }
           }
         }
       }
@@ -181,10 +242,34 @@ Page({
   //删除事件
   del: function (e) {//删除购物车数据
     var _index = e.currentTarget.dataset.index;
-    /*this.data.items.splice(e.currentTarget.dataset.index, 1)
-    this.setData({
-      items: this.data.items
-    });*/
+    console.log(_index);
+    var _indexArr = _index.split("#");
+    var _cartList = this.data.shoppingCartList;
+    var _shopId = _cartList[_indexArr[0]].list[_indexArr[1]].shopId;
+    var _goodId = _cartList[_indexArr[0]].list[_indexArr[1]].list[_indexArr[2]].goodsNo;
+    this.deleteCart(_shopId,_goodId);
+  },
+  deleteCart:function(_shopId,_goodId){
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/deleteCart',
+      params: {
+        loginId: app.globalData.loginId,
+        shopId: _shopId,
+        goodsNo:_goodId
+      },
+      success: function (res) {
+        if (res.data.code == 200) {
+          _this.getShopList();
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.deleteCart(_shopId,_goodId);
+          });
+        } else {
+          _this.showModel("删除购物车商品失败!");
+        }
+      }
+    });
   },
   //测试左滑删除end
   getShopList:function(){//获取购物车在的商品
@@ -198,9 +283,40 @@ Page({
       success: function (res) {
         if (res.data.code == 200) {
           console.log("getShopList:",res);
+          var _shopCartList = [];
+          var _expiredId = "";
+          for (var key in res.data.data.sendList){
+            var _area = res.data.data.sendList[key];
+            _area.isActive = true;
+            for(var shopkey in _area.list){
+              var _shop = _area.list[shopkey];
+              for(var goodkey in _shop.list){
+                var _good = _shop.list[goodkey];
+                _good.isTouchMove = false;
+                if(_good.isExpire == 1){
+                  _expiredId+=','+_good.goodsNo;
+                }
+              }
+            }
+            _shopCartList.push(_area);
+          }
+          for (var key in res.data.data.unSendList) {
+            var _area = res.data.data.unSendList[key];
+            _area.isActive = false;
+            for (var shopkey in _area.list) {
+              var _shop = _area.list[shopkey];
+              for (var goodkey in _shop.list) {
+                var _good = _shop.list[goodkey];
+                _good.isTouchMove = false; if (_good.isExpire == 1) {
+                  _expiredId += ',' + _good.goodsNo;
+                }
+              }
+            }
+            _shopCartList.push(_area);
+          }
           _this.setData({
-            sendList:res.data.data.sendList,
-            unSendList:res.data.data.unSendList
+            shoppingCartList:_shopCartList,
+            expiredId: _expiredId.substring(1)
           });
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
