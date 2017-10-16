@@ -20,11 +20,9 @@ Page({
     },
     options:{
       mchId:"80001828",
-      shopId:"6000000545",
-      shopLogo:"",
-      shopNm:"视不会后悔",
-      cellCd:'A2100224063'
+      shopId:"6000000545"
     },
+    shop:[],
     clickable:true,
     selectInfo:{
       selectAll:false,
@@ -133,7 +131,7 @@ Page({
       });
       this.computedCartInfo();
     }else{
-      this.getSelectInfo(_cartList);
+      this.getSelectInfo(_cartList,true);
     }
   },
   selectGood:function(e){//选择或取消购物车中商品
@@ -158,9 +156,27 @@ Page({
     this.computedCartInfo();
   },
   topay:function(){//去支付
-    wx.navigateTo({
-      url: '/pages/checkOrder/checkOrder',
-    });
+    var _this = this;
+    if (this.data.clickable){
+      this.setData({
+        clickable:false
+      });
+      var _selectIds = this.data.selectIds;
+      if(_selectIds.length){
+        this.setData({
+          clickable: true
+        });
+        wx.navigateTo({
+          url: '/pages/checkOrder/checkOrder?shopId=' + _this.data.shop.shopId
+          + '&cellCd=' + app.globalData.location.cellCd + '&goodsNo='+_selectIds
+          +'&mchId='+_this.data.shop.mchId
+        });
+      }else{
+        this.setData({
+          clickable: true
+        });
+      }
+    }
   },
   goTop: function () {//返回顶部
     this.setData({
@@ -186,6 +202,7 @@ Page({
   },
   getGoodsList:function(){//获取店铺中的商品
     var _this = this;
+    console.log(_this.data.options.shopId);
     common.getAjax({
       url: 'wx_we/queryShopGoods',
       params: {
@@ -194,6 +211,7 @@ Page({
       },
       token: _this.data.token,
       success: function (res) {
+        console.log("queryShopGoods:",res);
         if (res.data.code == 200) {
           var _goodsList = [];
           if (res.data.data.list) {
@@ -208,7 +226,8 @@ Page({
                 _goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
-                goodsList: _goodsList
+                goodsList: _goodsList,
+                shop:res.data.data.shop
               });
             } else {//购物车中无商品
               for (var key in _goodsList) {//无商品将商品的num即加入购物车中的数据置0
@@ -220,7 +239,8 @@ Page({
                 _goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
-                goodsList: _goodsList
+                goodsList: _goodsList,
+                shop:res.data.data.shop
               });
             }
           }else if(res.data.code == 40101){
@@ -426,8 +446,8 @@ Page({
       cartList:_cartList
     });
   },
-  getSelectInfo:function(cartList){//获取购物车选中信息列表
-    if(!this.data.selectIds.length){//一开始未选 中商品
+  getSelectInfo:function(cartList,_type){//获取购物车选中信息列表
+    if(!this.data.selectIds.length || _type){//一开始未选 中商品
       var _selectIdArr = [];
       for (var key in cartList){
         _selectIdArr.push(cartList[key].goodsNo);

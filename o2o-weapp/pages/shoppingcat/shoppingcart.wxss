@@ -146,6 +146,9 @@ page{
   color:#000;
   font-weight:bold;
 }
+.car-goods-list .car-good.expired .car-good-name{
+  color:rgba(0,0,0,.5);
+}
 .car-good-info{
   float:left;
   width:100rpx;
@@ -159,6 +162,9 @@ page{
   font-weight:bold;
   color:#fa3e2d;
 }
+.car-good.expired .car-good-info .car-good-price{
+  color:rgba(250,62,45,.5);
+}
 .car-good-info .car-good-num{
   margin-top:60rpx;
   display:block;
@@ -167,12 +173,18 @@ page{
   font-size:26rpx;
   color:#333;
 }
+.car-good.expired .car-good-info .car-good-num{
+  color:rgba(51,51,51,.5);
+}
 .clear-invalid{
   margin-top:30rpx;
   padding-top:30rpx;
   width:750rpx;
   height:114rpx;
   background:#fff;
+}
+.clear-invalid.disbaled button{
+  background:rgba(15,168,255,.5);
 }
 .clear-invalid button{
   margin:0 auto;

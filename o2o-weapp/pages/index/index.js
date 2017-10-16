@@ -203,9 +203,14 @@ Page({
                         location: {}
                       });
                       _this.showModal(res.data.desc);
-                    } else {
+                    } else if(res.data.code == 40101) {
                       _this.setData({
-                        bannerImgs: ['../../image/banner.png'],
+                        shopList: [],
+                        location: {}
+                      });
+                      app.globalData.location = {};
+                    }else{
+                      _this.setData({
                         shopList: [],
                         location: {}
                       });
@@ -219,6 +224,8 @@ Page({
                 });
               }else if(re.data.code == 40110){
                 wx.redirectTo({ url: "/pages/login/login" });
+              }else{
+                _this.initData();
               }
             }
           });
@@ -236,9 +243,8 @@ Page({
   jumpShopInfo: function (e) {//点店铺跳转
     var _idx = e.currentTarget.dataset.idx;
     var _shop = this.data.shopList[_idx];
-    var _trans = "mchId=" + _shop.mchId + "&shopId=" + _shop.shopId
-      + "&shopNm=" + _shop.shopNm + "&shopLogo=" + _shop.shopLogo
-      +"&cellCd="+this.data.location.cellCd;
+    console.log("jumpshop :",_shop)
+    var _trans = "mchId=" + _shop.mchId + "&shopId=" + _shop.shopId;
     var _url = "/pages/shop/shop?"+_trans;
     var _this = this;
     this.setData({

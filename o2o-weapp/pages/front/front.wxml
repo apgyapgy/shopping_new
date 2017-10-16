@@ -1,0 +1,5 @@
+<!--pages/front/front.wxml-->
+<view class="front-container">
+  <image class="front-text" src="../../image/front-text.png"/>
+  <image class="front-img" src="../../image/front.png"/>
+</view>

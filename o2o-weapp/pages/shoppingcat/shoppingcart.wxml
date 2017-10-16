@@ -11,9 +11,7 @@
       </view>
       <view wx:for="{{item.list}}" wx:for-item="shop" wx:for-index="shopidx" 
         wx:key="{{shop.shopId}}"  catchtap="jumpShop" data-shopid="{{shop.shopId}}" 
-        data-mchid="{{shop.mchId}}" data-shoplogo="{{shop.shopLogo}}"
-        data-shopnm="{{shop.shopNm}}" 
-        data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
+        data-mchid="{{shop.mchId}}" data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
         <view class='car-name'>
           <image src="../../image/nearby.png"/>
           <text class='s-name'>{{shop.shopNm}}</text>
@@ -27,7 +25,7 @@
                 wx:for-index="goodidx"
                 data-index="{{area+'#'+shopidx+'#'+goodidx}}" 
                 bindtouchstart="touchstart" bindtouchmove="touchmove" >
-            <view class='car-good'>
+            <view class="car-good {{good.isExpire==0?'expired':''}}">
               <!--<image src="{{good.goodsImgLogo}}"/>-->
               <image src="../../image/good.png"/>
               <text class="car-good-name">{{good.goodsNm}}</text>
@@ -44,7 +42,7 @@
 
     </view>
     <!--不可用小区结束-->
-    <view hidden="{{!shoppingCartList.length}}" class='clear-invalid'>
+    <view hidden="{{!shoppingCartList.length}}" class="clear-invalid {{expiredId?'':'disbaled'}}">
       <button bindtap="clearInvalid">清空失效商品</button>
     </view>
   </view>

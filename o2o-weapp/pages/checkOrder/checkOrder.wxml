@@ -5,40 +5,31 @@
   <view class="order-head">
     <view class='order-area'>
       <image src="../../image/area_active.png"/>
-      <text>浦东新区-508小区</text>
+      <text>{{shop.areaNm}}</text>
     </view>
-    <view class='order-cloth'>布放地：上海市虹口区曲阳路街道中山北一路865弄19号402室</view>
-    <view class='order-phone'>手机：13625625040</view>
+    <view class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
+    <view class='order-phone'>手机：{{shop.loginId}}</view>
   </view>
 
   <view class="order-wrapper clearfix">
     <view class='order-goods-list clearfix'>
-      <view class='order-good'>
+      <view wx:for="{{goods}}" wx:for-index="idx" wx:key="idx" class='order-good'>
         <image src="../../image/good.png"/>
+        <!--<image src="{{item.goodsImgLogo}}"/>-->
         <view class='order-good-right'>
-          <text class="order-good-name">上海本地蕃茄500g</text>
+          <text class="order-good-name">{{item.goodsNm}}</text>
           <view class='order-good-info'>
-            <text class='order-good-price'>￥1.8</text>
-            <text class='order-good-num'>X2</text>
-          </view>
-        </view>
-      </view>
-      <view class='order-good'>
-        <image src="../../image/good.png"/>
-        <view class='order-good-right'>
-          <text class="order-good-name">上海本地蕃茄500g</text>
-          <view class='order-good-info'>
-            <text class='order-good-price'>￥1.8</text>
-            <text class='order-good-num'>X2</text>
+            <text class='order-good-price'>￥{{item.goodsAmt/100}}</text>
+            <text class='order-good-num'>X{{item.orderNum}}</text>
           </view>
         </view>
       </view>
     </view>
-
-    <view class='arrive-time'>到达时间：今日17：30-18：00</view>
+    <view class='arrive-time'>到达时间：{{popHopeTs}}</view>
     <view catchtap="showCoupon" class='discount'>
       <text>商家优惠</text>
-      <view class='discount-price'>{{couponPrice/100}}元<text>></text></view>
+      <view hidden="{{couponsList.length<=0}}" class='discount-price'>{{couponPrice/100}}元<text>></text></view>
+      <view hidden="{{couponsList.length>0}}" class='discount-price disabled'>暂无优惠券</view>
     </view>
   </view>
   <view class='padding-86'></view>
@@ -53,22 +44,19 @@
       </view>
       <view class="coupon-price">￥{{item.couponAmt/100}}</view>
       <view class='coupon-condition'>满{{item.couponMin/100}}元使用</view>
-      <view class="coupon-vld">有效期到:{{item.endTime}}</view>
+      <view class="coupon-vld">有效期到:{{item.expireDt}}</view>
     </view>
     <view class="coupon-right">
-      <view class='coupon-name'>{{item.name}}</view>
-      <view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
-      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-name'>{{item.couponNm}}</view>
+      <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
     </view>
   </view>
 </scroll-view>
 <!--去结算-->
 <view class='car-bar'>
-  <view class='car-icon active'>
-    <image src="../../image/shop-car.png"/>
-  </view>
   <view class='car-money'>
-    <text class='car-total-money'>合计金额:{{(payPrice-couponPrice)/100}}元</text>
+    <text class='car-total-money'>实际支付金额:<text>{{(payPrice-couponPrice)/100}}</text>元</text>
     <text class='delivery-money'>配送费:0元</text>
   </view>
   <view catchtap="showPayModel" class="to-pay {{isPayAble?'active':''}}">去结算</view>
@@ -80,10 +68,10 @@
     <view class='pay-info-title'>支付</view>
     <view class='pay-info-body'>
       <view class='pay-info-company'>上海富友电子商务有限公司</view>
-      <view class='pay-info-money'>{{(payPrice-couponPrice)/100}}</view>
+      <view class='pay-info-money'>￥{{(payPrice-couponPrice)/100}}</view>
     </view>
     <view class='pay-info-pay'>
-      <text bindtap="topay" class='pay'>确认支付</text>
+      <text bindtap="topay" class="pay {{clickable?'':'disabled'}}">确认支付</text>
     </view>
   </view>
 </view>

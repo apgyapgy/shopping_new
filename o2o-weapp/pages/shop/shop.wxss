@@ -212,6 +212,9 @@
 .car-money .car-total-money,
 .car-money .delivery-money{
   display:block;
+  color:#000;
+}
+.car-money .car-total-money text{
   color:#f33;
 }
 .car-money .car-total-money{

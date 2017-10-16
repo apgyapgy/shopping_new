@@ -2,7 +2,7 @@
 var common = require('js/common.js');
 App({
   onLaunch: function () {
-    //wx.setStorageSync("location","31.230286683682#121.55711567154");
+    //wx.setStorageSync("location","31.230572#121.558072");
 
     /*// 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -134,20 +134,51 @@ App({
   },
   getLocation:function(){
     var _this = this;
+    var _location = wx.getStorageSync("location");
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
         _this.globalData.latitude = res.latitude;
         _this.globalData.longitude = res.longitude;
-        var _location = res.latitude + "#" + res.longitude;
-        wx.setStorageSync("location", _location);
+        _this.checkOauth();
       },
-      fail:function(res){
-          _this.checkLocationAuth(function(){
-            _this.getLocation();
-          });
+      fail: function (res) {
+        _this.checkLocationAuth(function () {
+          _this.getLocation();
+        });
       }
-    })
+    });
+  },
+  checkOauth:function(){
+    var _this = this;
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code,
+              bmapLng: _this.globalData.longitude,
+              bmapLat: _this.globalData.latitude
+            },
+            success: function (re) {
+              if (re.data.code == 200) {
+                _this.globalData.loginId = re.data.data.loginId;
+                _this.globalData.hostId = re.data.data.hostId;
+                wx.redirectTo({
+                  url: '/pages/index/index'
+                });
+              } else if (re.data.code == 40110) {
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
+          });
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
+    });
   },
   globalData: {
     userInfo: null,

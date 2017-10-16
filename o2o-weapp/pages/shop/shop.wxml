@@ -1,9 +1,9 @@
 <!--pages/shop/shop.wxml-->
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class="shop-head">
-    <!--<image src="{{options.shopLogo?options.shopLogo:'../../image/shop-icon.png'}}"/>-->
+    <!--<image src="{{shop.shopLogo?shop.shopLogo:'../../image/shop-icon.png'}}"/>-->
     <image src="../../image/shop-icon.png"/>
-    <view class="shop-name">{{options.shopNm}}</view>
+    <view class="shop-name">{{shop.shopNm}}</view>
   </view>
 
   <view class="goods-wrapper clearfix">
@@ -39,7 +39,7 @@
     <image src="../../image/shop-car.png"/>
   </view>
   <view class='car-money'>
-    <text class='car-total-money'>合计金额:{{selectInfo.selectAmt/100}}元</text>
+    <text class='car-total-money'>合计金额:<text>{{selectInfo.selectAmt/100}}</text>元</text>
     <text class='delivery-money'>配送费:0元</text>
   </view>
   <view catchtap="topay" class="to-pay {{cartList.length>0?'':'disabled'}}">去结算</view>
@@ -93,7 +93,7 @@
         <text class='car-total-money'>合计金额:{{selectInfo.selectAmt/100}}元</text>
         <text class='delivery-money'>配送费:0元</text>
       </view>
-      <view catchtap="topay" class="to-pay {{cartList.length>0?'':'disabled'}}">去结算</view>
+      <view catchtap="topay" class="to-pay {{selectIds.length>0?'':'disabled'}}">去结算</view>
     </view>
   </view>
 </view>

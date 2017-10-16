@@ -102,11 +102,16 @@ Page({
   clearInvalid:function(){//清空失效商品
     if (this.data.clickable) {
       var _expiredId = this.data.expiredId;
+      if (!_expiredId){
+        this.setData({
+          clickable: true
+        });
+        return;
+      }
       var _this = this;
       this.setData({
         clickable: false
       });
-      console.log("失效商品id:", _expiredId);
       var _this = this;
       common.getAjax({
         url: 'wx_we/deleteExpireCart',
@@ -122,12 +127,12 @@ Page({
               _this.deleteCart(_shopId, _goodId);
             });
           } else {
-            _this.showModel("清除购物车失效商品失败!");
+            _this.showModel("清除购物车失效商品失败,请重试!");
           }
         },
         complete:function(){
           _this.setData({
-            clickable: false
+            clickable: true
           });
         }
       });
@@ -137,14 +142,12 @@ Page({
     if(this.data.jumpFlag){
       var _dataset = e.currentTarget.dataset;
       var _shopid = _dataset.shopid,
-          _mchid = _dataset.mchid,
-          _shoplogo = _dataset.shoplogo ? _dataset.shoplogo:'',
-          _shopnm = _dataset.shopnm;
+          _mchid = _dataset.mchid;
       var _active = _dataset.active;
       if (_active) {
         var _url = "/pages/shop/shop";
         if(_shopid){
-          _url = _url+'?shopId='+_shopid+'&mchId='+_mchid+'&shopNm='+_shopnm+'&shopLogo='+_shoplogo;
+          _url = _url+'?shopId='+_shopid+'&mchId='+_mchid;
           wx.navigateTo({
             url: _url
           });
@@ -249,7 +252,7 @@ Page({
     var _goodId = _cartList[_indexArr[0]].list[_indexArr[1]].list[_indexArr[2]].goodsNo;
     this.deleteCart(_shopId,_goodId);
   },
-  deleteCart:function(_shopId,_goodId){
+  deleteCart:function(_shopId,_goodId){//删除某店铺购物车中某件商品
     var _this = this;
     common.getAjax({
       url: 'wx_we/deleteCart',
@@ -293,7 +296,7 @@ Page({
               for(var goodkey in _shop.list){
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
-                if(_good.isExpire == 1){
+                if(_good.isExpire == 0){
                   _expiredId+=','+_good.goodsNo;
                 }
               }
@@ -307,7 +310,8 @@ Page({
               var _shop = _area.list[shopkey];
               for (var goodkey in _shop.list) {
                 var _good = _shop.list[goodkey];
-                _good.isTouchMove = false; if (_good.isExpire == 1) {
+                _good.isTouchMove = false;
+                if (_good.isExpire == 0) {
                   _expiredId += ',' + _good.goodsNo;
                 }
               }

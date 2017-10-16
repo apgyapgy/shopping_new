@@ -89,13 +89,16 @@ page{
   top:-100rpx;
 }
 .car-money{
-  margin-left:120rpx;
+  margin-left:30rpx;
   float:left;
   width:440rpx;
 }
 .car-money .car-total-money,
 .car-money .delivery-money{
   display:block;
+  color:#000;
+}
+.car-money .car-total-money text{
   color:#f33;
 }
 .car-money .car-total-money{
@@ -218,6 +221,9 @@ page{
   font-size:28rpx;
   line-height:44rpx;
   color:#fa3e2d;
+}
+.order-wrapper .discount .discount-price.disabled{
+  color:rgba(0,0,0,.5);
 }
 .order-wrapper .discount .discount-price text{
   float:none;
@@ -387,4 +393,7 @@ page{
   color:#fff;
   border-radius:5rpx;
   text-align:center;
+}
+.pay-info-pay .pay.disabled{
+  background:rgba(38,177,254,.5);
 }
