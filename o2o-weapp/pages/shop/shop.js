@@ -88,12 +88,12 @@ Page({
         if (res.data.code == 200) {
           console.log("add cart success:",res);
           var _selectIds = _this.data.selectIds;
-          if(_selectIds.length){
+          //if(_selectIds.length){
             _selectIds.push(_goodsNo);
             _this.setData({
               selectIds: _selectIds
             });
-          }
+          //}
           _this.getCartList();
           if (fn) {
             fn();

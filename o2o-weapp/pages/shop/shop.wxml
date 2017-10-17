@@ -90,7 +90,7 @@
 
     <view bindtap="showCarInfo" class='car-bar'>
       <view class='car-money'>
-        <text class='car-total-money'>合计金额:{{selectInfo.selectAmt/100}}元</text>
+        <text class='car-total-money'>合计金额:<text>{{selectInfo.selectAmt/100}}</text>元</text>
         <text class='delivery-money'>配送费:0元</text>
       </view>
       <view catchtap="topay" class="to-pay {{selectIds.length>0?'':'disabled'}}">去结算</view>
