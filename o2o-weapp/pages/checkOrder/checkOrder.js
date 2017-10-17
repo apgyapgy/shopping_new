@@ -5,32 +5,7 @@ Page({
   data: {
     scrollTop: 0,
     couponShowFlag: false,//是否显示优惠券们
-    couponsList:[//优惠券列表 
-      {
-        id:1,
-        name:'富友商圈优惠券1',
-        couponMin:10000,
-        couponAmt:2000,
-        endTime:'2017-12-30',
-        select:false
-      },
-      {
-        id: 2,
-        name: '富友商圈优惠券2',
-        couponMin: 5000,
-        couponAmt: 1500,
-        endTime: '2017-12-30',
-        select: false
-      },
-      {
-        id: 3,
-        name: '富友商圈优惠券3',
-        couponMin: 800,
-        couponAmt: 2500,
-        endTime: '2017-12-30',
-        select: false
-      }
-    ],
+    couponsList: [],//优惠券列表 
     isPayAble:true,//判断是否可支付，用来决定去结算按钮状态 
     showPayModel:false,//是否显示支付信息弹窗 
     payPrice:0,//支付的价格，未减去优惠券价格
@@ -42,7 +17,7 @@ Page({
     token:'',
     popHopeTs:'',
     clickable:true,
-    payData:[]
+    payData:{}
   },
   /**
    * 生命周期函数--监听页面加载
@@ -69,7 +44,7 @@ Page({
         },
         token: _this.data.token,
         success: function (res) {
-          console.log("orderPage:", res);
+          console.log("checkOrder.js orderPage:", res);
           if(res.data.code == 200){
             
             _this.calculatePayPrice();
@@ -156,8 +131,8 @@ Page({
     });
   },
   topay:function(){//点击去结算
+    var _this = this;
     if(this.data.clickable){
-      var _this = this;
       var _goods = this.data.goods;
       var _orderGoods = [];
       this.setData({
@@ -166,7 +141,8 @@ Page({
       for(var key in _goods){
         var _arr = {
           goodsNo: _goods[key].goodsNo,
-          orderNum: _goods[key].orderNum
+          orderNum: _goods[key].orderNum,
+          mchId: _goods[key].mchId
         }
         _orderGoods.push(_arr);
       }
@@ -186,7 +162,12 @@ Page({
           params: _params,
           token:_this.data.token,
           success: function (res) {
-            console.log("order success:", res)
+            console.log("checkOrder.js order:", res);
+            if (res.data.code == 200) {
+              _this.requestPayMent(res.data.data);
+            }else{
+              _this.showModal(res.data.desc);
+            }
           },
           complete: function () {
             _this.setData({
@@ -197,27 +178,45 @@ Page({
       });
     }
   },
-  requestPayMent:function(){//发起微信支付
+  requestPayMent:function(_data){//发起微信支付
     var _this = this;
+    _this.setData({
+      payData:_data
+    });
+    console.log("payData:",this.data.payData);
     wx.requestPayment({
-      'timeStamp': _this.payData.timeStamp,
-      'nonceStr': _this.payData.nonceStr,
-      'package': _this.payData.package,
+      'timeStamp': _this.data.payData.timestamp,
+      'nonceStr': _this.data.payData.noncestr,
+      'package': _this.data.payData.package,
       'signType': 'MD5',
-      'paySign': _this.payData.paySign,
+      'paySign': _this.data.payData.paySign,
       'success': function (res) {
         if (res.errMsg == "requestPayment:ok"){
           //调用 支付成功
           console.log("支付成功:",res);
+          _this.showModal("支付成功，点击确定返回!",function(){
+            wx.navigateBack()
+          })
         }
       },
       'fail': function (res) {
         if (res.errMsg == "requestPayment:fail cancel"){
           //用户取消支付
           console.log("用户取消支付:",res);
+          _this.showModal("您已取消支付!",function(){
+            _this.setData({
+              showPayModel:false
+            });
+            //wx.navigateBack();
+          });
         } else if (res.errMsg == "requestPayment:fail (detail message)"){
           //调用支付失败，其中 detail message 为后台返回的详细失败原因
           console.log("支付失败:",res);
+          _this.showModal("支付失败!",function(){
+            _this.setData({
+              showPayModel: false
+            });
+          });
         }
       }
     })
@@ -260,6 +259,20 @@ Page({
           });
         } else {
           console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
+    });
+  },
+  showModal: function (cont,fn) {//显示弹窗,cont为显示的内容 
+    wx.showModal({
+      title: '提示',
+      content: cont,
+      showCancel: false,
+      success:function(res){
+        if (res.confirm){
+          if (fn) {
+            fn();
+          }
         }
       }
     });

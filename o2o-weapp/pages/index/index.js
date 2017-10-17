@@ -66,6 +66,7 @@ Page({
               bmapLat: app.globalData.latitude 
             },
             success: function (re) {
+              console.log("index.js onload oauth:",re);
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
                 app.globalData.hostId = re.data.data.hostId;
@@ -176,6 +177,7 @@ Page({
               bmapLat:app.globalData.latitude 
             },
             success: function (re) {
+              console.log("index.js oauth:",re);
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
                 app.globalData.hostId = re.data.data.hostId; 

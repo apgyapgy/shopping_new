@@ -1,26 +1,30 @@
 <!--pages/mycoupons/mycoupons.wxml-->
-<view class="coupon-head">
-  <view bindtap="changeTab" data-index="0" class="not-used {{activeTab==0?'active':''}}">未使用</view>
-  <view bindtap="changeTab" data-index="1" class="used {{activeTab==1?'active':''}}">已使用</view>
-  <view bindtap="changeTab" data-index="2" class="expired {{activeTab==2?'active':''}}">已过期</view> 
-</view>
-<view class="padding-20"></view>
-<view wx:if="{{couponsList.length>0}}" class="coupon-body">
-
-  <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" class="coupon">
-    <view class="coupon-left">
-      <view class="coupon-price">￥{{item.couponAmt/100}}</view>
-      <view class='coupon-condition'>满{{item.couponAmtMin/100}}元使用</view>
-      <view class="coupon-vld">有效期到:{{item.expireDt}}</view>
-    </view>
-    <view class="coupon-right">
-      <view class='coupon-name'>{{item.couponNm}}</view>
-      <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
-      <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
-    </view>
+<scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true" >
+  <view class="coupon-head">
+    <view bindtap="changeTab" data-index="0" class="not-used {{activeTab==0?'active':''}}">未使用</view>
+    <view bindtap="changeTab" data-index="1" class="used {{activeTab==1?'active':''}}">已使用</view>
+    <view bindtap="changeTab" data-index="2" class="expired {{activeTab==2?'active':''}}">已过期</view> 
   </view>
+  <view class="padding-20"></view>
+  <view wx:if="{{couponsList.length>0}}" class="coupon-body">
 
-</view>
-<view wx:else class="no-coupons">
-  <text>暂无优惠券</text>
-</view>
+    <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" class="coupon">
+      <view class="coupon-left">
+        <view class="coupon-price">￥{{item.couponAmt/100}}</view>
+        <view class='coupon-condition'>满{{item.couponAmtMin/100}}元使用</view>
+        <view class="coupon-vld">有效期到:{{item.expireDt}}</view>
+      </view>
+      <view class="coupon-right">
+        <view class='coupon-name'>{{item.couponNm}}</view>
+        <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+        <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
+      </view>
+    </view>
+
+  </view>
+  <view wx:else class="no-coupons">
+    <text>暂无优惠券</text>
+  </view>
+</scroll-view>
+<!--返回顶部-->
+<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>

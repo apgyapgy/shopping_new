@@ -1,96 +1,54 @@
 <!--pages/order/order.wxml-->
-<view class="order-head">
-  <view bindtap="changeTab" data-index="1" class="not-used {{activeTab==1?'active':''}}">待付款</view>
-  <view bindtap="changeTab" data-index="2" class="used {{activeTab==2?'active':''}}">待配送</view>
-  <view bindtap="changeTab" data-index="3" class="expired {{activeTab==3?'active':''}}">待取货</view> 
-  <view bindtap="changeTab" data-index="4" class="expired {{activeTab==4?'active':''}}">已完成</view> 
-</view>
-<!--padding-->
-<view class='padding-20'></view>
-
-<!--order body-->
-<view wx:if="{{orderList.length>0}}" class='order-body'>
-  <view class='shop-order clearfix'>
-
-    <view class='shop-name'>
-      <image src="../../image/nearby.png"/>
-      <text class='s-name'>XXX商户</text>
-      <text class='gt'>></text>
-      <text hidden="{{activeTab==1 || activeTab==3}}" class='order-success'>{{activeTab==4?'交易完成':'待配送'}}</text>
-    </view>
-
-    <view class='shop-goods-list clearfix'>
-      <view class='shop-good'>
-        <image src="../../image/good.png"/>
-        <text class="shop-good-name">上海本地蕃茄500g</text>
-        <view class='shop-good-info'>
-          <text class='shop-good-price'>￥1.8</text>
-          <text class='shop-good-num'>X2</text>
-        </view>
-      </view>
-      <view class='shop-good'>
-        <image src="../../image/good.png"/>
-        <text class="shop-good-name">上海本地蕃茄500g</text>
-        <view class='shop-good-info'>
-          <text class='shop-good-price'>￥1.8</text>
-          <text class='shop-good-num'>X2</text>
-        </view>
-      </view>
-    </view>
-
-    <view class='shop-order-info'>
-      <view class='shop-order-coupon-used'>已使用:满20减5</view>
-      <view class='shop-order-price'>共2件商品，实际支付￥<text>4.8</text></view>
-    </view>
-
-    <view wx:if="{{activeTab==1||activeTab==3}}" class='order-pay'>
-      <button wx:if="{{activeTab==1}}" bindtap="showPayModel" class='pay'>立即付款</button>
-      <button wx:elif="{{activeTab==3}}" bindtap="openBox" class='open-box'>开箱</button>
-    </view>
+<scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true" >
+  <view class="order-head">
+    <view bindtap="changeTab" data-index="0" class="not-used {{activeTab==0?'active':''}}">待付款</view>
+    <view bindtap="changeTab" data-index="1" class="used {{activeTab==1?'active':''}}">待配送</view>
+    <view bindtap="changeTab" data-index="2" class="expired {{activeTab==2?'active':''}}">待取货</view> 
+    <view bindtap="changeTab" data-index="3" class="expired {{activeTab==3?'active':''}}">已完成</view> 
   </view>
-  <view class='shop-order clearfix'>
+  <!--padding-->
+  <view class='padding-20'></view>
 
-    <view class='shop-name'>
-      <image src="../../image/nearby.png"/>
-      <text class='s-name'>XXX商户</text>
-      <text class='gt'>></text>
-      <text wx:if="{{activeTab==4 || activeTab==2}}" class='order-success'>{{activeTab==4?'交易完成':'待配送'}}</text>
-    </view>
+  <!--order body-->
+  <view wx:if="{{orderList.length>0}}" class='order-body'>
+    <view wx:for="{{orderList}}" wx:for-index="idx" wx:key="idx" class='shop-order clearfix'>
 
-    <view class='shop-goods-list clearfix'>
-      <view class='shop-good'>
-        <image src="../../image/good.png"/>
-        <text class="shop-good-name">上海本地蕃茄500g</text>
-        <view class='shop-good-info'>
-          <text class='shop-good-price'>￥1.8</text>
-          <text class='shop-good-num'>X2</text>
+      <view class='shop-name'>
+        <image src="../../image/nearby.png"/>
+        <text class='s-name'>{{item.mchNm}}</text>
+        <text class='gt'>></text>
+        <text hidden="{{activeTab==0 || activeTab==2}}" class='order-success'>{{activeTab==3?'交易完成':'待配送'}}</text>
+      </view>
+
+      <view class='shop-goods-list clearfix'>
+        <view wx:for="{{item.orderGoods}}" wx:for-item="good" wx:for-index="gidx" wx:key="gidx" class='shop-good'>
+          <!--<image src="{{good.goodsImgLogo}}"/>-->
+          <image src="../../image/good.png"/>
+          <text class="shop-good-name">{{good.goodsNm}}</text>
+          <view class='shop-good-info'>
+            <text class='shop-good-price'>￥{{good.goodsAmt/100}}</text>
+            <text class='shop-good-num'>X{{good.orderNum}}</text>
+          </view>
         </view>
       </view>
-      <view class='shop-good'>
-        <image src="../../image/good.png"/>
-        <text class="shop-good-name">上海本地蕃茄500g</text>
-        <view class='shop-good-info'>
-          <text class='shop-good-price'>￥1.8</text>
-          <text class='shop-good-num'>X2</text>
-        </view>
+
+      <view class='shop-order-info'>
+        <view class='shop-order-coupon-used'>{{item.couponAmt>0?'已使用:满'+item.couponAmtMin/100+'减'+item.couponAmt/100:'未使用优惠券'}}</view>
+        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmtYuan}}</text></view>
+      </view>
+
+      <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>
+        <button wx:if="{{activeTab==0}}" data-idx="{{idx}}" bindtap="showPayModel" class='pay'>立即付款</button>
+        <button wx:elif="{{activeTab==2}}" data-idx="{{idx}}" bindtap="openBox" class='open-box'>开箱</button>
       </view>
     </view>
 
-    <view class='shop-order-info'>
-      <view class='shop-order-coupon-used'>已使用:满20减5</view>
-      <view class='shop-order-price'>共2件商品，实际支付￥<text>4.8</text></view>
-    </view>
-
-    <view hidden="{{activeTab==2||activeTab==4}}" class='order-pay'>
-      <button hidden="{{activeTab!=1}}" bindtap="showPayModel" class='pay'>立即付款</button>
-      <button hidden="{{activeTab!=3}}" bindtap="showPayModel" class='open-box'>开箱</button>
-    </view>
   </view>
-</view>
-<view wx:else class="no-order">
-  <text>你还没有相关订单哦</text>
-</view>
-
+  <view wx:else class="no-order">
+    <text>你还没有相关订单哦</text>
+  </view>
+  <view class='padding-100'></view>
+</scroll-view>
 <view hidden="{{!showPayModel}}" class='pay-info-wrapper'>
   <view class="pay-info">
     <view bindtap="closePayModel" class='close'>X</view>
@@ -100,11 +58,12 @@
       <view class='pay-info-money'>500</view>
     </view>
     <view class='pay-info-pay'>
-      <text bindtap="topay" class='topay'>确认支付</text>
+      <text bindtap="topay" class="topay {{clickable?'':'disabled'}}">确认支付</text>
     </view>
   </view>
 </view>
-
+<!--返回顶部-->
+<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 <!--footer-->
 <import src="../footer/footer.wxml"/>
 <template is="footer" data="{{tabbarArray}}"></template>

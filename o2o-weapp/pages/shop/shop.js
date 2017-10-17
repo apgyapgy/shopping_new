@@ -32,14 +32,16 @@ Page({
     selectIds:[]
   },
   /*生命周期函数--监听页面加载*/
-  onLoad: function (options) {
-    if(options.shopId){
+  onLoad:function(options){
+    if (options.shopId) {
       this.setData({
         options: options
       });
-    }else{
+    } else {
       app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
     }
+  },
+  onShow: function () {
     this.getGoodsList();
     this.getCartList();
   },
@@ -85,6 +87,13 @@ Page({
       success: function (res) {
         if (res.data.code == 200) {
           console.log("add cart success:",res);
+          var _selectIds = _this.data.selectIds;
+          if(_selectIds.length){
+            _selectIds.push(_goodsNo);
+            _this.setData({
+              selectIds: _selectIds
+            });
+          }
           _this.getCartList();
           if (fn) {
             fn();
@@ -279,7 +288,8 @@ Page({
           _this.getSelectInfo(res.data.data.list);
           if(!_this.data.cartList.length){
             _this.setData({
-              showCarInfoFlag:false
+              showCarInfoFlag:false,
+              selectIds:[]
             });
           }
         }else if(res.data.code == 40101){
@@ -367,6 +377,12 @@ Page({
       token: _this.data.token,
       success: function (res) {
         if (res.data.code == 200) {
+          var _selectIds = _this.data.selectIds;
+          var _index = _selectIds.indexOf(_goodsNo);
+          _selectIds.splice(_index,1);
+          _this.setData({
+            selectIds:_selectIds
+          });
           _this.getCartList();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
@@ -436,7 +452,7 @@ Page({
         _cartList[key].isSelected = false;
       }
     }
-    //console.log(_selectId,_seArr,_seArr.length,_cartList.length)
+    //console.log(_selectId,_selectId.length,_cartList.length)
     this.setData({
       selectInfo:{
         selectAll: _selectId.length==_cartList.length?true:false,
@@ -447,6 +463,7 @@ Page({
     });
   },
   getSelectInfo:function(cartList,_type){//获取购物车选中信息列表
+    //_type判断是否是全选事件中触发，
     if(!this.data.selectIds.length || _type){//一开始未选 中商品
       var _selectIdArr = [];
       for (var key in cartList){

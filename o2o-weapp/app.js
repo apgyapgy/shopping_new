@@ -163,6 +163,7 @@ App({
               bmapLat: _this.globalData.latitude
             },
             success: function (re) {
+              console.log("app.js:oauth",re);
               if (re.data.code == 200) {
                 _this.globalData.loginId = re.data.data.loginId;
                 _this.globalData.hostId = re.data.data.hostId;

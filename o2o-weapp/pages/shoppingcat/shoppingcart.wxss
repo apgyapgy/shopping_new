@@ -139,7 +139,7 @@ page{
   float:left;
   padding-left:20rpx;
   margin-top:22rpx;
-  width:450rpx;
+  width:420rpx;
   height:174rpx;
   font-size:30rpx;
   line-height:40rpx;
@@ -150,13 +150,16 @@ page{
   color:rgba(0,0,0,.5);
 }
 .car-good-info{
-  float:left;
-  width:100rpx;
+  float:right;
+  margin-right:10rpx;
+  width:120rpx;
 }
 .car-good-info .car-good-price{
   display:block;
   margin-top:22rpx;
   height:40rpx;
+  width:120rpx;
+  text-align:center;
   line-height:40rpx;
   font-size:30rpx;
   font-weight:bold;
@@ -168,7 +171,7 @@ page{
 .car-good-info .car-good-num{
   margin-top:60rpx;
   display:block;
-  width:100rpx;
+  width:120rpx;
   text-align:center;
   font-size:26rpx;
   color:#333;

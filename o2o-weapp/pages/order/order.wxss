@@ -30,6 +30,11 @@
   height:20rpx;
   background:#fff;
 }
+.padding-120{
+  width:750rpx;
+  height:120rpx;
+  background:#fff;
+}
 
 /*没有订单*/
 .no-order text{
@@ -106,7 +111,7 @@
   float:left;
   padding-left:20rpx;
   margin-top:22rpx;
-  width:450rpx;
+  width:420rpx;
   height:174rpx;
   font-size:30rpx;
   line-height:40rpx;
@@ -114,22 +119,25 @@
   font-weight:bold;
 }
 .shop-good-info{
-  float:left;
-  width:100rpx;
+  float:right;
+  margin-right:10rpx;
+  width:120rpx;
 }
 .shop-good-info .shop-good-price{
   display:block;
   margin-top:22rpx;
+  width:120rpx;
   height:40rpx;
   line-height:40rpx;
   font-size:30rpx;
   font-weight:bold;
   color:#fa3e2d;
+  text-align:center;
 }
 .shop-good-info .shop-good-num{
   margin-top:60rpx;
   display:block;
-  width:100rpx;
+  width:120rpx;
   text-align:center;
   font-size:26rpx;
   color:#333;
@@ -258,4 +266,29 @@
   color:#fff;
   border-radius:5rpx;
   text-align:center;
+}
+.pay-info-pay .topay.disabled{
+  background:rgba(38,177,254,.5);
+}
+
+/*返回顶部*/
+.top{
+  display:none;
+  position:fixed;
+  bottom:280rpx;
+  right:30rpx;
+  width:80rpx;
+  height:80rpx;
+  border-radius:50%;
+}
+.top.active{
+  display:block;
+}
+/*scroll-view*/
+.scrollview{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  right:0; 
+  bottom:0;
 }

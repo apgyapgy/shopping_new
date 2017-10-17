@@ -175,20 +175,28 @@
          | cellCd	  		 | string(32)   |            |定位小区编号openId
          | goodsNo	  		 | string(32)   |            |购物车选中商品列表 如52001143,52001226
      2、返回
+     
+ 
+## 订单查询接口/api/orderQry
+	 1、请求参数
+	 	 | needGoods         | int          |  not null  | 查询订单是否需要同步查询出子订单 空-否 非空-是 
+	 	 | orderSt           | int          |  not null  | 0待支付  200待配送  201配送成功待取货 203已完成
+	 	 | orderSrc          | int          |  not null  | 3线上店铺
+     2、返回
      	 
      
 ## 支付接口
 	 ## 聚合支付下单 /api/order
      1、请求参数
         | orderAmt           | int      |  not null  |订单实际金额 分 1000
-		| orderSrc           | int      |  not null  |来源  3用户小程序
+		| src           	 | int      |  not null  |来源  4用户小程序
      	| shopId             | string   |  not null  |店铺编号
      	| orderTp            | string   |  not null  |1线上预售
-     	| payMode            | int      |  not null  |2微信小程序支付 
 		| hostId	         | string   |  not null  |配送终端
 		| couponNo           | string   |  not null  |优惠券编号
 		| orderGoods         | string   |  not null  |子订单，以json数组的方式传递
-		如：[{"goodsNo":"0000001","orderNum":"1"},{"goodsNo":"0000002","orderNum":"6"}]
+		如：[{"mchId":"80001828","goodsNo":"0000001","orderNum":"1"},{"mchId":"80001828","goodsNo":"0000002","orderNum":"6"}]
+			| mchId           	 | string   |  not null  |商户id
 			| goodsNo            | string   |  not null  |商品编号
         	| orderNum           | int      |  not null  |商品数量
 

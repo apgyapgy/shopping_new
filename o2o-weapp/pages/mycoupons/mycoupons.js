@@ -10,7 +10,9 @@ Page({
     activeTab:0,
     couponsList:[],
     coupons:[],
-    token:''
+    token: '',
+    backTopIconShowFlag: false,
+    scrollTop: 0,
   },
 
   /**
@@ -45,8 +47,14 @@ Page({
       success: function (res) {
         if (res.data.code == 200) {
           console.log("获取优惠券成功:",res);
+          var _coupons = res.data.data.datas;
+          for(var key in _coupons){
+            var _expireDt = _coupons[key].expireDt + "";
+            _expireDt = _expireDt.substring(0, 4) + '-' + _expireDt.substring(4, 6) + '-' + _expireDt.substring(6);
+            _coupons[key].expireDt = _expireDt;
+          }
           _this.setData({
-            coupons:res.data.data.datas
+            coupons: _coupons
           });
           _this.getShowCoupon();
         } else if (res.data.code == 40101) {
@@ -97,9 +105,6 @@ Page({
     var _coupons = this.data.coupons;
     for(var key in _coupons){
       if (_coupons[key].couponStDesc == _activeText){
-        var _expireDt = _coupons[key].expireDt+"";
-        _expireDt = _expireDt.substring(0, 4) + '-' + _expireDt.substring(4, 6) + '-' + _expireDt.substring(6);
-        _coupons[key].expireDt = _expireDt;
         _list.push(_coupons[key]);
       }
     }
@@ -113,5 +118,25 @@ Page({
       activeTab:_index
     });
     this.getShowCoupon();
+  },
+  goTop: function () { //返回顶部
+    this.setData({
+      scrollTop: 0
+    });
+  },
+  checkBackTop: function (e) {//检测并判断是否显示返回顶部按钮 
+    if (e.detail.scrollTop > 500) {
+      if (this.data.backTopIconShowFlag == false) {
+        this.setData({
+          backTopIconShowFlag: true
+        });
+      }
+    } else {
+      if (this.data.backTopIconShowFlag == true) {
+        this.setData({
+          backTopIconShowFlag: false
+        });
+      }
+    }
   }
 })

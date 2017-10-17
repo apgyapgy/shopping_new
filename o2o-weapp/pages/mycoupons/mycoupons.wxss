@@ -152,3 +152,24 @@ page{
   color:#666;
   text-align:center;
 }
+/*返回顶部*/
+.top{
+  display:none;
+  position:fixed;
+  bottom:280rpx;
+  right:30rpx;
+  width:80rpx;
+  height:80rpx;
+  border-radius:50%;
+}
+.top.active{
+  display:block;
+}
+/*scroll-view*/
+.scrollview{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  right:0; 
+  bottom:0;
+}
