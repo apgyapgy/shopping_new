@@ -159,21 +159,6 @@ Page({
       }
     });
   },
-  showModal: function (cont, fn) {
-    //显示弹窗,cont为显示的内容,fn为点击确定按钮触发事件可为空
-    wx.showModal({
-      title: '提示',
-      content: cont,
-      showCancel: false,
-      success: function (res) {
-        if (res.confirm) {
-          if (fn) {
-            fn();
-          }
-        }
-      }
-    });
-  },
   topay: function (e) {//点击去结算
     var _this = this;
     if(this.data.clickable){
@@ -208,28 +193,6 @@ Page({
         clickable:true
       });
     }
-    /*if (this.data.clickable) {
-      this.getToken(function () {
-        common.getAjax({
-          url: 'api/order',
-          params: _params,
-          token: _this.data.token,
-          success: function (res) {
-            console.log("checkOrder.js order:", res);
-            if (res.data.code == 200) {
-              _this.requestPayMent(res.data.data);
-            } else {
-              _this.showModal(res.data.desc);
-            }
-          },
-          complete: function () {
-            _this.setData({
-              clickable: true
-            });
-          }
-        });
-      });
-    }*/
   },
   requestPayMent: function (_data) {//发起微信支付
     var _this = this;
@@ -247,7 +210,7 @@ Page({
         if (res.errMsg == "requestPayment:ok") {
           //调用 支付成功
           console.log("支付成功:", res);
-          _this.showModal("支付成功，点击确定返回!", function (){
+          common.showModal("支付成功，点击确定返回!", function (){
             wx.navigateBack()
           });
         }
@@ -256,7 +219,7 @@ Page({
         if (res.errMsg == "requestPayment:fail cancel") {
           //用户取消支付
           console.log("用户取消支付:", res);
-          _this.showModal("您已取消支付!", function () {
+          common.showModal("您已取消支付!", function () {
             _this.setData({
               showPayModel:false
             });
@@ -265,7 +228,7 @@ Page({
         } else if (res.errMsg == "requestPayment:fail (detail message)") {
           //调用支付失败，其中 detail message 为后台返回的详细失败原因
           console.log("支付失败:", res);
-          _this.showModal("支付失败!",function(){
+          common.showModal("支付失败!",function(){
             _this.setData({
               showPayModel: false
             });

@@ -2,13 +2,6 @@
 page{
   background:#f2f2f2;
 }
-.scrollview{
-  position:absolute; 
-  top:0; 
-  left:0; 
-  right:0; 
-  bottom:0;
-}
 .car-area{
   margin-top:30rpx;
   width:750rpx;
@@ -201,20 +194,6 @@ page{
   background:#0fa8ff;
 }
 
-/*返回顶部*/
-.top{
-  display:none;
-  position:fixed;
-  bottom:280rpx;
-  right:30rpx;
-  width:80rpx;
-  height:80rpx;
-  border-radius:50%;
-}
-.top.active{
-  display:block;
-}
-
 /*footer*/
 @import '../footer/footer.wxss';
 .clearfix:after{
@@ -224,4 +203,26 @@ page{
   visibility:hidden;
   width:0;
   height:0;
+}
+/*购物车为空*/
+.cart-empty{
+  margin-top:300rpx;
+  width:750rpx;
+}
+.cart-empty image,
+.cart-empty text{
+  display:block;
+  margin:20rpx auto 0;
+}
+.cart-empty image{
+  width:200rpx;
+  height:190rpx;
+}
+.cart-empty text{
+  width:750rpx;
+  height:50rpx;
+  text-align:center;
+  line-height:50rpx;
+  font-size:40rpx;
+  color:#ccc;
 }

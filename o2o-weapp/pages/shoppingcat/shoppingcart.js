@@ -127,7 +127,7 @@ Page({
               _this.deleteCart(_shopId, _goodId);
             });
           } else {
-            _this.showModel("清除购物车失效商品失败,请重试!");
+            common.showModal("清除购物车失效商品失败,请重试!");
           }
         },
         complete:function(){
@@ -153,27 +153,13 @@ Page({
           });
         }
       } else {
-        this.showModal("请先将定位切换至该小区", function () {
-          console.log("去定位去");
-        });
+        common.showModal("请先将定位切换至该小区");
       }
     }else{
       this.setData({
         jumpFlag:true
       });
     }
-  },
-  showModal:function(txt,fn){//显示弹窗 
-    wx.showModal({
-      title: '提示',
-      content: txt,
-      showCancel: false,
-      success:function(){
-        if(fn){
-          fn();
-        }
-      }
-    });
   },
   //测试左滑删除begin
   //手指触摸动作开始 记录起点X坐标
@@ -269,7 +255,7 @@ Page({
             _this.deleteCart(_shopId,_goodId);
           });
         } else {
-          _this.showModel("删除购物车商品失败!");
+          common.showModal("删除购物车商品失败!");
         }
       }
     });
@@ -326,8 +312,8 @@ Page({
           _this.getToken(function () {
             _this.getShopList();
           });
-        }else{
-          _this.showModel("加载购物车数据失败!");
+        } else {
+          common.showModal("加载购物车数据失败!");
         }
       }
     });

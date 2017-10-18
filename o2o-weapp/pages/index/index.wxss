@@ -192,25 +192,7 @@
   font-size:24rpx;
 }
 
-/*返回顶部*/
-.top{
-  display:none;
-  position:fixed;
-  bottom:280rpx;
-  right:30rpx;
-  width:80rpx;
-  height:80rpx;
-  border-radius:50%;
-}
-.top.active{
-  display:block;
-}
-
 /* pages/footer/footer.wxss */
-.padding-100{
-  width:750rpx;
-  height:100rpx;
-}
 /*footer*/
 .footer{
   position:fixed;

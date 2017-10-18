@@ -10,7 +10,9 @@ Page({
     mobile:'',
     yzm:'',
     cutdownTime:0,
-    timer:null
+    timer: null,
+    latitude: '',//纬度
+    longitude: ''//经度
   },
   //事件处理函数
   bindViewTap: function () {
@@ -19,13 +21,26 @@ Page({
     })
   },
   onLoad: function () {
+    var _location = this.getStorageLocation();
+    if (_location) {
+      _location = _location.split("#");
+      this.setData({
+        latitude: _location[0],
+        longitude: _location[1]
+      });
+    } else {
+      this.setData({
+        latitude: app.globalData.latitude,
+        longitude: app.globalData.longitude
+      });
+    }
     if (app.globalData.userInfo) {
       //console.log('用户信息：' + JSON.stringify(app.globalData.userInfo));
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse) {
+    /*} else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
@@ -33,7 +48,7 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true
         })
-      }
+      }*/
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
@@ -73,18 +88,10 @@ Page({
     var _mobile = this.data.mobile.trim();
     var _code = this.data.yzm.trim();
     if(!_mobile){
-      wx.showModal({
-        title: '提示',
-        content: '请输入收件宝帐号或手机号',
-        showCancel: false
-      });
+      common.showModal("请输入收件宝帐号或手机号");
       return;
     }else if(!_code){
-      wx.showModal({
-        title: '提示',
-        content: '请输入验证码',
-        showCancel: false
-      });
+      common.showModal("请输入验证码");
       return;
     }
     if(/\d{6}/.test(_code)){
@@ -100,34 +107,8 @@ Page({
           }
         }
       });
-      /*wx.checkSession({
-        success: function () {
-          console.log("checksession success");
-          //session 未过期，并且在本生命周期一直有效
-          _this.loginBind();
-        },
-        fail: function () {
-          //登录态过期
-          console.log("checksession fail");
-          wx.login({
-            success: res => {
-              // 发送 res.code 到后台换取 openId, sessionKey, unionId
-              if (res.code) {
-                this.globalData.code = res.code;
-                _this.loginBind();
-              } else {
-                console.log('获取用户登录态失败！' + res.errMsg)
-              }
-            }
-          });
-        }
-      });*/
     }else{
-      wx.showModal({
-        title: '提示',
-        content: '验证码为6位数字',
-        showCancel: false
-      });
+      common.showModal("验证码为6位数字");
     }
   },
   sendYzm:function(e){//发送验证码
@@ -150,20 +131,12 @@ Page({
             });
             _this.cutdown();
           }else{
-            wx.showModal({
-              title: '提示',
-              content: re.data.desc,
-              showCancel: false
-            });
+            common.showModal(re.data.desc);
           }
         }
       });
     }else{
-      wx.showModal({
-        title: '提示',
-        content: '请输入正确的手机号',
-        showCancel:false
-      });
+      common.showModal(请输入正确的手机号);
     }
   },
   setmobile:function(e){//保存手机号
@@ -210,8 +183,8 @@ Page({
         mobile: _mobile,
         smsCode: _code,
         code: __code,
-        bmapLng: app.globalData.longitude,
-        bmapLat: app.globalData.latitude 
+        bmapLng: _this.data.longitude,
+        bmapLat: _this.data.latitude 
       },
       success: function (re) {
         console.log("登录认证绑定success:", re);
@@ -221,16 +194,15 @@ Page({
             url: '/pages/index/index',
           });
         } else {
-          wx.showModal({
-            title: '提示',
-            content: re.data.desc,
-            showCancel: false
-          });
+          common.showModal(re.data.desc);
         }
       },
       fail: function (re) {
         console.log("登录认证绑定 fail:", re);
       }
     });
+  },
+  getStorageLocation: function () {//从缓存中获取定位
+    return wx.getStorageSync("location");
   }
 });

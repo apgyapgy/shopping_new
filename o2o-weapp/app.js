@@ -3,43 +3,10 @@ var common = require('js/common.js');
 App({
   onLaunch: function () {
     //wx.setStorageSync("location","31.230572#121.558072");
-
-    /*// 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-    var _this = this;
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.code) {
-          _this.globalData.code = res.code;
-          console.log("login:",res);
-          wx.request({
-            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
-            data:{
-              code:res.code
-            },
-            success:function(re){
-              console.log("oauth return :",re);
-              if(re.data.code == 200){
-                _this.globalData.token = re.data.data.token;
-                //wx.redirectTo({ url: "/pages/index/index"});
-              }else if(re.data.code == 40110){
-                wx.redirectTo({ url: "/pages/login/login"});
-              }
-            }
-          });
-        } else {
-          console.log('获取用户登录态失败！' + res.errMsg);
-        }
-      }
-    });*/
-    //this.authUserInfo();
+    this.authUserInfo();
   },
   onShow:function(){
-    this.authUserInfo();
+    //this.authUserInfo();
   },
   checkUserInfoAuth: function (fn) {
     //判断用户是否授权获取用户信息,未授权点任何位置跳转授权页面
@@ -135,19 +102,31 @@ App({
   getLocation:function(){
     var _this = this;
     var _location = wx.getStorageSync("location");
-    wx.getLocation({
-      type: 'wgs84',
-      success: function (res) {
-        _this.globalData.latitude = res.latitude;
-        _this.globalData.longitude = res.longitude;
-        _this.checkOauth();
-      },
-      fail: function (res) {
-        _this.checkLocationAuth(function () {
-          _this.getLocation();
-        });
-      }
-    });
+    if(_location){
+      var _loca = _location.split("#");
+      this.globalData.latitude = _loca[0];
+      this.globalData.longitude = _loca[1];
+      this.checkOauth();
+    }else{
+      wx.getLocation({
+        type: 'wgs84',
+        success: function (res) {
+          _this.globalData.latitude = res.latitude;
+          _this.globalData.longitude = res.longitude;
+          var _location = wx.getStorageSync("location");
+          if (!_location) {//如果缓存中无定位，则缓存，否则不缓存
+            var _loca = res.latitude + "#" + res.longitude;
+            wx.setStorageSync("location", _loca);
+          }
+          _this.checkOauth();
+        },
+        fail: function (res) {
+          _this.checkLocationAuth(function () {
+            _this.getLocation();
+          });
+        }
+      });
+    }
   },
   checkOauth:function(){
     var _this = this;

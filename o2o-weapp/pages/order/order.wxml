@@ -36,11 +36,12 @@
         <view class='shop-order-coupon-used'>{{item.couponAmt>0?'已使用:满'+item.couponAmtMin/100+'减'+item.couponAmt/100:'未使用优惠券'}}</view>
         <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmtYuan}}</text></view>
       </view>
-
+      <!--
       <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>
         <button wx:if="{{activeTab==0}}" data-idx="{{idx}}" bindtap="showPayModel" class='pay'>立即付款</button>
         <button wx:elif="{{activeTab==2}}" data-idx="{{idx}}" bindtap="openBox" class='open-box'>开箱</button>
-      </view>
+      </view> 
+      -->
     </view>
 
   </view>

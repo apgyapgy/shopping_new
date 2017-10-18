@@ -2,21 +2,6 @@
 page{
   background:#fff;
 }
-.clearfix:after{
-  clear:both;
-  content:'';
-  display:block;
-  visibility:hidden;
-  width:0;
-  height:0;
-}
-.scrollview{
-  position:absolute; 
-  top:0; 
-  left:0; 
-  right:0; 
-  bottom:0;
-}
 /*顶部订单信息*/
 .order-head{
   padding-top:26rpx;

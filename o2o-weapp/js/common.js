@@ -1,4 +1,4 @@
-var baseUrl = 'https://dswx-test.fuiou.com/o2o/';
+var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
 var getSerial = function () {
   return new Date().getTime();
 }
@@ -56,8 +56,10 @@ var getAjax = function(options){
     },
     complete: function () {
       if (wx.hideLoading) {
-        wx.hideLoading()//关闭提示
-      }
+        setTimeout(function () {
+          wx.hideLoading()//关闭提示
+        },1000);
+      }     
       if(options.complete){
         options.complete();
       }
@@ -221,6 +223,23 @@ var getWeinxinPay = function (data, orderno) {
     }
   })
 }
+
+var showModal = function (cont,fn) {
+  //显示弹窗,cont为显示的内容 ,无取消按钮，fn不点击确定时执行的函数，有则执行
+  wx.showModal({
+    title: '提示',
+    content: cont,
+    showCancel: false,
+    success:function(res){
+      if(res.confirm){
+        if(fn){
+          fn();
+        }
+      }
+    }
+  });
+}
+
 module.exports = {
   baseUrl: baseUrl,
   ajaxAsync: ajaxAsync,
@@ -230,5 +249,6 @@ module.exports = {
   getWeinxinPay: getWeinxinPay,
   layer: layer,
   clearSession: clearSession, 
-  getAjax: getAjax
+  getAjax: getAjax,
+  showModal: showModal
 } 

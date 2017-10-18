@@ -1,5 +1,5 @@
 <!--pages/shoppingcat/shoppingcart.wxml-->
-<scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+<scroll-view wx:if="{{shoppingCartList.length>0}}" class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class='car-body'>
     <!--不可用小区开始-->
     <view wx:for="{{shoppingCartList}}" wx:for-index="area" wx:key="area" class='car-area clearfix'>
@@ -48,6 +48,10 @@
   </view>
   <view class='padding-100'></view>
 </scroll-view>
+<view wx:else class='cart-empty'>
+  <image src='../../image/cart-empty.png'/>
+  <text>购物车空空如也...</text>
+</view>
 <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 
 

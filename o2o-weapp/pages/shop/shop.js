@@ -99,13 +99,7 @@ Page({
             fn();
           }
         }else if (res.data.code == 201){
-          wx.showModal({
-            title: '提示',
-            content: '该商品已加入购物车',
-            showCancel:false,
-            success: function (res) {
-            }
-          });
+          common.showModal('该商品已加入购物车');
         }else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.saveCartAjax(_goodsNo, _goodsAmt, fn);

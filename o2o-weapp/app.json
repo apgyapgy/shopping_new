@@ -1,14 +1,13 @@
 {
   "pages": [
     "pages/front/front",
+    "pages/shoppingcat/shoppingcart",
     "pages/index/index",
     "pages/checkOrder/checkOrder",
     "pages/shop/shop",
-    "pages/shoppingcat/shoppingcart",
     "pages/mycoupons/mycoupons",
     "pages/order/order",
     "pages/login/login",
-    "pages/template/tabbar",
     "pages/logs/logs",
     "pages/footer/footer",
     "pages/my/my"

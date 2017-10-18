@@ -54,6 +54,19 @@ Page({
   }, 
   onLoad: function () {
     var _this = this;
+    var _location = this.getStorageLocation();
+    if (_location) {
+      _location = _location.split("#");
+      _this.setData({
+        latitude: _location[0],
+        longitude: _location[1]
+      });
+    } else {
+      _this.setData({
+        latitude: app.globalData.latitude,
+        longitude: app.globalData.longitude
+      })
+    }
     wx.login({
       success: ress => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -62,8 +75,8 @@ Page({
             url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
             data: {
               code: ress.code,
-              bmapLng: app.globalData.longitude,
-              bmapLat: app.globalData.latitude 
+              bmapLng: _this.data.longitude,
+              bmapLat: _this.data.latitude 
             },
             success: function (re) {
               console.log("index.js onload oauth:",re);
@@ -86,6 +99,7 @@ Page({
                         latitude: res.latitude,
                         longitude: res.longitude
                       });
+                      _this.saveLocation();
                       _this.initData();
                     },
                     fail:function(res){
@@ -99,6 +113,7 @@ Page({
                                 latitude: res.latitude,
                                 longitude: res.longitude
                               });
+                              _this.saveLocation();
                               _this.initData();
                             }
                           });
@@ -156,13 +171,6 @@ Page({
       }
     }
   },
-  showModal: function (cont) {//显示弹窗,cont为显示的内容 
-    wx.showModal({
-      title: '提示',
-      content: cont,
-      showCancel: false
-    });
-  },
   initData: function (fn) {//初始化页面数据
     var _this = this;
     wx.login({
@@ -171,10 +179,10 @@ Page({
         if (ress.code) {
           wx.request({
             url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
-            data: {
+            data:{
               code: ress.code,
-              bmapLng: app.globalData.longitude,
-              bmapLat:app.globalData.latitude 
+              bmapLng: _this.data.longitude,
+              bmapLat: _this.data.latitude
             },
             success: function (re) {
               console.log("index.js oauth:",re);
@@ -204,7 +212,7 @@ Page({
                         shopList: [],
                         location: {}
                       });
-                      _this.showModal(res.data.desc);
+                      common.showModal(res.data.desc);
                     } else if(res.data.code == 40101) {
                       _this.setData({
                         shopList: [],
@@ -217,7 +225,7 @@ Page({
                         location: {}
                       });
                       app.globalData.location = {};
-                      _this.showModal(res.data.desc);
+                      common.showModal(res.data.desc);
                     }
                     if (fn) {
                       fn();
