@@ -2,7 +2,7 @@
 var common = require('js/common.js');
 App({
   onLaunch: function () {
-    //wx.setStorageSync("location","31.230572#121.558072");
+    //wx.setStorageSync("location","31.228522821982#121.56115068654");
     this.authUserInfo();
   },
   onShow:function(){

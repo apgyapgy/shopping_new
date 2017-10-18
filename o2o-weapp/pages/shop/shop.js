@@ -42,6 +42,23 @@ Page({
     }
   },
   onShow: function () {
+    this.setData({
+      goodsList: [],
+      cartList: [],
+      showCarInfoFlag: false,
+      token: '',
+      cartInfo: {
+        orderNums: 0,
+        totalAmt: 0
+      },
+      shop: [],
+      selectInfo: {
+        selectAll: false,
+        selectNums: 0,
+        selectAmt: 0
+      },
+      selectIds: []
+    });
     this.getGoodsList();
     this.getCartList();
   },
@@ -205,7 +222,6 @@ Page({
   },
   getGoodsList:function(){//获取店铺中的商品
     var _this = this;
-    console.log(_this.data.options.shopId);
     common.getAjax({
       url: 'wx_we/queryShopGoods',
       params: {
