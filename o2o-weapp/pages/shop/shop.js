@@ -3,10 +3,6 @@
 const app = getApp()
 import common from '../../js/common.js';
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     backTopIconShowFlag: false,
     scrollTop: 0,
@@ -29,7 +25,7 @@ Page({
       selectNums:0,
       selectAmt:0
     },
-    selectIds:[]
+    selectIds:null
   },
   /*生命周期函数--监听页面加载*/
   onLoad:function(options){
@@ -42,6 +38,7 @@ Page({
     }
   },
   onShow: function () {
+    var _this = this;
     this.setData({
       goodsList: [],
       cartList: [],
@@ -57,10 +54,9 @@ Page({
         selectNums: 0,
         selectAmt: 0
       },
-      selectIds: []
+      selectIds: null
     });
     this.getGoodsList();
-    this.getCartList();
   },
   addsub:function(e){//加减购物车商品
     if (this.data.clickable) {
@@ -98,20 +94,22 @@ Page({
         goodsAmt : _goodsAmt,
         orderNum : 1,
         orderAmt : _goodsAmt,
-        operator: app.globalData.loginId
+        operator: app.globalData.loginId,
+        type:0
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           console.log("add cart success:",res);
           var _selectIds = _this.data.selectIds;
-          //if(_selectIds.length){
+          //console.log("index:",_selectIds.indexOf(_goodsNo));
+          if(_selectIds.indexOf(_goodsNo) == -1){
             _selectIds.push(_goodsNo);
             _this.setData({
               selectIds: _selectIds
             });
-          //}
-          _this.getCartList();
+          }
+          _this.getGoodsList();
           if (fn) {
             fn();
           }
@@ -121,6 +119,8 @@ Page({
           _this.getToken(function () {
             _this.saveCartAjax(_goodsNo, _goodsAmt, fn);
           });
+        }else{
+          common.showModal(res.data.desc);
         }
       },
       complete:function(){
@@ -228,7 +228,7 @@ Page({
         loginId: app.globalData.loginId,
         shopId: _this.data.options.shopId
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         console.log("queryShopGoods:",res);
         if (res.data.code == 200) {
@@ -262,11 +262,14 @@ Page({
                 shop:res.data.data.shop
               });
             }
-          }else if(res.data.code == 40101){
-            _this.getToken(function () {
-              _this.getGoodsList();
-            });
           }
+          _this.getCartList();
+        }else if(res.data.code == 40101){
+          _this.getToken(function () {
+            _this.getGoodsList();
+          });
+        }else{
+          common.showModal(res.data.desc);
         }
       },
       fail: function (res) {
@@ -282,9 +285,10 @@ Page({
         loginId: app.globalData.loginId,
         shopId: _this.data.options.shopId
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
+          console.log("queryShopCart:",res);
           var _cartInfo = {
             orderNums:0,
             totalAmt:0
@@ -306,6 +310,8 @@ Page({
           _this.getToken(function(){
             _this.getCartList();
           });
+        }else{
+          common.showModal(res.data.desc);
         }
       },
       fail: function (res) {
@@ -327,9 +333,7 @@ Page({
               console.log("in shop page oauth:",re);
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
-                _this.setData({
-                  token:re.data.data.token
-                });
+                app.globalData.token = re.data.data.token;
                 if(fn){
                   fn();
                 }
@@ -357,14 +361,16 @@ Page({
           goodsNo:_goodsNo,
           type:_type=='add'?0:1
         },
-        token: _this.data.token,
+        token: app.globalData.token,
         success: function (res) {
           if (res.data.code == 200) {
-            _this.getCartList();
+            _this.getGoodsList();
           } else if (res.data.code == 40101) {
             _this.getToken(function () {
               _this.updateOrderNum(_goodsNo,_num, _type);
             });
+          }else{
+            common.showModal(res.data.desc);
           }
         },
         complete:function(){
@@ -384,7 +390,7 @@ Page({
         shopId: _this.data.options.shopId,
         goodsNo: _goodsNo
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           var _selectIds = _this.data.selectIds;
@@ -393,11 +399,13 @@ Page({
           _this.setData({
             selectIds:_selectIds
           });
-          _this.getCartList();
+          _this.getGoodsList();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.deleteCart(_goodsNo);
           });
+        }else{
+          common.showModal(res.data.desc);
         }
       },
       complete: function () {
@@ -415,7 +423,7 @@ Page({
         loginId: app.globalData.loginId,
         shopId: _this.data.options.shopId
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           _this.setData({
@@ -430,12 +438,15 @@ Page({
               selectNums: 0,
               selectAmt: 0
             },
-            selectIds: []
+            selectIds: null
           });
+          _this.getGoodsList();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.emptyCart();
           });
+        }else{
+          common.showModal(res.data.desc);
         }
       },
       complete: function () {
@@ -474,7 +485,7 @@ Page({
   },
   getSelectInfo:function(cartList,_type){//获取购物车选中信息列表
     //_type判断是否是全选事件中触发，
-    if(!this.data.selectIds.length || _type){//一开始未选 中商品
+    if(this.data.selectIds == null || _type){//一开始未选 中商品
       var _selectIdArr = [];
       for (var key in cartList){
         _selectIdArr.push(cartList[key].goodsNo);

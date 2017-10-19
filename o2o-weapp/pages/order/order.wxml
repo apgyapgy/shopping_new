@@ -15,7 +15,7 @@
 
       <view class='shop-name'>
         <image src="../../image/nearby.png"/>
-        <text class='s-name'>{{item.mchNm}}</text>
+        <text class='s-name'>{{item.shopNm}}</text>
         <text class='gt'>></text>
         <text hidden="{{activeTab==0 || activeTab==2}}" class='order-success'>{{activeTab==3?'交易完成':'待配送'}}</text>
       </view>
@@ -32,9 +32,11 @@
         </view>
       </view>
 
-      <view class='shop-order-info'>
+      <view wx:if="{{item.couponAmt>0}}" class='shop-order-info'>
         <view class='shop-order-coupon-used'>{{item.couponAmt>0?'已使用:满'+item.couponAmtMin/100+'减'+item.couponAmt/100:'未使用优惠券'}}</view>
-        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmtYuan}}</text></view>
+      </view>
+      <view class='shop-order-info'>
+        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmtYuan}}</text>(配送费：{{item.distAmt/100}}元)</view>
       </view>
       <!--
       <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>

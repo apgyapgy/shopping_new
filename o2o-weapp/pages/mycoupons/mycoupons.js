@@ -10,7 +10,6 @@ Page({
     activeTab:0,
     couponsList:[],
     coupons:[],
-    token: '',
     backTopIconShowFlag: false,
     scrollTop: 0,
   },
@@ -43,7 +42,7 @@ Page({
         openId: '',
         src:app.globalData.src
       },
-      token:_this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           console.log("获取优惠券成功:",res);
@@ -80,9 +79,7 @@ Page({
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
                 app.globalData.hostId = re.data.data.hostId;
-                _this.setData({
-                  token: re.data.data.token
-                });
+                app.globalData.token = re.data.data.token;
                 if (fn) {
                   fn();
                 }

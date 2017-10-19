@@ -42,7 +42,7 @@
 
     </view>
     <!--不可用小区结束-->
-    <view hidden="{{!shoppingCartList.length}}" class="clear-invalid {{expiredId?'':'disbaled'}}">
+    <view hidden="{{!shoppingCartList.length || !expiredId.length}}" class="clear-invalid {{expiredId?'':'disbaled'}}">
       <button bindtap="clearInvalid">清空失效商品</button>
     </view>
   </view>

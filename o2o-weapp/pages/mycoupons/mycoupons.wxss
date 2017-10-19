@@ -139,9 +139,10 @@ page{
 .no-coupons text{
   display:block;
   margin-top:300rpx;
-  height:100rpx;
-  line-height:100rpx;
-  font-size:24rpx;
-  color:#666;
+  height:50rpx;
+  width:750rpx;
+  line-height:50rpx;
+  font-size:40rpx;
+  color:#ccc;
   text-align:center;
 }

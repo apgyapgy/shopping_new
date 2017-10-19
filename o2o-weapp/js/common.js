@@ -58,8 +58,8 @@ var getAjax = function(options){
       if (wx.hideLoading) {
         setTimeout(function () {
           wx.hideLoading()//关闭提示
-        },1000);
-      }     
+        },400);
+      } 
       if(options.complete){
         options.complete();
       }

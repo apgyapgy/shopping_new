@@ -48,7 +48,6 @@ Page({
       }
     ],
     showPayModel:false,
-    token:'',
     orderSt: [0, 200, 201, 203],//0待支付  200待配送  201配送成功待取货 203已完成
     backTopIconShowFlag: false,
     scrollTop: 0,
@@ -60,10 +59,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    if(options.type){
+      this.setData({
+        activeTab:options.type
+      });
+    }
     var _this = this;
     this.getToken(function(){
       _this.getOrders();
     });
+    this.qryUserCartNums();
   },
   changeTab: function (e) {
     var _index = e.target.dataset.index;
@@ -111,7 +116,7 @@ Page({
         orderSt: _this.data.orderSt[_this.data.activeTab],
         orderSrc:3
       },
-      token: _this.data.token,
+      token: app.globalData.token,
       success: function (res) {
         console.log("getOrders:",res);
         if(res.data.code == 200){
@@ -142,9 +147,7 @@ Page({
             success: function (re) {
               console.log("in order page oauth:", re);
               if (re.data.code == 200) {
-                _this.setData({
-                  token: re.data.data.token
-                });
+                app.globalData.token = re.data.data.token;
                 if (fn) {
                   fn();
                 }
@@ -160,82 +163,6 @@ Page({
     });
   },
   topay: function (e) {//点击去结算
-    var _this = this;
-    if(this.data.clickable){
-      this.setData({
-        clickable:false
-      });
-      var _idx = this.data.clickIdx;
-      //console.log("topay idx:",_idx,this.data.orderList[_idx]);
-      var _order = this.data.orderList[_idx];
-      var _goods = _order.orderGoods;
-      var _orderGoods = [];
-      for (var key in _goods) {
-        var _arr = {
-          goodsNo: _goods[key].goodsNo,
-          orderNum: _goods[key].orderNum,
-          mchId: _goods[key].mchId
-        }
-        _orderGoods.push(_arr);
-      }
-      var _params = {
-        orderAmt: _order.orderAmt,
-        src: 3,
-        shopId: _order.shopId,
-        orderTp: 1,
-        payMode: 2,
-        hostId: _order.orderAmt,
-        couponNo: _order.couponNo,
-        orderGoods: _orderGoods
-      };
-      console.log("topay params:",_params);
-      _this.setData({
-        clickable:true
-      });
-    }
-  },
-  requestPayMent: function (_data) {//发起微信支付
-    var _this = this;
-    _this.setData({
-      payData: _data
-    });
-    console.log("payData:", this.data.payData);
-    wx.requestPayment({
-      'timeStamp': _this.data.payData.timestamp,
-      'nonceStr': _this.data.payData.noncestr,
-      'package': _this.data.payData.package,
-      'signType': 'MD5',
-      'paySign': _this.data.payData.paySign,
-      'success': function (res) {
-        if (res.errMsg == "requestPayment:ok") {
-          //调用 支付成功
-          console.log("支付成功:", res);
-          common.showModal("支付成功，点击确定返回!", function (){
-            wx.navigateBack()
-          });
-        }
-      },
-      'fail': function (res) {
-        if (res.errMsg == "requestPayment:fail cancel") {
-          //用户取消支付
-          console.log("用户取消支付:", res);
-          common.showModal("您已取消支付!", function () {
-            _this.setData({
-              showPayModel:false
-            });
-            //wx.navigateBack();
-          });
-        } else if (res.errMsg == "requestPayment:fail (detail message)") {
-          //调用支付失败，其中 detail message 为后台返回的详细失败原因
-          console.log("支付失败:", res);
-          common.showModal("支付失败!",function(){
-            _this.setData({
-              showPayModel: false
-            });
-          });
-        }
-      }
-    })
   },
   goTop: function () { //返回顶部
     this.setData({
@@ -256,5 +183,33 @@ Page({
         });
       }
     }
+  },
+  qryUserCartNums: function () {
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/qryUserCartNums',
+      params: {
+        loginId: app.globalData.loginId
+      },
+      token: app.globalData.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          console.log("qryUserCartNums:", res);
+          var _tabbarArray = _this.data.tabbarArray;
+          if (res.data.data.totalNumbers != _tabbarArray[1].shopCartNum) {
+            _tabbarArray[1].shopCartNum = res.data.data.totalNumbers;
+            _this.setData({
+              tabbarArray: _tabbarArray
+            });
+          }
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.qryUserCartNums();
+          })
+        } else {
+          common.showModal(res.data.desc);
+        }
+      }
+    });
   }
 })

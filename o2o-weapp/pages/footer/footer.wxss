@@ -34,7 +34,7 @@
 .footer navigator.car .shopcart-num{
   position:absolute;
   left:100rpx;
-  top:15rpx;
+  top:10rpx;
   height:40rpx;
   width:40rpx;
   line-height:40rpx;

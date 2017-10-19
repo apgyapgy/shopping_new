@@ -52,7 +52,7 @@ Page({
     location:{},
     jumpUrl:""
   }, 
-  onLoad: function () {
+  onShow: function () {
     var _this = this;
     var _location = this.getStorageLocation();
     if (_location) {
@@ -65,7 +65,7 @@ Page({
       _this.setData({
         latitude: app.globalData.latitude,
         longitude: app.globalData.longitude
-      })
+      });
     }
     wx.login({
       success: ress => {
@@ -83,6 +83,7 @@ Page({
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
                 app.globalData.hostId = re.data.data.hostId;
+                app.globalData.token = re.data.data.token;
                 var _location = _this.getStorageLocation();
                 if (_location) {//保存的有定位获取店铺
                   var _locArr = _location.split("#");
@@ -132,6 +133,7 @@ Page({
         }
       }
     }); 
+    this.qryUserCartNums();
   },
   userInfoReadyCallback:function(){    
   },
@@ -188,14 +190,15 @@ Page({
               console.log("index.js oauth:",re);
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
-                app.globalData.hostId = re.data.data.hostId; 
+                app.globalData.hostId = re.data.data.hostId;
+                app.globalData.token = re.data.data.token; 
                 common.getAjax({
                   url: 'wx_we/home',
                   params: {
                     bmapLng: _this.data.longitude,
                     bmapLat: _this.data.latitude
                   },
-                  token: re.data.data.token,
+                  token: app.globalData.token,
                   success: function (res) {
                     console.log("首页:", res);
                     if (res.data.code == 200) {
@@ -251,10 +254,9 @@ Page({
     this.checkLocationAuth();
   },
   jumpShopInfo: function (e) {//点店铺跳转
-    var _idx = e.currentTarget.dataset.idx;
-    var _shop = this.data.shopList[_idx];
-    console.log("jumpshop :",_shop)
-    var _trans = "mchId=" + _shop.mchId + "&shopId=" + _shop.shopId;
+    var _shopId = e.currentTarget.dataset.shopid;
+    var _mchId = e.currentTarget.dataset.mchid;
+    var _trans = "mchId=" + _mchId + "&shopId=" + _shopId;
     var _url = "/pages/shop/shop?"+_trans;
     var _this = this;
     this.setData({
@@ -417,7 +419,66 @@ Page({
   },
   refresh: function () {//下拉刷新
     //this.onLoad();
-  }/*,
+  },
+  qryUserCartNums:function(){
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/qryUserCartNums',
+      params: {
+        loginId:app.globalData.loginId
+      },
+      token: app.globalData.token,
+      success:function(res){
+        if(res.data.code == 200){
+          console.log("qryUserCartNums:",res);
+          var _tabbarArray = _this.data.tabbarArray;
+          if (res.data.data.totalNumbers != _tabbarArray[1].shopCartNum) {
+            _tabbarArray[1].shopCartNum = res.data.data.totalNumbers;
+            _this.setData({
+              tabbarArray: _tabbarArray
+            });
+          }
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.qryUserCartNums();
+          })
+        } else {
+          common.showModal(res.data.desc);
+        }
+      }
+    });
+  },
+  getToken: function (fn) {//如果用户token过期，重新获取token，并获取数据
+    var _this = this;
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code
+            },
+            success: function (re) {
+              console.log("in shop page oauth:", re);
+              if (re.data.code == 200) {
+                app.globalData.loginId = re.data.data.loginId;
+                app.globalData.token = re.data.data.token;
+                if (fn) {
+                  fn();
+                }
+              } else if (re.data.code == 40110) {
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
+          });
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
+    });
+  }
+  /*,
   refresh:function(){
     wx.showToast({
       title: '刷新中',

@@ -316,47 +316,48 @@ page{
   bottom:0;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.1);
+  background:rgba(0,0,0,0.4);
 }
 .pay-info-wrapper .pay-info{
   position:relative;
   margin:400rpx auto 0;
   width:500rpx;
-  height:300rpx;
+  height:340rpx;
   background:#fff;
+  border-radius: 10rpx;
 }
 .pay-info-wrapper .pay-info .close{
   position:absolute;
-  top:10rpx;
-  left:20rpx;
-  width:36rpx;
-  height:36rpx;
+  top:20rpx;
+  right:20rpx;
+  width:40rpx;
+  height:40rpx;
   border-radius:50%;
   border:2rpx solid #676767;
-  font-size:26rpx;
+  font-size:30rpx;
   text-align:center;
-  line-height:36rpx;
+  line-height:40rpx;
   color:#676767;
 }
 .pay-info-title{
   width:100%;
-  height:60rpx;
-  line-height:60rpx;
-  font-size:30rpx;
+  height:80rpx;
+  line-height:80rpx;
+  font-size:34rpx;
   color:#333;
   text-align:center;
   border-bottom:1rpx solid #bcbcbc;
 }
 .pay-info-body{
   width:100%;
-  height:140rpx;
+  height:160rpx;
   border-bottom:1rpx solid #bcbcbc;
 }
 .pay-info-body .pay-info-company,
 .pay-info-body .pay-info-money{
   width:100%;
-  height:70rpx;
-  line-height:70rpx;
+  height:80rpx;
+  line-height:80rpx;
   font-size:30rpx;
   text-align:center;
 }
@@ -364,19 +365,20 @@ page{
   line-height:60rpx;
 }
 .pay-info-pay{
+  float:left;
   width:100%;
   height:100rpx;
 }
 .pay-info-pay .pay{
   display:block;
   margin:20rpx auto;
-  width:180rpx;
-  height:50rpx;
+  width:200rpx;
+  height:60rpx;
   background:#26b1fe;
-  line-height:50rpx;
+  line-height:60rpx;
   font-size:30rpx;
   color:#fff;
-  border-radius:5rpx;
+  border-radius:10rpx;
   text-align:center;
 }
 .pay-info-pay .pay.disabled{

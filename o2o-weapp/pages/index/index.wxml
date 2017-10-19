@@ -14,7 +14,7 @@
     <!--定位-->
     <view catchtap="chooseLocation" class="location">
       <image class="location-icon" src="../../image/location.png"/>
-      <text class="location-name">{{location.areaNm?location.areaNm:'点击定位'}}</text>
+      <text class="location-name">{{location.areaNm?location.areaNm+location.hostAddrShort:'点击定位'}}</text>
       <image class="location-down-icon" src="../../image/down.png"/>
     </view>
 
@@ -28,7 +28,7 @@
 
     <!--店铺-->
     <view wx:if="{{shopList.length}}" class='shops'>
-      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-idx="{{idx}}" bindtap="jumpShopInfo">
+      <view wx:for="{{shopList}}"  wx:for-index="idx" wx:key="idx" class="shop" data-shopid="{{item.shopId}}" data-mchid="{{item.mchId}}" bindtap="jumpShopInfo">
         <view class='shop-left'>
           <image src="{{item.mchLogo?item.mchLogo:'../../image/shop-icon.png'}}"/>
         </view>

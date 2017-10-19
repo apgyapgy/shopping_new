@@ -47,7 +47,6 @@ Page({
     startX:0,
     startY:0,
     //测试左滑删除end,
-    token:'',
     shoppingCartList:[],
     expiredId:'',
     jumpFlag:true,
@@ -77,6 +76,7 @@ Page({
       app.globalData.loginId = "15316117950";
     }
     this.getShopList();
+    this.qryUserCartNums();
   },
   //返回顶部
   goTop: function () {//返回顶部
@@ -119,9 +119,11 @@ Page({
           loginId: app.globalData.loginId,
           goodsNoStr: _expiredId
         },
+        token: app.globalData.token,
         success: function (res) {
           if (res.data.code == 200) {
             _this.getShopList();
+            _this.qryUserCartNums();
           } else if (res.data.code == 40101) {
             _this.getToken(function () {
               _this.deleteCart(_shopId, _goodId);
@@ -247,9 +249,11 @@ Page({
         shopId: _shopId,
         goodsNo:_goodId
       },
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           _this.getShopList();
+          _this.qryUserCartNums();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.deleteCart(_shopId,_goodId);
@@ -269,6 +273,7 @@ Page({
         loginId: app.globalData.loginId,
         hostId: app.globalData.location.hostId
       },
+      token: app.globalData.token,
       success: function (res) {
         if (res.data.code == 200) {
           console.log("getShopList:",res);
@@ -308,6 +313,7 @@ Page({
             shoppingCartList:_shopCartList,
             expiredId: _expiredId.substring(1)
           });
+          //_this.qryUserCartNums();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.getShopList();
@@ -333,9 +339,7 @@ Page({
               console.log("in shop page oauth:", re);
               if (re.data.code == 200) {
                 app.globalData.loginId = re.data.data.loginId;
-                _this.setData({
-                  token: re.data.data.token
-                });
+                app.globalData.token = re.data.data.token;
                 if (fn) {
                   fn();
                 }
@@ -346,6 +350,34 @@ Page({
           });
         } else {
           console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
+    });
+  },
+  qryUserCartNums: function () {
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/qryUserCartNums',
+      params: {
+        loginId: app.globalData.loginId
+      },
+      token: app.globalData.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          console.log("qryUserCartNums:", res);
+          var _tabbarArray = _this.data.tabbarArray;
+          if (res.data.data.totalNumbers != _tabbarArray[1].shopCartNum) {
+            _tabbarArray[1].shopCartNum = res.data.data.totalNumbers;
+            _this.setData({
+              tabbarArray: _tabbarArray
+            });
+          }
+        }else if(res.data.code == 40101){
+          _this.getToken(function(){
+            _this.qryUserCartNums();
+          })
+        }else{
+          common.showModal(res.data.desc);
         }
       }
     });

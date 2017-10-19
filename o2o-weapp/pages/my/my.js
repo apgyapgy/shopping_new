@@ -1,4 +1,6 @@
 // pages/my/my.js
+var app = getApp();
+import common from '../../js/common.js';
 Page({
   /**
    * 页面的初始数据
@@ -43,12 +45,18 @@ Page({
         active: true
       }
     ],
+    userInfo:{},
     concatPhone:'95138' //客服电话
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) { 
+    console.log("userInfo:", app.globalData); 
+    this.setData({
+      userInfo:app.globalData.userInfo
+    });
+    this.qryUserCartNums();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -103,6 +111,64 @@ Page({
   toCoupon:function(){
     wx.navigateTo({
       url: '/pages/mycoupons/mycoupons'
+    });
+  },
+  qryUserCartNums: function () {
+    var _this = this;
+    common.getAjax({
+      url: 'wx_we/qryUserCartNums',
+      params: {
+        loginId: app.globalData.loginId
+      },
+      token: app.globalData.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          console.log("qryUserCartNums:", res);
+          var _tabbarArray = _this.data.tabbarArray;
+          if (res.data.data.totalNumbers != _tabbarArray[1].shopCartNum) {
+            _tabbarArray[1].shopCartNum = res.data.data.totalNumbers;
+            _this.setData({
+              tabbarArray: _tabbarArray
+            });
+          }
+        } else if (res.data.code == 40101) {
+          _this.getToken(function () {
+            _this.qryUserCartNums();
+          })
+        } else {
+          common.showModal(res.data.desc);
+        }
+      }
+    });
+  },
+  getToken: function (fn) {//如果用户token过期，重新获取token，并获取数据
+    var _this = this;
+    wx.login({
+      success: ress => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (ress.code) {
+          wx.request({
+            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+            data: {
+              code: ress.code
+            },
+            success: function (re) {
+              console.log("in shop page oauth:", re);
+              if (re.data.code == 200) {
+                app.globalData.loginId = re.data.data.loginId;
+                app.globalData.token = re.data.data.token;
+                if (fn) {
+                  fn();
+                }
+              } else if (re.data.code == 40110) {
+                wx.redirectTo({ url: "/pages/login/login" });
+              }
+            }
+          });
+        } else {
+          console.log('获取用户登录态失败！' + ress.errMsg)
+        }
+      }
     });
   }
 });

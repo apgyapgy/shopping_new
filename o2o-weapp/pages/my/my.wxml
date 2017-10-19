@@ -1,8 +1,8 @@
 <!--pages/my/my.wxml-->
 <view class="my-container">
   <view class="user-info">
-    <image class="user-icon" src="../../image/user.png"/>
-    <text class="user-phone">15316117950</text>
+    <image class="user-icon" src="{{userInfo.avatarUrl?userInfo.avatarUrl:'../../image/user.png'}}"/>
+    <text class="user-phone">{{userInfo.nickName}}</text>
   </view>
   <view class="my-list">
     <view catchtap="toCoupon" class="list">

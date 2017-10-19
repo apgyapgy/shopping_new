@@ -14,7 +14,6 @@ Page({
     options:[],//页面参数
     shop:[],//店铺信息
     goods:[],//订单商品
-    token:'',
     popHopeTs:'',
     clickable:true,
     payData:{}
@@ -42,7 +41,7 @@ Page({
           cellCd: _this.data.options.cellCd,
           goodsNo: _this.data.options.goodsNo
         },
-        token: _this.data.token,
+        token: app.globalData.token,
         success: function (res) {
           console.log("checkOrder.js orderPage:", res);
           if(res.data.code == 200){
@@ -160,7 +159,7 @@ Page({
         common.getAjax({
           url: 'api/order',
           params: _params,
-          token:_this.data.token,
+          token: app.globalData.token,
           success: function (res) {
             console.log("checkOrder.js order:", res);
             if (res.data.code == 200) {
@@ -194,9 +193,12 @@ Page({
         if (res.errMsg == "requestPayment:ok"){
           //调用 支付成功
           console.log("支付成功:",res);
-          common.showModal("支付成功，点击确定返回!",function(){
-            wx.navigateBack()
-          })
+          common.showModal("支付成功!",function(){
+            //wx.navigateBack()
+            wx.redirectTo({
+              url: '/pages/order/order?type=1',
+            });
+          });
         }
       },
       'fail': function (res) {
@@ -208,6 +210,9 @@ Page({
               showPayModel:false
             });
             //wx.navigateBack();
+            /*wx.redirectTo({
+              url: '/pages/order/order?type=0',
+            });*/
           });
         } else if (res.errMsg == "requestPayment:fail (detail message)"){
           //调用支付失败，其中 detail message 为后台返回的详细失败原因
@@ -245,10 +250,8 @@ Page({
             success: function (re) {
               console.log("in shop page oauth:", re);
               if (re.data.code == 200) {
-                app.globalData.loginId = re.data.data.loginId;
-                _this.setData({
-                  token: re.data.data.token
-                });
+                app.globalData.loginId = re.data.data.loginId; 
+                app.globalData.token = re.data.data.token;
                 if (fn) {
                   fn();
                 }
