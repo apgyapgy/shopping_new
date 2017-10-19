@@ -68,6 +68,8 @@ Page({
     this.getToken(function(){
       _this.getOrders();
     });
+  },
+  onShow:function(){
     this.qryUserCartNums();
   },
   changeTab: function (e) {
