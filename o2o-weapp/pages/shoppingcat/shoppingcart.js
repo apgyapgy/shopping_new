@@ -50,7 +50,8 @@ Page({
     shoppingCartList:[],
     expiredId:'',
     jumpFlag:true,
-    clickable:true
+    clickable: true,//是否可点击，用于防止连续点击 
+    imgPre: app.globalData.imgPre
   },
   /*生命周期函数--监听页面加载*/
   /*onLoad: function (options) {
@@ -287,7 +288,7 @@ Page({
               for(var goodkey in _shop.list){
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
-                if(_good.isExpire == 0){
+                if(_good.isExpire == 0){//isExpire为0表示失效，为1未失效
                   _expiredId+=','+_good.goodsNo;
                 }
               }

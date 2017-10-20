@@ -22,8 +22,8 @@
 
       <view class='shop-goods-list clearfix'>
         <view wx:for="{{item.orderGoods}}" wx:for-item="good" wx:for-index="gidx" wx:key="gidx" class='shop-good'>
-          <!--<image src="{{good.goodsImgLogo}}"/>-->
-          <image src="../../image/good.png"/>
+          <image src="{{imgPre+good.goodsImgLogo}}"/>
+          <!--<image src="../../image/good.png"/>-->
           <text class="shop-good-name">{{good.goodsNm}}</text>
           <view class='shop-good-info'>
             <text class='shop-good-price'>￥{{good.goodsAmt/100}}</text>
@@ -36,7 +36,7 @@
         <view class='shop-order-coupon-used'>{{item.couponAmt>0?'已使用:满'+item.couponAmtMin/100+'减'+item.couponAmt/100:'未使用优惠券'}}</view>
       </view>
       <view class='shop-order-info'>
-        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmtYuan}}</text>(配送费：{{item.distAmt/100}}元)</view>
+        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmt/100}}</text><text hidden="{{item.distAmt<=0}}">(配送费：{{item.distAmt/100}}元)</text></view>
       </view>
       <!--
       <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>

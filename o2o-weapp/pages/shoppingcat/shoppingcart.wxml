@@ -26,8 +26,8 @@
                 data-index="{{area+'#'+shopidx+'#'+goodidx}}" 
                 bindtouchstart="touchstart" bindtouchmove="touchmove" >
             <view class="car-good {{good.isExpire==0?'expired':''}}">
-              <!--<image src="{{good.goodsImgLogo}}"/>-->
-              <image src="../../image/good.png"/>
+              <image src="{{imgPre+good.goodsImgLogo}}"/>
+              <!--<image src="../../image/good.png"/>-->
               <text class="car-good-name">{{good.goodsNm}}</text>
               <view class='car-good-info'>
                 <text class='car-good-price'>￥{{good.goodsAmt/100}}</text>

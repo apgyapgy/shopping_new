@@ -53,7 +53,8 @@ Page({
     scrollTop: 0,
     clickable:true,
     clickIdx:'',//立即付款与开箱的idx,用于获取订单信息
-    payData:{}
+    payData: {},
+    imgPre: app.globalData.imgPre
   },
   /**
    * 生命周期函数--监听页面加载

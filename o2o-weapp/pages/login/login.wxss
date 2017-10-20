@@ -54,6 +54,9 @@
   font-weight:normal;
   font-family:"microsoft yahei";
 }
+.inputYzm{
+  width:98%;
+}
 .place{
   font-size:30rpx;
   line-height:40rpx;

@@ -50,8 +50,11 @@ Page({
     longitude:'',//经度
     shopList:[],
     location:{},
-    jumpUrl:""
+    jumpUrl: "",
+    imgPre: app.globalData.imgPre
   }, 
+  onLoad:function(){
+  },
   onShow: function () {
     var _this = this;
     var _location = this.getStorageLocation();

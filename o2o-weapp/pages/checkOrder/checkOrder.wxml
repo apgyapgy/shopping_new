@@ -14,8 +14,8 @@
   <view class="order-wrapper clearfix">
     <view class='order-goods-list clearfix'>
       <view wx:for="{{goods}}" wx:for-index="idx" wx:key="idx" class='order-good'>
-        <image src="../../image/good.png"/>
-        <!--<image src="{{item.goodsImgLogo}}"/>-->
+        <!--<image src="../../image/good.png"/>-->
+        <image src="{{imgPre+item.goodsImgLogo}}"/>
         <view class='order-good-right'>
           <text class="order-good-name">{{item.goodsNm}}</text>
           <view class='order-good-info'>

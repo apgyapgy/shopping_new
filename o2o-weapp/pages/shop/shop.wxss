@@ -101,13 +101,28 @@
   height:50rpx;
   border-radius:50%;
 }
-
+.ex-tip{/*失效*/
+  float:left;
+  margin-top:22rpx;
+  margin-left:15rpx;
+  width:70rpx;
+  height:30rpx;
+  font-size:24rpx;
+  line-height:30rpx;
+  text-align:center;
+  border-radius:10rpx;
+  background:#ccc;
+  color:#fff;
+}
 .good .add-sub .num{
   width:60rpx;
   height:50rpx;
   line-height:50rpx;
   color:#333;
   text-align:center;
+}
+.good.expired .add-sub .num{
+  margin-right:50rpx;
 }
 .nogood{
   margin-top:400rpx;

@@ -9,23 +9,24 @@ Page({
     goodsList:[],
     cartList: [],
     showCarInfoFlag:false,
-    token:'',
-    cartInfo: {
+    cartInfo: {//购物车金额 与商品总数
       orderNums: 0,
       totalAmt: 0
     },
-    options:{
+    options:{//url参数
       mchId:"80001828",
       shopId:"6000000545"
     },
-    shop:[],
+    shop:[],//店铺信息
     clickable:true,
-    selectInfo:{
+    selectInfo:{//已选中商品信息
       selectAll:false,
       selectNums:0,
       selectAmt:0
     },
-    selectIds:null
+    selectIds:null,
+    imgPre:app.globalData.imgPre,
+    expireList:[]//过期失效商品
   },
   /*生命周期函数--监听页面加载*/
   onLoad:function(options){
@@ -43,7 +44,6 @@ Page({
       goodsList: [],
       cartList: [],
       showCarInfoFlag: false,
-      token: '',
       cartInfo: {
         orderNums: 0,
         totalAmt: 0
@@ -131,7 +131,7 @@ Page({
     });
   },
   showCarInfo:function(){//显示购物车信息
-    if (this.data.cartList.length>0){
+    if (this.data.cartList.length > 0 || this.data.expireList.length>0){
       this.setData({
         showCarInfoFlag: true
       });
@@ -299,13 +299,16 @@ Page({
           _this.setData({
             cartInfo:_cartInfo
           });
-          _this.getSelectInfo(res.data.data.list);
           if(!_this.data.cartList.length){
             _this.setData({
               showCarInfoFlag:false,
-              selectIds:[]
+              selectIds:null
             });
           }
+          _this.setData({
+            expireList: res.data.data.expireList?res.data.data.expireList:[]
+          });
+          _this.getSelectInfo(res.data.data.list);
         }else if(res.data.code == 40101){
           _this.getToken(function(){
             _this.getCartList();
@@ -359,11 +362,20 @@ Page({
           loginId: app.globalData.loginId,
           shopId: _this.data.options.shopId,
           goodsNo:_goodsNo,
-          type:_type=='add'?0:1
+          type:_type=='add'?0:1   //0为增，1为减
         },
         token: app.globalData.token,
         success: function (res) {
           if (res.data.code == 200) {
+            if(_type == 'add'){
+              var _selectIds = _this.data.selectIds;
+              if (_selectIds.indexOf(_goodsNo) == -1) {
+                _selectIds.push(_goodsNo);
+                _this.setData({
+                  selectIds: _selectIds
+                });
+              }
+            }
             _this.getGoodsList();
           } else if (res.data.code == 40101) {
             _this.getToken(function () {
@@ -467,16 +479,21 @@ Page({
     for(var key in _cartList){
       if (_selectId.indexOf(_cartList[key].goodsNo)!=-1) {
         _num += _cartList[key].orderNum;
-        _totalAmt += _cartList[key].orderAmt*_cartList[key].orderNum;
+        _totalAmt += _cartList[key].goodsAmt*_cartList[key].orderNum;
         _cartList[key].isSelected = true;
       } else {
         _cartList[key].isSelected = false;
       }
+    } 
+    for (var key in this.data.expireList){
+      var _index = _selectId.indexOf(this.data.expireList[key].goodsNo);
+      if(_index!=-1){
+        _selectId.splice(_index,1);
+      }
     }
-    //console.log(_selectId,_selectId.length,_cartList.length)
     this.setData({
       selectInfo:{
-        selectAll: _selectId.length==_cartList.length?true:false,
+        selectAll: _selectId.length == _cartList.length && _cartList.length>0?true:false,
         selectNums:_num,
         selectAmt:_totalAmt
       },

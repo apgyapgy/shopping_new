@@ -9,7 +9,7 @@ Page({
   data: {
   
   },
-  onLoad:function(){
+  onShow:function(){
     this.authUserInfo();
   },
   checkUserInfoAuth: function (fn) {

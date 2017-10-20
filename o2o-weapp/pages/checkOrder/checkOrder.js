@@ -16,7 +16,8 @@ Page({
     goods:[],//订单商品
     popHopeTs:'',
     clickable:true,
-    payData:{}
+    payData: {},
+    imgPre: app.globalData.imgPre
   },
   /**
    * 生命周期函数--监听页面加载
@@ -39,13 +40,13 @@ Page({
         params: {
           shopId: _this.data.options.shopId,
           cellCd: _this.data.options.cellCd,
-          goodsNo: _this.data.options.goodsNo
+          goodsNo: _this.data.options.goodsNo,
+          mchId:_this.data.options.mchId
         },
         token: app.globalData.token,
         success: function (res) {
           console.log("checkOrder.js orderPage:", res);
           if(res.data.code == 200){
-            
             _this.calculatePayPrice();
             if(res.data.data.coupons.length){
               _this.setData({
@@ -64,8 +65,14 @@ Page({
                 popHopeTs: res.data.data.popHopeTs
               });
             }
+          }else if(res.data.code == 40101){
+            _this.getToken(function(){
+              _this.getOrderInfo();
+            });
           }else{
-            wx.navigateBack({});
+            common.showModal(res.data.desc,function(){
+              wx.navigateBack({});
+            });            
           }
         },
         complete: function () {
@@ -146,7 +153,7 @@ Page({
         _orderGoods.push(_arr);
       }
       var _params = {
-        orderAmt: _this.data.payPrice,
+        orderAmt: _this.data.payPrice - _this.data.couponPrice,
         src: 3,
         shopId: _this.data.options.shopId,
         orderTp: 1,
@@ -163,7 +170,15 @@ Page({
           success: function (res) {
             console.log("checkOrder.js order:", res);
             if (res.data.code == 200) {
-              _this.requestPayMent(res.data.data);
+              if (_this.data.payPrice - _this.data.couponPrice >0){
+                _this.requestPayMent(res.data.data);
+              }else{
+                common.showModal("支付成功!", function () {
+                  wx.redirectTo({
+                    url: '/pages/order/order?type=1',
+                  });
+                });
+              }
             }else{
               common.showModal(res.data.desc);
             }
