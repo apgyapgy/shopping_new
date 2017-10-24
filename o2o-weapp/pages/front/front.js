@@ -150,35 +150,48 @@ Page({
   },
   checkOauth: function () {
     var _this = this;
-    wx.login({
-      success: ress => {
-        console.log("login:", ress);
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (ress.code) {
-          wx.request({
-            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
-            data: {
-              code: ress.code,
-              bmapLng: app.globalData.longitude,
-              bmapLat: app.globalData.latitude
-            },
-            success: function (re) {
-              console.log("app.js:oauth", re);
-              if (re.data.code == 200) {
-                app.globalData.loginId = re.data.data.loginId;
-                app.globalData.hostId = re.data.data.hostId;
-                app.globalData.token = re.data.data.token;
-                wx.redirectTo({
-                  url: '/pages/index/index'
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if (res.networkType == 'none') {
+          common.showModal("网络已断开，请联网后重试!");
+        }else{
+          wx.login({
+            success: ress => {
+              console.log("login:", ress);
+              // 发送 res.code 到后台换取 openId, sessionKey, unionId
+              if (ress.code) {
+                wx.request({
+                  url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+                  data: {
+                    code: ress.code,
+                    bmapLng: app.globalData.longitude,
+                    bmapLat: app.globalData.latitude
+                  },
+                  success: function (re) {
+                    console.log("app.js:oauth", re);
+                    if (re.data.code == 200) {
+                      app.globalData.loginId = re.data.data.loginId;
+                      app.globalData.hostId = re.data.data.hostId;
+                      app.globalData.token = re.data.data.token;
+                      wx.redirectTo({
+                        url: '/pages/index/index'
+                      });
+                    } else if (re.data.code == 40110) {
+                      wx.redirectTo({ url: "/pages/login/login" });
+                    }
+                  }
                 });
-              } else if (re.data.code == 40110) {
-                wx.redirectTo({ url: "/pages/login/login" });
+              } else {
+                console.log('获取用户登录态失败！' + ress.errMsg)
               }
             }
           });
-        } else {
-          console.log('获取用户登录态失败！' + ress.errMsg)
         }
+      },
+      fail:function(res){
+        console.log("获取网络状态失败:",res);
       }
     });
   }

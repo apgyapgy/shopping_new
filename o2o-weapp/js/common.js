@@ -28,43 +28,61 @@ var basicParms = {
   serial: getSerial().toString(),
 };
 var getAjax = function(options){
-  if (wx.showLoading) {
-    wx.showLoading({
-      title: '加载中',
-    })
-  }
-  if(options.token){
-    var _header  = {
-      'content-type': 'application/json',
-      'Cookie': 'JSESSIONID=' + options.token
-    };
-  }else{
-    var _header = {
-      'content-type': 'application/json'
-    }
-  }
-  return wx.request({
-    url: baseUrl + options.url,
-    data: options.params,
-    method: options.method?options.method:'GET',
-    success: options.success,
-    header: _header,
-    fail: function (res) {
-      if(options.fail){
-        options.fail(res)
+  wx.getNetworkType({
+    success: function (res) {
+      // 返回网络类型, 有效值：
+      // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+      var networkType = res.networkType;
+      if(res.networkType == 'none'){
+        showModal("网络已断开，请联网后重试!",function(){
+          if(options.complete){
+            options.complete();
+          }
+        });
+      }else{
+        if (wx.showLoading) {
+          wx.showLoading({
+            title: '加载中',
+          })
+        }
+        if (options.token) {
+          var _header = {
+            'content-type': 'application/json',
+            'Cookie': 'JSESSIONID=' + options.token
+          };
+        } else {
+          var _header = {
+            'content-type': 'application/json'
+          }
+        }
+        return wx.request({
+          url: baseUrl + options.url,
+          data: options.params,
+          method: options.method ? options.method : 'GET',
+          success: options.success,
+          header: _header,
+          fail: function (res) {
+            if (options.fail) {
+              options.fail(res)
+            }
+          },
+          complete: function () {
+            if (wx.hideLoading) {
+              setTimeout(function () {
+                wx.hideLoading()//关闭提示
+              }, 400);
+            }
+            if (options.complete) {
+              options.complete();
+            }
+          }
+        });
       }
     },
-    complete: function () {
-      if (wx.hideLoading) {
-        setTimeout(function () {
-          wx.hideLoading()//关闭提示
-        },400);
-      } 
-      if(options.complete){
-        options.complete();
-      }
+    fail:function(res){
+      console.log("获取网络状态失败：",res);
     }
-  });
+  });  
 }
 var ajaxAsync = function (options) {
   if (wx.showLoading) {

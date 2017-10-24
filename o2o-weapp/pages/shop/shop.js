@@ -340,31 +340,48 @@ Page({
   },
   getToken:function(fn){//如果用户token过期，重新获取token，并获取数据
     var _this = this;
-    wx.login({
-      success: ress => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (ress.code) {
-          wx.request({
-            url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
-            data: {
-              code: ress.code
-            },
-            success: function (re) {
-              console.log("in shop page oauth:",re);
-              if (re.data.code == 200) {
-                app.globalData.loginId = re.data.data.loginId;
-                app.globalData.token = re.data.data.token;
-                if(fn){
-                  fn();
-                }
-              } else if (re.data.code == 40110) {
-                wx.redirectTo({ url: "/pages/login/login" });
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        if (res.networkType == 'none') {
+          common.showModal("网络已断开，请联网后重试!",function(){
+            _this.setData({
+              clickable:true
+            });
+          });
+        } else {
+          wx.login({
+            success: ress => {
+              // 发送 res.code 到后台换取 openId, sessionKey, unionId
+              if (ress.code) {
+                wx.request({
+                  url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+                  data: {
+                    code: ress.code
+                  },
+                  success: function (re) {
+                    console.log("in shop page oauth:",re);
+                    if (re.data.code == 200) {
+                      app.globalData.loginId = re.data.data.loginId;
+                      app.globalData.token = re.data.data.token;
+                      if(fn){
+                        fn();
+                      }
+                    } else if (re.data.code == 40110) {
+                      wx.redirectTo({ url: "/pages/login/login" });
+                    }
+                  }
+                });
+              } else {
+                console.log('获取用户登录态失败！' + ress.errMsg)
               }
             }
           });
-        } else {
-          console.log('获取用户登录态失败！' + ress.errMsg)
         }
+      },
+      fail:function(res){
+        console.log("获取网络状态失败:",res);
       }
     });
   },
