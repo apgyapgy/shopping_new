@@ -221,7 +221,7 @@ page{
   position:fixed;
   left:0;
   padding-top:20rpx;
-  bottom:86rpx;
+  bottom:0;
   width:750rpx;
   height:787rpx;
   background:rgba(0,0,0,0.7);

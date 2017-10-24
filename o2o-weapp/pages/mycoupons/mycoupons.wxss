@@ -84,6 +84,18 @@ page{
   font-size:40rpx;
   color:#fa3e2d;
 }
+.coupon.used .coupon-price{
+  color:rgba(250,62,45,.5);
+}
+.coupon.used .coupon-condition{
+  color:rgba(102,102,102,.5);
+}
+.coupon.used .coupon-vld{
+  color:rgba(153,153,153,.5);
+}
+.coupon.used .coupon-name{
+  color:rgba(102,102,102,.5);
+}
 .coupon-condition{
   margin-left:48rpx;
   height:38rpx;

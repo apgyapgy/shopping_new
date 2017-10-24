@@ -51,7 +51,9 @@ Page({
     expiredId:'',
     jumpFlag:true,
     clickable: true,//是否可点击，用于防止连续点击 
-    imgPre: app.globalData.imgPre
+    imgPre: app.globalData.imgPre,
+    noCartFlag:false,
+    netDisconnectFlag: false
   },
   /*生命周期函数--监听页面加载*/
   /*onLoad: function (options) {
@@ -66,16 +68,25 @@ Page({
     }
     this.getShopList();
   },*/
-  onShow: function (options) {
-    if (!app.globalData.location.cellCd) {
-      app.globalData.location = {
-        bmapLat: "31.228522821982",
-        bmapLng: "121.56115068654",
-        cellCd: "A2100224063",
-        hostId: "70000030"
-      };
-      app.globalData.loginId = "15316117950";
+  onLoad: function () {
+    var _this = this;
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
     }
+  },
+  onShow: function (options) {
     this.getShopList();
     this.qryUserCartNums();
   },
@@ -268,11 +279,16 @@ Page({
   //测试左滑删除end
   getShopList:function(){//获取购物车在的商品
     var _this = this;
+    if (this.data.noCartFlag == true){
+      this.setData({
+        noCartFlag:false
+      });
+    }
     common.getAjax({
       url: 'wx_we/qryUserCart',
       params: {
         loginId: app.globalData.loginId,
-        hostId: app.globalData.location.hostId
+        hostId: app.globalData.location.hostId ? app.globalData.location.hostId:''
       },
       token: app.globalData.token,
       success: function (res) {
@@ -310,16 +326,29 @@ Page({
             }
             _shopCartList.push(_area);
           }
-          _this.setData({
-            shoppingCartList:_shopCartList,
-            expiredId: _expiredId.substring(1)
-          });
+          if(_shopCartList.length){
+            _this.setData({
+              shoppingCartList: _shopCartList,
+              expiredId: _expiredId.substring(1)
+            });
+          }else{
+            _this.setData({
+              shoppingCartList: _shopCartList,
+              expiredId: _expiredId.substring(1),
+              noCartFlag: true
+            });
+          }
           //_this.qryUserCartNums();
         } else if (res.data.code == 40101) {
           _this.getToken(function () {
             _this.getShopList();
           });
         } else {
+          _this.setData({
+            shoppingCartList: [],
+            expiredId: '',
+            noCartFlag: true
+          });
           common.showModal("加载购物车数据失败!");
         }
       }

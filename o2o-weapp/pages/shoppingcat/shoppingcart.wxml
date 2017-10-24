@@ -30,7 +30,7 @@
               <!--<image src="../../image/good.png"/>-->
               <text class="car-good-name">{{good.goodsNm}}</text>
               <view class='car-good-info'>
-                <text class='car-good-price'>￥{{good.goodsAmt/100}}</text>
+                <text class='car-good-price'>￥{{good.goodsAmt?good.goodsAmt/100:0}}</text>
                 <text class='car-good-num'>X{{good.orderNum}}</text>
               </view>
             </view>
@@ -48,12 +48,13 @@
   </view>
   <view class='padding-100'></view>
 </scroll-view>
-<view wx:else class='cart-empty'>
+<view hidden="{{!noCartFlag}}" class='cart-empty'>
   <image src='../../image/cart-empty.png'/>
   <text>购物车空空如也...</text>
 </view>
-<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
-
+<image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>
 
 <!--footer-->
 <import src="../footer/footer.wxml"/>

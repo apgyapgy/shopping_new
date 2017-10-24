@@ -45,15 +45,33 @@ Page({
         text: '我的',
         active: false
       }
-    ],
+    ],//底部导航栏信息
     latitude:'',//纬度
     longitude:'',//经度
-    shopList:[],
-    location:{},
-    jumpUrl: "",
-    imgPre: app.globalData.imgPre
+    shopList: [],//店铺列表 
+    location: {}, //返回的定位小区信息
+    jumpUrl: "",  //要跳转的链接
+    imgPre: app.globalData.imgPre, //图片前缀
+    noshop:false,  //当无店铺或收件宝快递柜时显示
+    netDisconnectFlag:false
   }, 
-  onLoad:function(){
+  onLoad: function () {
+    var _this = this;
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:",res);
+        if(res.networkType == 'none'){
+          _this.setData({
+            netDisconnectFlag:true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
+    }
   },
   onShow: function () {
     var _this = this;
@@ -162,6 +180,7 @@ Page({
     });
   },
   checkBackTop:function(e){//检测并判断是否显示返回顶部按钮 
+    console.log("checkBackTop", this.data.backTopIconShowFlag);
     if (e.detail.scrollTop > 500) {
       if (this.data.backTopIconShowFlag == false){
         this.setData({
@@ -206,29 +225,44 @@ Page({
                     console.log("首页:", res);
                     if (res.data.code == 200) {
                       var _data = res.data.data;
-                      _this.setData({
-                        bannerImgs: _data.banners,
-                        shopList: _data.shops,
-                        location: _data.location
-                      });
+                      if(_data.shops.length){
+                        _this.setData({
+                          bannerImgs: _data.banners,
+                          shopList: _data.shops,
+                          location: _data.location,
+                          noshop:false
+                        });
+                      }else{
+                        _this.setData({
+                          bannerImgs: _data.banners,
+                          shopList: _data.shops,
+                          location: _data.location,
+                          noshop:true
+                        });
+                      }
                       app.globalData.location = _data.location;
                     } else if (res.data.code == 40201) {
+                      app.globalData.hostId = re.data.data.hostId?re.data.data.hostId:'';
                       _this.setData({
                         bannerImgs: ['../../image/banner.png'],
                         shopList: [],
-                        location: {}
+                        location: {},
+                        noshop:true
                       });
+                      app.globalData.location = {};
                       common.showModal(res.data.desc);
-                    } else if(res.data.code == 40101) {
+                    } else if (res.data.code == 40101) {
+                      app.globalData.hostId = re.data.data.hostId ? re.data.data.hostId : '';
                       _this.setData({
                         shopList: [],
                         location: {}
                       });
                       app.globalData.location = {};
-                    }else{
+                    } else {
                       _this.setData({
                         shopList: [],
-                        location: {}
+                        location: {},
+                        noshop:true
                       });
                       app.globalData.location = {};
                       common.showModal(res.data.desc);
@@ -240,8 +274,15 @@ Page({
                 });
               }else if(re.data.code == 40110){
                 wx.redirectTo({ url: "/pages/login/login" });
-              }else{
+              }else if(re.data.code == 40101){
                 _this.initData();
+              }else{
+                _this.setData({
+                  shopList: [],
+                  location: {},
+                  noshop: true
+                });
+                common.showModal(re.data.desc);
               }
             }
           });

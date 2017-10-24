@@ -15,7 +15,7 @@
         <image src="{{imgPre+item.goodsImgLogo}}"/>
         <view class='good-info'>
           <text class='good-name'>{{item.goodsNm}}</text>
-          <text class='good-price'>￥{{item.goodsAmt/100}}</text>
+          <text class='good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
         </view>
         <view class='add-sub'>
           <image hidden="{{item.cartGoodsNum<=0}}" data-goodsNo="{{item.goodsNo}}" catchtap="addsub" data-type="sub" data-num="{{item.cartGoodsNum}}" class='sub' src="../../image/sub.png"/>
@@ -43,10 +43,10 @@
     <text class='car-total-money'>合计金额:<text>{{selectInfo.selectAmt>=shop.distAmtMin?selectInfo.selectAmt/100:(selectInfo.selectAmt+shop.distAmt)/100}}</text>元</text>
     <text class='delivery-money'>配送费:{{selectInfo.selectAmt>=shop.distAmtMin?0:shop.distAmt/100}}元</text>
     -->
-    <text class='car-total-money'>合计金额:<text>{{(selectInfo.selectAmt+shop.distAmt)/100}}</text>元</text>
-    <text class='delivery-money'>配送费:{{shop.distAmt?shop.distAmt/100:0}}元</text>
+    <text class='car-total-money'>合计金额:<text>{{shop.distAmt>=0&&selectInfo.selectAmt>0?(selectInfo.selectAmt+shop.distAmt)/100:0}}</text>元</text>
+    <text class='delivery-money'>配送费:{{shop.distAmt?shop.distAmt/100:0}}元,起送费{{shop.distAmtMin?shop.distAmtMin/100:0}}元</text>
   </view>
-  <view catchtap="topay" class="to-pay {{selectIds.length>0?'':'disabled'}}">去结算</view>
+  <view catchtap="topay" class="to-pay {{selectIds.length>0&&selectInfo.selectAmt>=shop.distAmtMin?'':'disabled'}}">去结算</view>
 </view>
 
 <!--购物车详情-->
@@ -69,7 +69,7 @@
           <!--<image src="../../image/good.png"/>-->
           <view class='good-info'>
             <text class='good-name'>{{item.goodsNm}}</text>
-            <text class='good-price'>￥{{item.goodsAmt/100}}</text>
+            <text class='good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
           </view>
           <view class='add-sub'>
             <image hidden="{{item.orderNum<=0}}" data-goodsNo="{{item.goodsNo}}" catchtap="addsub" data-type="sub" data-num="{{item.orderNum}}" class='sub' src="../../image/sub.png"/>
@@ -84,7 +84,7 @@
           <!--<image src="../../image/good.png"/>-->
           <view class='good-info'>
             <text class='good-name'>{{item.goodsNm}}</text>
-            <text class='good-price'>￥{{item.goodsAmt/100}}</text>
+            <text class='good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
           </view>
           <view class='add-sub'>
             <text hidden="{{item.orderNum<=0}}" class='num'>{{item.orderNum}}</text>
@@ -95,7 +95,7 @@
     </scroll-view>
 
     <view class='car-info-head'>
-      <view class='select' catchtap="selectAll"> 
+      <view hidden="{{cartList.length<=0}}" class='select' catchtap="selectAll"> 
         <view class="select-icon {{selectInfo.selectAll?'active':''}}">
           <image src="../../image/success.png"/>
         </view>
@@ -109,12 +109,14 @@
 
     <view bindtap="showCarInfo" class='car-bar'>
       <view class='car-money'>
-        <text class='car-total-money'>合计金额:<text>{{(selectInfo.selectAmt+shop.distAmt)/100}}</text>元</text>
-        <text class='delivery-money'>配送费:{{shop.distAmt/100}}元</text>
+        <text class='car-total-money'>合计金额:<text>{{selectInfo.selectAmt>0&&shop.distAmt>=0?(selectInfo.selectAmt+shop.distAmt)/100:0}}</text>元</text>
+        <text class='delivery-money'>配送费:{{shop.distAmt?shop.distAmt/100:0}}元,起送费{{shop.distAmtMin?shop.distAmtMin/100:0}}元</text>
       </view>
-      <view catchtap="topay" class="to-pay {{selectIds.length>0?'':'disabled'}}">去结算</view>
+      <view catchtap="topay" class="to-pay {{selectIds.length>0&&selectInfo.selectAmt>=shop.distAmtMin?'':'disabled'}}">去结算</view>
     </view>
   </view>
 </view>
 <!--返回顶部-->
-<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>

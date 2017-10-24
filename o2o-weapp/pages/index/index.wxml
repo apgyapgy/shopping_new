@@ -14,7 +14,8 @@
     <!--定位-->
     <view catchtap="chooseLocation" class="location">
       <image class="location-icon" src="../../image/location.png"/>
-      <text class="location-name">{{location.areaNm?location.areaNm+location.hostAddrShort:'点击定位'}}</text>
+      <!--<text class="location-name">{{location.areaNm?(location.hostAddrShort?location.areaNm+location.hostAddrShort:location.areaNm):'点击定位'}}</text>-->
+      <text class="location-name">{{location.areaNm?location.areaNm:'点击定位'}}</text>
       <image class="location-down-icon" src="../../image/down.png"/>
     </view>
 
@@ -45,7 +46,7 @@
     </view>
 
     <!--暂无商铺-->
-    <view wx:else class="no-shop">
+    <view wx:if="{{noshop}}" class="no-shop">
       <image src="../../image/no-shop.png"/>
       <text>该小区附近暂无商铺(收件宝快递柜）</text>
       <text>请尝试切换其他小区</text>
@@ -54,8 +55,9 @@
     <view class='padding-100'></view>
   </scroll-view>
     <!--返回顶部-->
-    <image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
-
+    <image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+    <!--toast-->
+    <view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>
     <!--footer模板-->
     <view class='footer'>
       <view bindtap="naviTo" wx:for="{{tabbarArray}}" wx:key="{{item.id}}" class="navi {{item.cls}} {{item.active==true?'active':''}}" data-naviUrl="{{item.url}}" hover-class="navigator-hover">

@@ -26,16 +26,33 @@ Page({
     },
     selectIds:null,
     imgPre:app.globalData.imgPre,
-    expireList:[]//过期失效商品
+    expireList:[],//过期失效商品
+    netDisconnectFlag: false
   },
   /*生命周期函数--监听页面加载*/
-  onLoad:function(options){
+  onLoad: function (options) {
+    var _this = this;
     if (options.shopId) {
       this.setData({
         options: options
       });
     } else {
       app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
+    }
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
     }
   },
   onShow: function () {
@@ -177,7 +194,7 @@ Page({
   },
   topay:function(){//去支付
     var _this = this;
-    if (this.data.clickable){
+    if (this.data.clickable && this.data.selectInfo.selectAmt >= this.data.shop.distAmtMin){
       this.setData({
         clickable:false
       });

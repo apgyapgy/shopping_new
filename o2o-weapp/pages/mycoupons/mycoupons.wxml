@@ -8,7 +8,8 @@
   <view class="padding-20"></view>
   <view wx:if="{{couponsList.length>0}}" class="coupon-body">
 
-    <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" class="coupon">
+    <view wx:for="{{couponsList}}" wx:for-index="idx" wx:key="idx" 
+      class="coupon {{activeTab==1||activeTab==2?'used':''}}">
       <view class="coupon-left">
         <view class="coupon-price">￥{{item.couponAmt/100}}</view>
         <view class='coupon-condition'>满{{item.couponAmtMin/100}}元使用</view>
@@ -22,9 +23,11 @@
     </view>
 
   </view>
-  <view wx:else class="no-coupons">
+  <view hidden="{{!noCouponFlag}}" class="no-coupons">
     <text>暂无优惠券</text>
   </view>
 </scroll-view>
 <!--返回顶部-->
-<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>

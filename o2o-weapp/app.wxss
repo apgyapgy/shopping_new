@@ -59,3 +59,23 @@ button[type='de']
   width:750rpx;
   height:100rpx;
 }
+/*toast*/
+.toast{
+  display:none;
+  position:fixed;
+  left:50%;
+  top:50%;
+  width:340rpx;
+  height:50rpx;
+  transform:translate(-50%,-50%);
+  line-height:50rpx;
+  font-size:30rpx;
+  text-align:center;
+  background:rgba(0,0,0,.8);
+  color:#fff;
+  border-radius: 5rpx;
+  transition:all .5s ease-in-out;
+}
+.toast.show{
+  display:block;
+}

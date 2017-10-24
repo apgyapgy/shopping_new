@@ -21,7 +21,7 @@
   top:50rpx;
   left:50%;
   transform:translateX(-50%);
-  min-width:246rpx;
+  min-width:250rpx;
   height:50rpx;
   line-height:50rpx;
   background:#eaf7ff;

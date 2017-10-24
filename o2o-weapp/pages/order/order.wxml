@@ -26,7 +26,7 @@
           <!--<image src="../../image/good.png"/>-->
           <text class="shop-good-name">{{good.goodsNm}}</text>
           <view class='shop-good-info'>
-            <text class='shop-good-price'>￥{{good.goodsAmt/100}}</text>
+            <text class='shop-good-price'>￥{{good.goodsAmt?good.goodsAmt/100:0}}</text>
             <text class='shop-good-num'>X{{good.orderNum}}</text>
           </view>
         </view>
@@ -36,7 +36,11 @@
         <view class='shop-order-coupon-used'>{{item.couponAmt>0?'已使用:满'+item.couponAmtMin/100+'减'+item.couponAmt/100:'未使用优惠券'}}</view>
       </view>
       <view class='shop-order-info'>
-        <view class='shop-order-price'>共{{item.goodsNum}}件商品，实际支付￥<text>{{item.orderAmt/100}}</text><text hidden="{{item.distAmt<=0}}">(配送费：{{item.distAmt/100}}元)</text></view>
+        <view class='shop-order-price'>
+          共{{item.goodsNum}}件商品，{{activeTab==0?'待':'实际'}}支付￥
+          <text>{{item.orderAmt?item.orderAmt/100:0}}</text>
+          (配送费：{{item.distAmt>0?item.distAmt/100:0}}元)
+        </view>
       </view>
       <!--
       <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>
@@ -47,7 +51,7 @@
     </view>
 
   </view>
-  <view wx:else class="no-order">
+  <view hidden="{{!noOrderFlag}}" class="no-order">
     <text>你还没有相关订单哦</text>
   </view>
   <view class='padding-100'></view>
@@ -66,7 +70,9 @@
   </view>
 </view>
 <!--返回顶部-->
-<image catchtap="goTop" class="'top' {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>
 <!--footer-->
 <import src="../footer/footer.wxml"/>
 <template is="footer" data="{{tabbarArray}}"></template>

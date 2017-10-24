@@ -11,7 +11,9 @@ Page({
     couponsList:[],
     coupons:[],
     backTopIconShowFlag: false,
-    scrollTop: 0,
+    scrollTop: 0, 
+    netDisconnectFlag: false,
+    noCouponFlag:false
   },
 
   /**
@@ -22,6 +24,21 @@ Page({
     this.getToken(function(){
       _this.getCoupons();
     });
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
+    }
   },
   mockLogin:function(){//模拟登录 
     var _this = this;
@@ -60,6 +77,12 @@ Page({
           _this.getToken(function () {
             _this.getCoupons();
           });
+        }else{
+          _this.setData({
+            coupons:[],
+            noCouponFlag:true
+          });
+          common.showModal(res.data.desc);
         }
       }
     });
@@ -105,14 +128,23 @@ Page({
         _list.push(_coupons[key]);
       }
     }
-    this.setData({
-      couponsList:_list
-    });
+    if(_list.length){
+      this.setData({
+        couponsList: _list,
+        noCouponFlag:false
+      });
+    }else{
+      this.setData({
+        couponsList: _list,
+        noCouponFlag:true
+      });
+    }
   },
   changeTab:function(e){
     var _index = e.target.dataset.index;
     this.setData({
-      activeTab:_index
+      activeTab:_index,
+      noCouponFlag:false
     });
     this.getShowCoupon();
   },

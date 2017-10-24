@@ -7,8 +7,8 @@
       <image src="../../image/area_active.png"/>
       <text>{{shop.areaNm}}</text>
     </view>
-    <view class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
     <view class='order-phone'>手机：{{shop.loginId}}</view>
+    <view class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
   </view>
 
   <view class="order-wrapper clearfix">
@@ -19,7 +19,7 @@
         <view class='order-good-right'>
           <text class="order-good-name">{{item.goodsNm}}</text>
           <view class='order-good-info'>
-            <text class='order-good-price'>￥{{item.goodsAmt/100}}</text>
+            <text class='order-good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
             <text class='order-good-num'>X{{item.orderNum}}</text>
           </view>
         </view>
@@ -28,22 +28,31 @@
     <view class='arrive-time'>到达时间：{{popHopeTs}}</view>
     <view catchtap="showCoupon" class='discount'>
       <text>商家优惠</text>
-      <view hidden="{{couponsList.length<=0}}" class='discount-price'>{{couponPrice/100}}元<text>></text></view>
+      <view hidden="{{couponsList.length<=0}}" class='discount-price'>{{couponAmt?couponAmt/100:0}}元<text>></text></view>
       <view hidden="{{couponsList.length>0}}" class='discount-price disabled'>暂无优惠券</view>
     </view>
   </view>
   <view class='padding-86'></view>
 </scroll-view>
 
+<!--去结算-->
+<view class='car-bar'>
+  <view class='car-money'>
+    <text class='car-total-money'>实际支付金额:<text>{{(payPrice-couponAmt)>0?(payPrice-couponAmt)/100:0}}</text>元</text>
+    <text class='delivery-money'>配送费:{{goods[0].distAmt?goods[0].distAmt/100:0}}元</text>
+  </view>
+  <view catchtap="showPayModel" class="to-pay {{isPayAble&&isOrderGetted?'active':''}}">去结算</view>
+</view>
+
 <!--优惠券-->
 <scroll-view catchtap="hideCoupon" hidden="{{!couponShowFlag}}" class="order-coupon clearfix" scroll-y >
-  <view wx:for="{{couponsList}}" wx:for-index="id" wx:key="{{id}}" class='coupon'>
+  <view catchtap="selectCoupon" data-idx="{{id}}" wx:for="{{couponsList}}" wx:for-index="id" wx:key="{{id}}" class='coupon'>
     <view class="coupon-left">
-      <view catchtap="selectCoupon" class="select {{item.select?'active':''}}" data-idx="{{id}}">
+      <view class="select {{item.select?'active':''}}">
         <image src="../../image/success.png"/>
       </view>
-      <view class="coupon-price">￥{{item.couponAmt/100}}</view>
-      <view class='coupon-condition'>满{{item.couponMin/100}}元使用</view>
+      <view class="coupon-price">￥{{item.couponAmt?item.couponAmt/100:0}}</view>
+      <view class='coupon-condition'>满{{item.couponAmtMin?item.couponAmtMin/100:0}}元使用</view>
       <view class="coupon-vld">有效期到:{{item.expireDt}}</view>
     </view>
     <view class="coupon-right">
@@ -53,14 +62,6 @@
     </view>
   </view>
 </scroll-view>
-<!--去结算-->
-<view class='car-bar'>
-  <view class='car-money'>
-    <text class='car-total-money'>实际支付金额:<text>{{(payPrice-couponPrice)/100}}</text>元</text>
-    <text class='delivery-money'>配送费:{{goods[0].distAmt?goods[0].distAmt/100:0}}元</text>
-  </view>
-  <view catchtap="showPayModel" class="to-pay {{isPayAble?'active':''}}">去结算</view>
-</view>
 
 <view hidden="{{!showPayModel}}" class='pay-info-wrapper'>
   <view class="pay-info">
@@ -68,10 +69,12 @@
     <view class='pay-info-title'>支付</view>
     <view class='pay-info-body'>
       <view class='pay-info-company'>上海富友电子商务有限公司</view>
-      <view class='pay-info-money'>￥{{(payPrice-couponPrice)/100}}</view>
+      <view class='pay-info-money'>￥{{(payPrice-couponAmt)>0?(payPrice-couponAmt)/100:0}}</view>
     </view>
     <view class='pay-info-pay'>
       <text bindtap="topay" class="pay {{clickable?'':'disabled'}}">确认支付</text>
     </view>
   </view>
 </view>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>

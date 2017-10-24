@@ -7,10 +7,27 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    netDisconnectFlag: false
+  },
+  onLoad: function () {
+    var _this = this;
+    this.authUserInfo();
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
+    }
   },
   onShow:function(){
-    this.authUserInfo();
   },
   checkUserInfoAuth: function (fn) {
     //判断用户是否授权获取用户信息,未授权点任何位置跳转授权页面
@@ -35,7 +52,6 @@ Page({
               }
             },
             fail: function () {
-              console.info("设置失败返回数据");
               app.globalData.userInfoAuth = false;
             }
           });
@@ -98,8 +114,7 @@ Page({
         if (res.errMsg == "getUserInfo:fail auth deny") {
           _this.checkUserInfoAuth(function () {
             _this.authUserInfo();
-          }
-          );
+          });
         }
       }
     });

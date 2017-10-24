@@ -16,3 +16,5 @@
     <button bindtap="sure" class="weui-btn" type="primary">确认</button>
   </view>
 </view>
+<!--toast-->
+<view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>

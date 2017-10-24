@@ -54,7 +54,9 @@ Page({
     clickable:true,
     clickIdx:'',//立即付款与开箱的idx,用于获取订单信息
     payData: {},
-    imgPre: app.globalData.imgPre
+    imgPre: app.globalData.imgPre,
+    noOrderFlag:false,
+    netDisconnectFlag: false
   },
   /**
    * 生命周期函数--监听页面加载
@@ -69,6 +71,21 @@ Page({
     this.getToken(function(){
       _this.getOrders();
     });
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
+    }
   },
   onShow:function(){
     this.qryUserCartNums();
@@ -112,6 +129,11 @@ Page({
   },
   getOrders:function(){
     var _this = this;
+    if (this.data.noOrderFlag == true){
+      this.setData({
+        noOrderFlag:false
+      });
+    }
     common.getAjax({
       url: 'api/orderQry',
       params: {
@@ -123,13 +145,26 @@ Page({
       success: function (res) {
         console.log("getOrders:",res);
         if(res.data.code == 200){
-          _this.setData({
-            orderList:res.data.data.datas
-          });
+          if(res.data.data.datas.length){
+            _this.setData({
+              orderList: res.data.data.datas,
+              noOrderFlag:false
+            })
+          }else{
+            _this.setData({
+              orderList:res.data.data.datas,
+              noOrderFlag:true
+            });
+          }
         }else if(res.data.code == 40101){
           _this.getToken(function(){
             _this.getOrders();
           });
+        }else{
+          _this.setData({
+            noOrderFlag:true
+          })
+          common.showModal(res.data.desc);
         }
       },
       complete: function () {

@@ -313,7 +313,7 @@
 }
 .car-info-head .clear-car image{
   float:left;
-  margin-top:30rpx;
+  margin-top:26rpx;
   width:34rpx;
   height:34rpx;
 }
@@ -323,6 +323,6 @@
   margin-top:10rpx;
   height:70rpx;
   line-height:70rpx;
-  color:#ccc;
+  color:#666;
   font-size:30rpx;
 }

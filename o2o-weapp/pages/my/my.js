@@ -46,17 +46,34 @@ Page({
       }
     ],
     userInfo:{},
-    concatPhone:'95138' //客服电话
+    concatPhone:'95138', //客服电话
+    netDisconnectFlag: false
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) { 
+  onLoad: function (options) {
+    var _this = this;
     console.log("userInfo:", app.globalData); 
     this.setData({
       userInfo:app.globalData.userInfo
     });
     this.qryUserCartNums();
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

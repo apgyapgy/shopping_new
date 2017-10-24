@@ -142,8 +142,8 @@
   line-height:60rpx;
 }
 .shop-order-info .shop-order-coupon-used{
-  margin-left:30rpx;
-  float:left;
+  margin-right:30rpx;
+  float:right;
 }
 .shop-order-info .shop-order-price{
   float:right;

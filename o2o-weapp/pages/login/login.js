@@ -12,7 +12,9 @@ Page({
     cutdownTime:0,
     timer: null,
     latitude: '',//纬度
-    longitude: ''//经度
+    longitude: '',//经度
+    isYzmSended:false, //判断验证码有没有发送
+    netDisconnectFlag: false
   },
   //事件处理函数
   bindViewTap: function () {
@@ -21,6 +23,7 @@ Page({
     })
   },
   onLoad: function () {
+    var _this = this;
     var _location = this.getStorageLocation();
     if (_location) {
       _location = _location.split("#");
@@ -40,15 +43,6 @@ Page({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    /*} else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }*/
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
@@ -57,9 +51,24 @@ Page({
           this.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
-          })
+          });
         }
       })
+    }
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          }, 2000);
+        }
+      });
     }
   },
   getUserInfo: function (e) {
@@ -85,6 +94,10 @@ Page({
     })
   },
   sure:function(){//点击确认按钮
+    if(!this.data.isYzmSended){
+      common.showModal("请先获取验证码!");
+      return;
+    }
     var _mobile = this.data.mobile.trim();
     var _code = this.data.yzm.trim();
     if(!_mobile){
@@ -114,6 +127,7 @@ Page({
   sendYzm:function(e){//发送验证码
     var _mobile = this.data.mobile.trim();
     if (!_mobile){
+      common.showModal("请输入手机号");
       return;
     }
     var _this = this;
@@ -126,9 +140,16 @@ Page({
         success:function(re){
           console.log("send mobile success:",re);
           if (re.data.code == 200) {
-            _this.setData({
-              cutdownTime: 61
-            });
+            if (_this.data.isYzmSended == false){
+              _this.setData({
+                cutdownTime:61,
+                isYzmSended:true
+              });
+            }else{
+              _this.setData({
+                cutdownTime: 61
+              });
+            }
             _this.cutdown();
           }else{
             common.showModal(re.data.desc);
@@ -136,7 +157,7 @@ Page({
         }
       });
     }else{
-      common.showModal(请输入正确的手机号);
+      common.showModal("请输入正确的手机号");
     }
   },
   setmobile:function(e){//保存手机号

@@ -9,26 +9,44 @@ Page({
     isPayAble:true,//判断是否可支付，用来决定去结算按钮状态 
     showPayModel:false,//是否显示支付信息弹窗 
     payPrice:0,//支付的价格，未减去优惠券价格
-    couponPrice:0,//优惠券价格
-    couponId:'',//已选 中的优惠券id
+    couponAmt:0,//优惠券价格
+    couponNo:'',//已选 中的优惠券id
     options:[],//页面参数
     shop:[],//店铺信息
     goods:[],//订单商品
     popHopeTs:'',
     clickable:true,
     payData: {},
-    imgPre: app.globalData.imgPre
+    imgPre: app.globalData.imgPre,
+    isOrderGetted:false,  //判断订单信息有没有获取 
+    netDisconnectFlag: false
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     console.log("checkOrder:",options);
+    var _this = this;
     this.setData({
       options:options
     });
     if(options.shopId){
       this.getOrderInfo();
+    }
+    if (wx.onNetworkStatusChange){
+      wx.onNetworkStatusChange(function (res) {
+        console.log("ent change:", res);
+        if (res.networkType == 'none') {
+          _this.setData({
+            netDisconnectFlag: true
+          });
+          setTimeout(function () {
+            _this.setData({
+              netDisconnectFlag: false
+            });
+          },2000);
+        }
+      });
     }
     //this.checkAbleAndMaxCoupon();
   },
@@ -53,7 +71,8 @@ Page({
                 shop: res.data.data.shopHost,
                 goods: res.data.data.carts,
                 payPrice:res.data.data.orderAmt,
-                popHopeTs: res.data.data.popHopeTs
+                popHopeTs: res.data.data.popHopeTs,
+                isOrderGetted:true
               });
               _this.checkAbleAndMaxCoupon(res.data.data.coupons);
             }else{
@@ -62,7 +81,8 @@ Page({
                 shop: res.data.data.shopHost,
                 goods: res.data.data.carts,
                 payPrice: res.data.data.orderAmt,
-                popHopeTs: res.data.data.popHopeTs
+                popHopeTs: res.data.data.popHopeTs,
+                isOrderGetted:true
               });
             }
           }else if(res.data.code == 40101){
@@ -120,11 +140,13 @@ Page({
       if(_index == key){
         if (_couponList[key]["select"] == true){
           this.setData({
-            couponPrice:0
+            couponAmt:0,
+            couponNo:''
           });
         }else{
           this.setData({
-            couponPrice: _couponList[key].couponAmt
+            couponAmt: _couponList[key].couponAmt,
+            couponNo:_couponList[key].couponNo
           });
         }
         _couponList[key]["select"] = !_couponList[key]["select"];
@@ -133,7 +155,9 @@ Page({
       }
     }
     this.setData({
-      couponsList:_couponList
+      couponsList:_couponList,
+      couponShowFlag: false,
+      isPayAble: true
     });
   },
   topay:function(){//点击去结算
@@ -153,15 +177,20 @@ Page({
         _orderGoods.push(_arr);
       }
       var _params = {
-        orderAmt: _this.data.payPrice - _this.data.couponPrice,
+        orderAmt: _this.data.payPrice - _this.data.couponAmt > 0 ? _this.data.payPrice - _this.data.couponAmt:0,
         src: 3,
         shopId: _this.data.options.shopId,
         orderTp: 1,
         payMode: 2,
         hostId: _this.data.shop.hostId,
-        couponNo: _this.data.couponId,
+        couponNo: _this.data.couponNo,
         orderGoods: _orderGoods
       };
+      /*console.log("pay params:",_params);
+      this.setData({
+        clickable: true
+      });
+      return;*/
       this.getToken(function(){
         common.getAjax({
           url: 'api/order',
@@ -170,7 +199,7 @@ Page({
           success: function (res) {
             console.log("checkOrder.js order:", res);
             if (res.data.code == 200) {
-              if (_this.data.payPrice - _this.data.couponPrice >0){
+              if (_this.data.payPrice - _this.data.couponAmt >0){
                 _this.requestPayMent(res.data.data);
               }else{
                 common.showModal("支付成功!", function () {
@@ -242,9 +271,11 @@ Page({
     })
   },
   showPayModel:function(){
-    this.setData({
-      showPayModel: true
-    });
+    if (this.data.isOrderGetted && this.data.isPayAble){
+      this.setData({
+        showPayModel: true
+      });
+    }
   },
   closePayModel:function(){
     this.setData({
@@ -281,26 +312,6 @@ Page({
       }
     });
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  },
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  },
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  },
   checkAbleAndMaxCoupon:function(couponsList){//选择最大的优惠券
     if(couponsList){
       var _coupons = couponsList;
@@ -325,18 +336,19 @@ Page({
       if(_maxKey!=-1){
         _coupons[_maxKey].select=true;
         this.setData({
-          couponPrice:_maxPrice,
-          couponId: this.data.couponsList[_maxKey].id,
+          couponAmt:_maxPrice,
+          couponNo: _coupons[_maxKey].couponNo,
           couponsList:_coupons
         });
       }else{
         _coupons[0].select = true;
         this.setData({
-          couponPrice: _coupons[0].couponAmt,
-          couponId: _coupons[0].id,
+          couponAmt: _coupons[0].couponAmt,
+          couponNo: _coupons[0].couponNo,
           couponsList: _coupons
         });
       }
     }
-  }
+  },
+  preventDefault:function(){}
 })
