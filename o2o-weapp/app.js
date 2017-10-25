@@ -14,11 +14,15 @@ App({
     userInfoAuth:false,
     token:'',
     hostId: '',
+    loginId:'',
     openId: '',
     latitude:'',
     longitude:'',
-    imgPre:'https://static.fuiou.com/',
+    imgPre:'https://static.fuiou.com/',//生产
+    //imgPre: 'http://static.fuiou.god',//生产
     location:{},
-    src:3
+    src:3,
+    baseUrl: 'https://chi.fuiou.com/'  //生产
+    //baseUrl: 'https://dswx-test.fuiou.com/o2o/' //测试
   }
 })

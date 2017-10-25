@@ -211,7 +211,7 @@ Page({
         console.log("登录认证绑定success:", re);
         if (re.data.code == 200) {
           app.globalData.token = re.data.data.token;
-          wx.redirectTo({
+          wx.reLaunch({
             url: '/pages/index/index',
           });
         } else {

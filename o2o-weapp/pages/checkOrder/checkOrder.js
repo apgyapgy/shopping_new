@@ -19,7 +19,11 @@ Page({
     payData: {},
     imgPre: app.globalData.imgPre,
     isOrderGetted:false,  //判断订单信息有没有获取 
-    netDisconnectFlag: false
+    netDisconnectFlag: false,
+    shopHost:[],//所有可选择小区
+    areaShowFlag:false,  //判断布放地要不要显示 
+    hostId:'',
+    loginId:''
   },
   /**
    * 生命周期函数--监听页面加载
@@ -68,7 +72,6 @@ Page({
             _this.calculatePayPrice();
             if(res.data.data.coupons.length){
               _this.setData({
-                shop: res.data.data.shopHost,
                 goods: res.data.data.carts,
                 payPrice:res.data.data.orderAmt,
                 popHopeTs: res.data.data.popHopeTs,
@@ -78,13 +81,13 @@ Page({
             }else{
               _this.setData({
                 couponsList:res.data.data.coupons,
-                shop: res.data.data.shopHost,
                 goods: res.data.data.carts,
                 payPrice: res.data.data.orderAmt,
                 popHopeTs: res.data.data.popHopeTs,
                 isOrderGetted:true
               });
             }
+            _this.getCurrentShop(res.data.data.shopHost);
           }else if(res.data.code == 40101){
             _this.getToken(function(){
               _this.getOrderInfo();
@@ -131,6 +134,7 @@ Page({
   closeCoupon:function(){
     if(this.data.couponShowFlag == true){
       this.hideCoupon();
+      this.hideArea();
     }
   },
   selectCoupon:function(e){//选择优惠券
@@ -182,7 +186,7 @@ Page({
         shopId: _this.data.options.shopId,
         orderTp: 1,
         payMode: 2,
-        hostId: _this.data.shop.hostId,
+        hostId: _this.data.hostId,
         couponNo: _this.data.couponNo,
         orderGoods: _orderGoods
       };
@@ -203,7 +207,7 @@ Page({
                 _this.requestPayMent(res.data.data);
               }else{
                 common.showModal("支付成功!", function () {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/order/order?type=1',
                   });
                 });
@@ -239,7 +243,7 @@ Page({
           console.log("支付成功:",res);
           common.showModal("支付成功!",function(){
             //wx.navigateBack()
-            wx.redirectTo({
+            wx.reLaunch({
               url: '/pages/order/order?type=1',
             });
           });
@@ -300,7 +304,7 @@ Page({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               if (ress.code) {
                 wx.request({
-                  url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+                  url: app.globalData.baseUrl + 'wx_we/oauth',
                   data: {
                     code: ress.code
                   },
@@ -313,7 +317,7 @@ Page({
                         fn();
                       }
                     } else if (re.data.code == 40110) {
-                      wx.redirectTo({ url: "/pages/login/login" });
+                      wx.reLaunch({ url: "/pages/login/login" });
                     }
                   }
                 });
@@ -367,5 +371,51 @@ Page({
       }
     }
   },
-  preventDefault:function(){}
+  preventDefault:function(){},
+  getCurrentShop:function(_shops){//获取当前店铺
+    var _key;
+    for(var key in _shops){
+      if(_shops[key].hostId == app.globalData.location.hostId){
+        _shops[key].select = true;
+        _key = key;
+      }else{
+        _shops[key].select = false;
+      }
+    }
+    this.setData({
+      shopHost:_shops,
+      shop: _shops[_key],
+      hostId: _shops[_key].hostId,
+      loginId:app.globalData.loginId
+    });
+  },
+  selectShop:function(e){//选择店铺
+    var _idx = e.currentTarget.dataset.idx;
+    var _shopHost = this.data.shopHost;
+    for(var key in _shopHost){
+      if(key == _idx){
+        _shopHost[key].select = true;
+      }else{
+        _shopHost[key].select = false;
+      }
+    }
+    this.setData({
+      shopHost:_shopHost,
+      shop:_shopHost[_idx],
+      hostId:_shopHost[_idx].hostId,
+      areaShowFlag:false
+    });
+  },
+  hideArea:function(){//隐藏布放地
+    this.setData({
+      areaShowFlag: false
+    });
+  },
+  showArea:function(){//显示布放地
+    if (this.data.shopHost.length > 1) {
+      this.setData({
+        areaShowFlag: true
+      });
+    }
+  }
 })

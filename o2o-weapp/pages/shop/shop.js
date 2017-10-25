@@ -259,7 +259,7 @@ Page({
                 /*if (_goodsList[key].goodsImgLogo){
                   _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
                 }*/
-                _goodsList[key].goodsImgLogo = '../../image/good.png';
+                //_goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
                 goodsList: _goodsList,
@@ -356,7 +356,7 @@ Page({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               if (ress.code) {
                 wx.request({
-                  url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+                  url: app.globalData.baseUrl + 'wx_we/oauth',
                   data: {
                     code: ress.code
                   },
@@ -369,7 +369,7 @@ Page({
                         fn();
                       }
                     } else if (re.data.code == 40110) {
-                      wx.redirectTo({ url: "/pages/login/login" });
+                      wx.reLaunch({ url: "/pages/login/login" });
                     }
                   }
                 });

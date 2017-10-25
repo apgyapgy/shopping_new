@@ -163,7 +163,7 @@ Page({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               if (ress.code) {
                 wx.request({
-                  url: 'https://dswx-test.fuiou.com/o2o/wx_we/oauth',
+                  url: app.globalData.baseUrl + 'wx_we/oauth',
                   data: {
                     code: ress.code,
                     bmapLng: app.globalData.longitude,
@@ -175,11 +175,11 @@ Page({
                       app.globalData.loginId = re.data.data.loginId;
                       app.globalData.hostId = re.data.data.hostId;
                       app.globalData.token = re.data.data.token;
-                      wx.redirectTo({
+                      wx.reLaunch({
                         url: '/pages/index/index'
                       });
                     } else if (re.data.code == 40110) {
-                      wx.redirectTo({ url: "/pages/login/login" });
+                      wx.reLaunch({ url: "/pages/login/login" });
                     }
                   }
                 });

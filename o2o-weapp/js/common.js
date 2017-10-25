@@ -1,4 +1,5 @@
-var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
+//var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
+var baseUrl = 'https://chi.fuiou.com/';//生产
 var getSerial = function () {
   return new Date().getTime();
 }

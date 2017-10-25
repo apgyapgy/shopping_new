@@ -59,6 +59,10 @@ button[type='de']
   width:750rpx;
   height:100rpx;
 }
+.padding-120{
+  width:750rpx;
+  height:120rpx; 
+}
 /*toast*/
 .toast{
   display:none;

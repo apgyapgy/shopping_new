@@ -217,7 +217,7 @@ page{
 }
 
 /*优惠券*/
-.order-coupon{
+.order-coupon,.order-shop{
   position:fixed;
   left:0;
   padding-top:20rpx;
@@ -306,6 +306,46 @@ page{
   height:30rpx;
   line-height:30rpx;
   font-size:24rpx;
+  color:#666;
+}
+/*布放地们*/
+.order-shop .shop{
+  position:relative;
+  margin-bottom:20rpx;
+  margin-left:30rpx;
+  width:690rpx;
+  height:60rpx;
+  background:#fff;
+  border-radius:10rpx;
+}
+.order-shop .shop .select{
+  position:absolute;
+  top:10rpx;
+  left:10rpx;
+  width:36rpx;
+  height:36rpx;
+  border-radius:50%;
+  border:2rpx solid #26b1fe;
+}
+.order-shop .shop .select.active{
+  background:#26b1fe;
+}
+.order-shop .shop .select image{
+  display:none;
+  float:left;
+  margin:6rpx auto 0;
+  width:30rpx;
+  height:26rpx;
+}
+.order-shop .shop .select.active image{
+  display:block;
+}
+.order-shop .shop .shop-name{
+  padding-left:60rpx;
+  width:80%;
+  height:60rpx;
+  line-height:60rpx;
+  font-size:30rpx;
   color:#666;
 }
 /*点击去支付的弹窗*/

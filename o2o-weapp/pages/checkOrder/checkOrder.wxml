@@ -3,12 +3,12 @@
 <!--顶部信息-->
 <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" bindtap="closeCoupon">
   <view class="order-head">
-    <view class='order-area'>
+    <view catchtap="showArea" class='order-area'>
       <image src="../../image/area_active.png"/>
-      <text>{{shop.areaNm}}</text>
+      <text>{{shop.areaNm?shop.areaNm+' >>':''}}</text>
     </view>
-    <view class='order-phone'>手机：{{shop.loginId}}</view>
-    <view class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
+    <view class='order-phone'>手机：{{loginId}}</view>
+    <view catchtap="showArea" class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
   </view>
 
   <view class="order-wrapper clearfix">
@@ -32,7 +32,7 @@
       <view hidden="{{couponsList.length>0}}" class='discount-price disabled'>暂无优惠券</view>
     </view>
   </view>
-  <view class='padding-86'></view>
+  <view class='padding-120'></view>
 </scroll-view>
 
 <!--去结算-->
@@ -60,6 +60,16 @@
       <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
       <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
     </view>
+  </view>
+</scroll-view>
+
+<!--布放地-->
+<scroll-view catchtap="hideArea" hidden="{{!areaShowFlag}}" class="order-shop clearfix" scroll-y >
+  <view catchtap="selectShop" data-idx="{{id}}" wx:for="{{shopHost}}" wx:for-index="id" wx:key="{{id}}" class='shop'>
+    <view class="select {{item.select?'active':''}}">
+      <image src="../../image/success.png"/>
+    </view>
+    <view class='shop-name'>{{item.areaNm}}</view>
   </view>
 </scroll-view>
 
