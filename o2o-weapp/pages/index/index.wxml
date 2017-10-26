@@ -13,11 +13,13 @@
     </swiper>
 
     <!--定位-->
-    <view catchtap="chooseLocation" class="location">
-      <image class="location-icon" src="../../image/location.png"/>
-      <!--<text class="location-name">{{location.areaNm?(location.hostAddrShort?location.areaNm+location.hostAddrShort:location.areaNm):'点击定位'}}</text>-->
-      <text class="location-name">{{location.areaNm?location.areaNm:'点击定位'}}</text>
-      <image class="location-down-icon" src="../../image/down.png"/>
+    <view class='location-wrapper'>
+      <view catchtap="chooseLocation" class="location">
+        <image class="location-icon" src="../../image/location.png"/>
+        <!--<text class="location-name">{{location.areaNm?(location.hostAddrShort?location.areaNm+location.hostAddrShort:location.areaNm):'点击定位'}}</text>-->
+        <text class="location-name">{{location.areaNm?location.areaNm+'(终端:'+location.hostId+')':'点击定位'}}</text>
+        <image class="location-down-icon" src="../../image/down.png"/>
+      </view>
     </view>
 
     <!--title-->

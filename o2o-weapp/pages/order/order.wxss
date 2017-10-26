@@ -106,6 +106,7 @@
   line-height:40rpx;
   color:#000;
   font-weight:bold;
+  word-break:break-all;
 }
 .shop-good-info{
   float:right;

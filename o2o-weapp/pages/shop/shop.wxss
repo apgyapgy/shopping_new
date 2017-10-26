@@ -75,8 +75,10 @@
   margin-top:22rpx;
   line-height:42rpx;
   font-size:30rpx;
+  width:520rpx;
   height:108rpx;
   color:#000;
+  word-break:break-all;
 }
 .good .good-info .good-price{
   height:48rpx;

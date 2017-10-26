@@ -134,6 +134,8 @@ Page({
   closeCoupon:function(){
     if(this.data.couponShowFlag == true){
       this.hideCoupon();
+    }
+    if (this.data.areaShowFlag == true){
       this.hideArea();
     }
   },
@@ -164,7 +166,7 @@ Page({
       isPayAble: true
     });
   },
-  topay:function(){//点击去结算
+  topay: function () {//点击去结算  showPayModel
     var _this = this;
     if(this.data.clickable){
       var _goods = this.data.goods;
@@ -373,7 +375,7 @@ Page({
   },
   preventDefault:function(){},
   getCurrentShop:function(_shops){//获取当前店铺
-    var _key;
+    var _key=-1;
     for(var key in _shops){
       if(_shops[key].hostId == app.globalData.location.hostId){
         _shops[key].select = true;
@@ -382,10 +384,18 @@ Page({
         _shops[key].select = false;
       }
     }
+    var _shop = {};
+    if(_key == -1){
+      if(_shops.length){
+        _shop = _shops[0];
+      }
+    }else{
+      _shop = _shops[_key];
+    }
     this.setData({
       shopHost:_shops,
       shop: _shops[_key],
-      hostId: _shops[_key].hostId,
+      hostId: _shops[_key].hostId?_shops[_key].hostId:app.globalData.location.hostId,
       loginId:app.globalData.loginId
     });
   },
@@ -412,10 +422,14 @@ Page({
     });
   },
   showArea:function(){//显示布放地
-    if (this.data.shopHost.length > 1) {
-      this.setData({
-        areaShowFlag: true
-      });
+    if (this.data.areaShowFlag == true) {
+      this.hideArea();
+    }else{
+      if (this.data.shopHost.length > 1) {
+        this.setData({
+          areaShowFlag: true
+        });
+      }
     }
   }
 })

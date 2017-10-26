@@ -87,13 +87,13 @@ page{
   color:#f33;
 }
 .car-money .car-total-money{
-  margin-top:10rpx;
   height:40rpx;
   line-height:40rpx;
   font-size:30rpx;
   font-weight:bold;
 }
 .car-money .delivery-money{
+  margin-top:10rpx;
   height:34rpx;
   line-height:34rpx;
   font-size:24rpx;
@@ -150,6 +150,7 @@ page{
   line-height:40rpx;
   color:#000;
   font-weight:bold;
+  word-break:break-all;
 }
 .order-good-right .order-good-info{
   float:left;

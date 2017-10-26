@@ -88,85 +88,7 @@ Page({
         longitude: app.globalData.longitude
       });
     }
-    wx.getNetworkType({
-      success: function (res) {
-        // 返回网络类型, 有效值：
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        if (res.networkType == 'none') {
-          common.showModal("网络已断开，请联网后重试!");
-        } else {
-          wx.login({
-            success: ress => {
-              // 发送 res.code 到后台换取 openId, sessionKey, unionId
-              if (ress.code) {
-                wx.request({
-                  url: app.globalData.baseUrl + 'wx_we/oauth',
-                  data: {
-                    code: ress.code,
-                    bmapLng: _this.data.longitude,
-                    bmapLat: _this.data.latitude 
-                  },
-                  success: function (re) {
-                    console.log("index.js onload oauth:",re);
-                    if (re.data.code == 200) {
-                      app.globalData.loginId = re.data.data.loginId;
-                      app.globalData.hostId = re.data.data.hostId;
-                      app.globalData.token = re.data.data.token;
-                      var _location = _this.getStorageLocation();
-                      if (_location) {//保存的有定位获取店铺
-                        var _locArr = _location.split("#");
-                        _this.setData({
-                          latitude: _locArr[0],
-                          longitude: _locArr[1]
-                        });
-                        _this.initData();
-                      } else {//未保存定位重新获取定位
-                        wx.getLocation({
-                          type: 'wgs84',
-                          success: function (res) {
-                            _this.setData({
-                              latitude: res.latitude,
-                              longitude: res.longitude
-                            });
-                            _this.saveLocation();
-                            _this.initData();
-                          },
-                          fail:function(res){
-                            console.log("location fail:",res);
-                            if (res.errMsg == "getLocation:fail auth deny"){
-                              _this.checkLocationAuth(function () {
-                                wx.getLocation({
-                                  type: 'wgs84',
-                                  success: function (res) {
-                                    _this.setData({
-                                      latitude: res.latitude,
-                                      longitude: res.longitude
-                                    });
-                                    _this.saveLocation();
-                                    _this.initData();
-                                  }
-                                });
-                              });
-                            }
-                          }
-                        });     
-                      }   
-                    } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
-                    }
-                  }
-                });
-              } else {
-                console.log('获取用户登录态失败！' + ress.errMsg)
-              }
-            }
-          });
-        }
-      },
-      fail:function(res){
-        console.log("获取网络状态失败:",res);
-      } 
-    });
+    _this.initData();
     this.qryUserCartNums();
   },
   userInfoReadyCallback:function(){    
@@ -208,115 +130,69 @@ Page({
       }
     }
   },
-  initData: function (fn) {//初始化页面数据
+  initData: function (fun) {//初始化页面数据
     var _this = this;
-    wx.getNetworkType({
-      success: function (res) {
-        // 返回网络类型, 有效值：
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        if (res.networkType == 'none') {
-          common.showModal("网络已断开，请联网后重试!");
-        } else {
-          wx.login({
-            success: ress => {
-              // 发送 res.code 到后台换取 openId, sessionKey, unionId
-              if (ress.code) {
-                wx.request({
-                  url: app.globalData.baseUrl + 'wx_we/oauth',
-                  data:{
-                    code: ress.code,
-                    bmapLng: _this.data.longitude,
-                    bmapLat: _this.data.latitude
-                  },
-                  success: function (re) {
-                    console.log("index.js oauth:",re);
-                    if (re.data.code == 200) {
-                      app.globalData.loginId = re.data.data.loginId;
-                      app.globalData.hostId = re.data.data.hostId;
-                      app.globalData.token = re.data.data.token; 
-                      common.getAjax({
-                        url: 'wx_we/home',
-                        params: {
-                          bmapLng: _this.data.longitude,
-                          bmapLat: _this.data.latitude
-                        },
-                        token: app.globalData.token,
-                        success: function (res) {
-                          console.log("首页:", res);
-                          if (res.data.code == 200) {
-                            var _data = res.data.data;
-                            if(_data.shops.length){
-                              _this.setData({
-                                bannerImgs: _data.banners,
-                                shopList: _data.shops,
-                                location: _data.location,
-                                noshop:false
-                              });
-                            }else{
-                              _this.setData({
-                                bannerImgs: _data.banners,
-                                shopList: _data.shops,
-                                location: _data.location,
-                                noshop:true
-                              });
-                            }
-                            app.globalData.location = _data.location;
-                          } else if (res.data.code == 40201) {
-                            app.globalData.hostId = re.data.data.hostId?re.data.data.hostId:'';
-                            _this.setData({
-                              bannerImgs: ['../../image/banner.png'],
-                              shopList: [],
-                              location: {},
-                              noshop:true
-                            });
-                            app.globalData.location = {};
-                            common.showModal(res.data.desc);
-                          } else if (res.data.code == 40101) {
-                            app.globalData.hostId = re.data.data.hostId ? re.data.data.hostId : '';
-                            _this.setData({
-                              shopList: [],
-                              location: {}
-                            });
-                            app.globalData.location = {};
-                          } else {
-                            _this.setData({
-                              shopList: [],
-                              location: {},
-                              noshop:true
-                            });
-                            app.globalData.location = {};
-                            common.showModal(res.data.desc);
-                          }
-                          if (fn) {
-                            fn();
-                          }
-                        }
-                      });
-                    }else if(re.data.code == 40110){
-                      wx.reLaunch({ url: "/pages/login/login" });
-                    }else if(re.data.code == 40101){
-                      _this.initData();
-                    }else{
-                      _this.setData({
-                        shopList: [],
-                        location: {},
-                        noshop: true
-                      });
-                      common.showModal(re.data.desc);
-                    }
-                  }
-                });
-              } else {
-                console.log('获取用户登录态失败！' + ress.errMsg)
-              }
-            }
-          });
-        }
+    common.getAjax({
+      url: 'wx_we/home',
+      params: {
+        bmapLng: _this.data.longitude,
+        bmapLat: _this.data.latitude
       },
-      fail:function(res){
-        console.log("获取网络状态失败：",res);
+      token: app.globalData.token,
+      success: function (res) {
+        console.log("首页:", res);
+        if (res.data.code == 200) {
+          var _data = res.data.data;
+          if(_data.shops.length){
+            _this.setData({
+              bannerImgs: _data.banners,
+              shopList: _data.shops,
+              location: _data.location,
+              noshop:false
+            });
+          }else{
+            _this.setData({
+              bannerImgs: _data.banners,
+              shopList: _data.shops,
+              location: _data.location,
+              noshop:true
+            });
+          }
+          app.globalData.location = _data.location;
+        } else if (res.data.code == 40201) {
+          app.globalData.hostId = re.data.data.hostId?re.data.data.hostId:'';
+          _this.setData({
+            bannerImgs: ['../../image/banner.png'],
+            shopList: [],
+            location: {},
+            noshop:true
+          });
+          app.globalData.location = {};
+          common.showModal(res.data.desc);
+        } else if (res.data.code == 40101) {
+          app.globalData.hostId = re.data.data.hostId ? re.data.data.hostId : '';
+          _this.setData({
+            shopList: [],
+            location: {}
+          });
+          app.globalData.location = {};
+          _this.getToken(function(){
+            _this.initData(fun);
+          });
+        } else {
+          _this.setData({
+            shopList: [],
+            location: {},
+            noshop:true
+          });
+          app.globalData.location = {};
+          common.showModal(res.data.desc);
+        }
+        if (fun) {
+          fun();
+        }
       }
-    });    
+    });
   },
   chooseLocation: function () {//弹出地图选择定位
     var _this = this;

@@ -16,12 +16,16 @@
 }
 
 /*定位*/
-.location{
+.location-wrapper{
   position:absolute;
   top:50rpx;
-  left:50%;
-  transform:translateX(-50%);
-  min-width:250rpx;
+  width:750rpx;
+  height:50rpx;
+  text-align:center;
+}
+.location{
+  display:inline-block;
+  /*min-width:250rpx;*/
   height:50rpx;
   line-height:50rpx;
   background:#eaf7ff;
