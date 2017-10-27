@@ -160,7 +160,6 @@ Page({
           }
           app.globalData.location = _data.location;
         } else if (res.data.code == 40201) {
-          app.globalData.hostId = re.data.data.hostId?re.data.data.hostId:'';
           _this.setData({
             bannerImgs: ['../../image/banner.png'],
             shopList: [],
@@ -170,7 +169,6 @@ Page({
           app.globalData.location = {};
           common.showModal(res.data.desc);
         } else if (res.data.code == 40101) {
-          app.globalData.hostId = re.data.data.hostId ? re.data.data.hostId : '';
           _this.setData({
             shopList: [],
             location: {}

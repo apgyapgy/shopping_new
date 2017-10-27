@@ -133,11 +133,13 @@ page{
   padding-left:20rpx;
   margin-top:22rpx;
   width:420rpx;
-  height:174rpx;
+  height:80rpx;
   font-size:30rpx;
   line-height:40rpx;
   color:#000;
   font-weight:bold;
+  word-break:break-all;
+  overflow:hidden;
 }
 .car-goods-list .car-good.expired .car-good-name{
   color:rgba(0,0,0,.5);

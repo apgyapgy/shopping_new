@@ -76,11 +76,16 @@
   line-height:42rpx;
   font-size:30rpx;
   width:520rpx;
-  height:108rpx;
+  height:90rpx;
   color:#000;
   word-break:break-all;
+  overflow:hidden;
+}
+.car-info-wrapper .good .good-info .good-name{
+  width:500rpx;
 }
 .good .good-info .good-price{
+  margin-top:18rpx;
   height:48rpx;
   font-size:28rpx;
   line-height:48rpx;
