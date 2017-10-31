@@ -148,6 +148,7 @@ Page({
     });
   },
   showCarInfo:function(){//显示购物车信息
+    console.log(this.data.selectIds.length, this.data.selectInfo.selectAmt, this.data.shop.distAmtMin)
     if (this.data.cartList.length > 0 || this.data.expireList.length>0){
       this.setData({
         showCarInfoFlag: true
@@ -272,7 +273,6 @@ Page({
                 /*if (_goodsList[key].goodsImgLogo){
                   _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
                 }*/
-                _goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
                 goodsList: _goodsList,

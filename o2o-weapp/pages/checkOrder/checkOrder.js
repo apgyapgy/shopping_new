@@ -256,25 +256,50 @@ Page({
           //用户取消支付
           console.log("用户取消支付:",res);
           common.showModal("您已取消支付!",function(){
-            _this.setData({
-              showPayModel:false
-            });
-            //wx.navigateBack();
-            /*wx.redirectTo({
-              url: '/pages/order/order?type=0',
-            });*/
+            _this.cancelPay();
           });
         } else if (res.errMsg == "requestPayment:fail (detail message)"){
           //调用支付失败，其中 detail message 为后台返回的详细失败原因
           console.log("支付失败:",res);
           common.showModal("支付失败!",function(){
-            _this.setData({
-              showPayModel: false
-            });
+            _this.cancelPay();
           });
         }
       }
     })
+  },
+  cancelPay: function () {//取消支付，释放优惠券
+    var _this = this;
+    if (this.couponAmt != 0) { //已选择优惠券
+      common.getAjax({
+        url: 'api/order/close/' + _this.data.payData.outOrderNo,
+        token: app.globalData.token,
+        success: function (res) {
+          console.log("取消优惠券成功:",res);
+          if(res.data.code == 200){
+            if(res.data.data.token){
+              app.globalData.token = res.data.data.token;
+            }
+          }else if(res.data.code == 40101){
+            _this.getToken(function(){
+              _this.cancelPay();
+            });
+          }
+        },
+        fail:function(res){
+          console.log("取消优惠券失败:",res)
+        },
+        complete:function(){
+          _this.setData({
+            showPayModel: false
+          });
+        }
+      });
+    }else{
+      _this.setData({
+        showPayModel: false
+      });
+    }
   },
   showPayModel:function(){
     if (this.data.isOrderGetted && this.data.isPayAble){
@@ -389,6 +414,7 @@ Page({
       if(_shops.length){
         _shop = _shops[0];
       }
+      _key = 0;
     }else{
       _shop = _shops[_key];
     }
@@ -425,11 +451,18 @@ Page({
     if (this.data.areaShowFlag == true) {
       this.hideArea();
     }else{
-      if (this.data.shopHost.length > 1) {
+      if (this.data.couponShowFlag == true){
         this.setData({
-          areaShowFlag: true
+          couponShowFlag:false
         });
+      }else{
+        if (this.data.shopHost.length > 1) {
+          this.setData({
+            areaShowFlag: true
+          });
+        }
       }
+      
     }
   }
 })

@@ -4,7 +4,7 @@
   padding-top:20rpx;
   width:750rpx;
   height:150rpx;
-  background:#665754;
+  background:#dedede;
 }
 .shop-head image{
   display:block;
@@ -12,7 +12,8 @@
   width:80rpx;
   height:80rpx;
   border:2rpx solid #bebcb7;
-  border-radius:5rpx;
+  border-radius:50%;
+  background-color:#fff;
 }
 .shop-head .shop-name{
   display:block;
@@ -69,7 +70,6 @@
 }
 .good .good-info text{
   display:block;
-  font-weight:bold;
 }
 .good .good-info .good-name{
   margin-top:22rpx;

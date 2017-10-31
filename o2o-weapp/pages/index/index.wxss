@@ -124,7 +124,7 @@
   margin-left:10rpx;
   width:730rpx;
   height:180rpx;
-  border-bottom:1rpx dashed #666;
+  border-bottom:1rpx dashed #ddd;
 }
 .shop-left{
   float:left;
@@ -161,10 +161,14 @@
   float:left;
   margin-left:10rpx;
   font-size:30rpx;
-  font-weight:bold;
+  /*font-weight:bold;*/
   line-height:30rpx;
 }
 .shop-right .shop-intro-wrapper{
+  margin-bottom:6rpx;
+  height:30rpx;
+}
+.shop-right .shop-intro-wrapper-else{
   margin-bottom:6rpx;
   height:30rpx;
 }

@@ -17,7 +17,8 @@
       <view catchtap="chooseLocation" class="location">
         <image class="location-icon" src="../../image/location.png"/>
         <!--<text class="location-name">{{location.areaNm?(location.hostAddrShort?location.areaNm+location.hostAddrShort:location.areaNm):'点击定位'}}</text>-->
-        <text class="location-name">{{location.areaNm?location.areaNm+'(终端:'+location.hostId+')':'点击定位'}}</text>
+        <!--<text class="location-name">{{location.areaNm?location.areaNm+'(终端:'+location.hostId+')':'点击定位'}}</text>-->
+        <text class="location-name">{{location.areaNm?location.areaNm:'点击定位'}}</text>
         <image class="location-down-icon" src="../../image/down.png"/>
       </view>
     </view>
@@ -41,7 +42,8 @@
             <view class='brand'>品牌</view>
             <view class='name'>{{item.shopNm}}</view>
           </view>
-          <view class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
+          <view wx:if="{{item.shopAddr}}" class='shop-intro-wrapper'><text class='shop-intro'>{{item.shopAddr}}</text></view>
+          <view wx:else class='shop-intro-wrapper-else'></view>
           <text class='shop-send'>{{item.distAmtMinYuan}}元起送，{{item.distAmtYuan}}元配送费</text>
           <text class='enter'>立即进入 ></text>
         </view>

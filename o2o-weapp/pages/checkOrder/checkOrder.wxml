@@ -5,7 +5,7 @@
   <view class="order-head">
     <view catchtap="showArea" class='order-area'>
       <image src="../../image/area_active.png"/>
-      <text>{{shop.areaNm?shop.areaNm+' >>':''}}</text>
+      <text>{{shop.areaNm?shop.areaNm+(shopHost.length>1?' >>':''):''}}</text>
     </view>
     <view class='order-phone'>手机：{{loginId}}</view>
     <view catchtap="showArea" class='order-cloth'>布放地：{{shop.hostAddrShort}}</view>
@@ -20,7 +20,7 @@
           <text class="order-good-name">{{item.goodsNm}}</text>
           <view class='order-good-info'>
             <text class='order-good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
-            <text class='order-good-num'>X{{item.orderNum}}</text>
+            <text class='order-good-num'>x {{item.orderNum}}</text>
           </view>
         </view>
       </view>

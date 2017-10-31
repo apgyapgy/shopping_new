@@ -27,7 +27,7 @@
           <text class="shop-good-name">{{good.goodsNm}}</text>
           <view class='shop-good-info'>
             <text class='shop-good-price'>￥{{good.goodsAmt?good.goodsAmt/100:0}}</text>
-            <text class='shop-good-num'>X{{good.orderNum}}</text>
+            <text class='shop-good-num'>x {{good.orderNum}}</text>
           </view>
         </view>
       </view>

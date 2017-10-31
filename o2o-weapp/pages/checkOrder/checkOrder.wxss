@@ -149,7 +149,6 @@ page{
   font-size:30rpx;
   line-height:40rpx;
   color:#000;
-  font-weight:bold;
   word-break:break-all;
   overflow:hidden;
 }

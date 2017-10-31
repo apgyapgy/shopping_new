@@ -31,7 +31,7 @@
               <text class="car-good-name">{{good.goodsNm}}</text>
               <view class='car-good-info'>
                 <text class='car-good-price'>￥{{good.goodsAmt?good.goodsAmt/100:0}}</text>
-                <text class='car-good-num'>X{{good.orderNum}}</text>
+                <text class='car-good-num'>x {{good.orderNum}}</text>
               </view>
             </view>
             <view class="del" catchtap="del" data-index="{{area+'#'+shopidx+'#'+goodidx}}">删除</view>
