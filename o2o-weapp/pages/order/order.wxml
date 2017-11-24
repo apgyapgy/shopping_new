@@ -13,14 +13,14 @@
   <view wx:if="{{orderList.length>0}}" class='order-body'>
     <view wx:for="{{orderList}}" wx:for-index="idx" wx:key="idx" class='shop-order clearfix'>
 
-      <view class='shop-name'>
+      <view class='shop-name' catchtap="jumpShop" data-mchid="{{item.mchId}}" data-shopid="{{item.shopId}}">
         <image src="../../image/nearby.png"/>
         <text class='s-name'>{{item.shopNm}}</text>
         <text class='gt'>></text>
         <text hidden="{{activeTab==0 || activeTab==2}}" class='order-success'>{{activeTab==3?'交易完成':'待配送'}}</text>
       </view>
 
-      <view class='shop-goods-list clearfix'>
+      <view catchtap="showOrderIndo" data-no="{{item.orderNo}}" class='shop-goods-list clearfix'>
         <view wx:for="{{item.orderGoods}}" wx:for-item="good" wx:for-index="gidx" wx:key="gidx" class='shop-good'>
           <image src="{{imgPre+good.goodsImgLogo}}"/>
           <!--<image src="../../image/good.png"/>-->
@@ -37,17 +37,17 @@
       </view>
       <view class='shop-order-info'>
         <view class='shop-order-price'>
-          共{{item.goodsNum}}件商品，{{activeTab==0?'待':'实际'}}支付￥
-          <text>{{item.orderAmt?item.orderAmt/100:0}}</text>
-          (配送费：{{item.distAmt>0?item.distAmt/100:0}}元)
+          共{{item.goodsNum}}件商品，{{activeTab==0?'待':'实际'}}支付
+          <text>￥{{item.orderAmt?item.orderAmtYuan:'0.00'}}</text>
+          (配送费：{{item.distAmt>0?item.distAmtYuan/100:'0.00'}}元)
         </view>
       </view>
-      <!--
-      <view wx:if="{{activeTab==0||activeTab==2}}" class='order-pay'>
-        <button wx:if="{{activeTab==0}}" data-idx="{{idx}}" bindtap="showPayModel" class='pay'>立即付款</button>
-        <button wx:elif="{{activeTab==2}}" data-idx="{{idx}}" bindtap="openBox" class='open-box'>开箱</button>
-      </view> 
-      -->
+      
+      <view wx:if="{{activeTab==0}}" class='order-pay'>
+        <button wx:if="{{activeTab==0}}" data-no="{{item.orderNo}}" catchtap="pay" class='pay'>立即付款</button>
+        <!--<button wx:elif="{{activeTab==2}}" data-idx="{{idx}}" bindtap="openBox" class='open-box'>开箱</button>--> 
+      </view>
+      
     </view>
 
   </view>

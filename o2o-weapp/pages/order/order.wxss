@@ -105,17 +105,16 @@
   font-size:30rpx;
   line-height:40rpx;
   color:#000;
-  font-weight:bold;
   word-break:break-all;
   overflow:hidden;
 }
 .shop-good-info{
   float:right;
   margin-right:10rpx;
-  width:120rpx;
+  width:530rpx;
 }
 .shop-good-info .shop-good-price{
-  display:block;
+  float:left;
   margin-top:22rpx;
   width:120rpx;
   height:40rpx;
@@ -126,8 +125,7 @@
   text-align:center;
 }
 .shop-good-info .shop-good-num{
-  margin-top:60rpx;
-  display:block;
+  float:right;
   width:120rpx;
   text-align:center;
   font-size:26rpx;
@@ -153,6 +151,8 @@
 }
 .shop-order-price text{
   font-size:30rpx;
+  color:#fa3e2d;
+  font-weight:bold;
 }
 
 .order-pay{

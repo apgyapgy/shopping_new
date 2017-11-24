@@ -48,6 +48,7 @@ Page({
     startY:0,
     //测试左滑删除end,
     shoppingCartList:[],
+    expiredList:[],
     expiredId:'',
     jumpFlag:true,
     clickable: true,//是否可点击，用于防止连续点击 
@@ -88,7 +89,7 @@ Page({
   },
   onShow: function (options) {
     this.getShopList();
-    this.qryUserCartNums();
+    app.qryUserCartNums(this);
   },
   //返回顶部
   goTop: function () {//返回顶部
@@ -137,7 +138,7 @@ Page({
             _this.getShopList();
             _this.qryUserCartNums();
           } else if (res.data.code == 40101) {
-            _this.getToken(function () {
+            app.getToken(_this,function () {
               _this.deleteCart(_shopId, _goodId);
             });
           } else {
@@ -267,7 +268,7 @@ Page({
           _this.getShopList();
           _this.qryUserCartNums();
         } else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.deleteCart(_shopId,_goodId);
           });
         } else {
@@ -284,11 +285,16 @@ Page({
         noCartFlag:false
       });
     }
+    if (app.globalData.location && JSON.stringify(app.globalData.location) != ''){
+      var _hostId = app.globalData.location.hostId;
+    }else{
+      var _hostId = '';
+    }
     common.getAjax({
       url: 'wx_we/qryUserCart',
       params: {
         loginId: app.globalData.loginId,
-        hostId: app.globalData.location.hostId ? app.globalData.location.hostId:''
+        hostId: _hostId
       },
       token: app.globalData.token,
       success: function (res) {
@@ -296,18 +302,29 @@ Page({
           console.log("getShopList:",res);
           var _shopCartList = [];
           var _expiredId = "";
+          var _expiredList = [];
           for (var key in res.data.data.sendList){
             var _area = res.data.data.sendList[key];
             _area.isActive = true;
             for(var shopkey in _area.list){
               var _shop = _area.list[shopkey];
-              for(var goodkey in _shop.list){
+              for (var goodkey = 0;goodkey < _shop.list.length;goodkey++) {
+                var _good = _shop.list[goodkey];
+                _good.isTouchMove = false;
+                if (_good.isExpire == 0) {//isExpire为0表示失效，为1未失效
+                  _expiredId += ',' + _good.goodsNo;
+                  _expiredList.push(_shop.list[goodkey]);
+                  _shop.list.splice(goodkey, 1);
+                  goodkey--;
+                }
+              }
+              /*for(var goodkey in _shop.list){
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
                 if(_good.isExpire == 0){//isExpire为0表示失效，为1未失效
                   _expiredId+=','+_good.goodsNo;
                 }
-              }
+              }*/
             }
             _shopCartList.push(_area);
           }
@@ -316,11 +333,14 @@ Page({
             _area.isActive = false;
             for (var shopkey in _area.list) {
               var _shop = _area.list[shopkey];
-              for (var goodkey in _shop.list) {
+              for (var goodkey = 0; goodkey < _shop.list.length; goodkey++) {
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
-                if (_good.isExpire == 0) {
+                if (_good.isExpire == 0) {//isExpire为0表示失效，为1未失效
                   _expiredId += ',' + _good.goodsNo;
+                  _expiredList.push(_shop.list[goodkey]);
+                  _shop.list.splice(goodkey, 1);
+                  goodkey--;
                 }
               }
             }
@@ -329,18 +349,20 @@ Page({
           if(_shopCartList.length){
             _this.setData({
               shoppingCartList: _shopCartList,
-              expiredId: _expiredId.substring(1)
+              expiredId: _expiredId.substring(1),
+              expiredList:_expiredList
             });
           }else{
             _this.setData({
               shoppingCartList: _shopCartList,
               expiredId: _expiredId.substring(1),
-              noCartFlag: true
+              noCartFlag: true,
+              expiredList: _expiredList
             });
           }
           //_this.qryUserCartNums();
         } else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.getShopList();
           });
         } else {
@@ -420,7 +442,7 @@ Page({
             });
           }
         }else if(res.data.code == 40101){
-          _this.getToken(function(){
+          app.getToken(_this,function(){
             _this.qryUserCartNums();
           })
         }else{

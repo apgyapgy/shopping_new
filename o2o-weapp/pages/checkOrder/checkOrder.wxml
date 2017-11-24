@@ -57,7 +57,7 @@
     </view>
     <view class="coupon-right">
       <view class='coupon-name'>{{item.couponNm}}</view>
-      <!--<view class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
+      <!--<view wx:if="{{}}" class='coupon-info'>1.xxxxxxxxxxxxxxxxxx</view>
       <view class='coupon-info'>2.xxxxxxxxxxxxxxxxxx</view>-->
     </view>
   </view>

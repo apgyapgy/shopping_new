@@ -1,5 +1,5 @@
-//var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
-var baseUrl = 'https://chi.fuiou.com/';//生产
+var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
+//var baseUrl = 'https://chi.fuiou.com/';//生产
 var getSerial = function () {
   return new Date().getTime();
 }
@@ -245,6 +245,7 @@ var getWeinxinPay = function (data, orderno) {
 
 var showModal = function (cont,fn) {
   //显示弹窗,cont为显示的内容 ,无取消按钮，fn不点击确定时执行的函数，有则执行
+  cont=cont?cont:'';
   wx.showModal({
     title: '提示',
     content: cont,

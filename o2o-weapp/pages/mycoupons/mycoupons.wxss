@@ -96,6 +96,9 @@ page{
 .coupon.used .coupon-name{
   color:rgba(102,102,102,.5);
 }
+.coupon.used .coupon-info{
+  color:rgba(102,102,102,.5);
+}
 .coupon-condition{
   margin-left:48rpx;
   height:38rpx;
@@ -119,33 +122,10 @@ page{
   color:#666;
 }
 .coupon-info{
-  height:30rpx;
-  line-height:30rpx;
-  font-size:24rpx;
+  height:40rpx;
+  line-height:40rpx;
+  font-size:30rpx;
   color:#666;
-}
-.heart{
-  margin-top:220rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 120rpx;
-}
-.heart-left{
-  width: 50rpx;
-  height: 85rpx;
-  background-color: #fff;
-  border-radius: 25rpx 25rpx 0 0;
-  transform-origin: 25rpx 25rpx;
-  transform: rotate(-45deg);
-}
-.heart-right{
-  width: 50rpx;
-  height: 85rpx;
-  background-color: #fff;
-  border-radius: 25rpx 25rpx 0 0;
-  transform-origin: 25rpx 25rpx;
-  transform: rotate(45deg);
 }
 .no-coupons text{
   display:block;

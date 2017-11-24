@@ -1,7 +1,6 @@
 /**app.wxss**/
 @import 'css/weui.wxss';
 
-button[type='de']
 .container {
   height: 100%;
   display: flex;

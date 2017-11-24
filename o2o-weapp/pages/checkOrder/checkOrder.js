@@ -29,7 +29,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log("checkOrder:",options);
     var _this = this;
     this.setData({
       options:options
@@ -56,7 +55,7 @@ Page({
   },
   getOrderInfo:function(){
     var _this = this;
-    this.getToken(function () {
+    app.getToken(_this,function () {
       common.getAjax({
         url: 'api/orderPage',
         params: {
@@ -89,7 +88,7 @@ Page({
             }
             _this.getCurrentShop(res.data.data.shopHost);
           }else if(res.data.code == 40101){
-            _this.getToken(function(){
+            app.getToken(_this,function(){
               _this.getOrderInfo();
             });
           }else{
@@ -197,7 +196,7 @@ Page({
         clickable: true
       });
       return;*/
-      this.getToken(function(){
+      app.getToken(_this,function(){
         common.getAjax({
           url: 'api/order',
           params: _params,
@@ -256,13 +255,16 @@ Page({
           //用户取消支付
           console.log("用户取消支付:",res);
           common.showModal("您已取消支付!",function(){
-            _this.cancelPay();
+            wx.reLaunch({
+              url: '/pages/order/order?type=0',
+            });
+            /*_this.cancelPay();*/
           });
         } else if (res.errMsg == "requestPayment:fail (detail message)"){
           //调用支付失败，其中 detail message 为后台返回的详细失败原因
           console.log("支付失败:",res);
           common.showModal("支付失败!",function(){
-            _this.cancelPay();
+            //_this.cancelPay();
           });
         }
       }
@@ -281,7 +283,7 @@ Page({
               app.globalData.token = res.data.data.token;
             }
           }else if(res.data.code == 40101){
-            _this.getToken(function(){
+            app.getToken(_this,function(){
               _this.cancelPay();
             });
           }

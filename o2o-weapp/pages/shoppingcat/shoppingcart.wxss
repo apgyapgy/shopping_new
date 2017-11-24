@@ -78,6 +78,10 @@ page{
   float:left;
   background:#fff;
 }
+.car-goods-list.expired-list{
+  margin-top:10rpx;
+  width:750rpx;
+}
 .car-goods-list .car-good{
   width:750rpx;
   height:196rpx;
@@ -88,6 +92,19 @@ page{
   -webkit-transform: translateX(180rpx);
   transform: translateX(180rpx);
   margin-left: -180rpx
+}
+.car-goods-list.expired-list .car-good .ex-tip{
+  float:left;
+  margin-top:22rpx;
+  margin-left:10rpx;
+  width:70rpx;
+  height:30rpx;
+  font-size:24rpx;
+  line-height:30rpx;
+  text-align:center;
+  border-radius:10rpx;
+  background:#ccc;
+  color:#fff;
 }
 .car-container{
   font-size: 30rpx;
@@ -128,6 +145,9 @@ page{
   border-radius:10rpx;
   border:2rpx solid #e5e7e2;
 }
+.car-goods-list.expired-list .car-good image{
+  margin-left:10rpx;
+}
 .car-goods-list .car-good .car-good-name{
   float:left;
   padding-left:20rpx;
@@ -139,6 +159,9 @@ page{
   color:#000;
   word-break:break-all;
   overflow:hidden;
+}
+.car-goods-list.expired-list .car-good .car-good-name{
+  width:320rpx;
 }
 .car-goods-list .car-good.expired .car-good-name{
   color:rgba(0,0,0,.5);

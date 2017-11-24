@@ -1,0 +1,40 @@
+<!--pages/orderinfo/orderinfo.wxml-->
+<view class='padding-30'></view>
+<view class='goodsList clearfix'>
+  <view  class='shop-good' wx:for="{{orderInfo.orderGoods}}" wx:for-index="idx" wx:key="idx">
+    <!--<image src="{{imgPre+good.goodsImgLogo}}"/>-->
+    <image src="{{imgPre+item.goodsImgLogo}}"/>
+    <text class="shop-good-name">{{item.goodsNm}}</text>
+    <view class='shop-good-info'>
+      <text class='shop-good-price'>￥{{item.goodsAmt?item.goodsAmt/100:0}}</text>
+      <text class='shop-good-num'>x {{item.orderNum}}</text>
+    </view>
+  </view> 
+
+  <!--订单详情关于价钱-->
+  <view class='order-info-price clearfix'>
+    <view class='total-price'>
+      <text class='left'>商品总价:</text>
+      <text class='right'>￥{{orderInfo.orderAmtOrgYuan?orderInfo.orderAmtOrgYuan:'0.00'}}</text>
+    </view>
+    <view class='delivery-money'>
+      <text class='left'>配送费:</text>
+      <text class='right'>￥{{orderInfo.distAmtYuan?orderInfo.distAmtYuan:'0.00'}}</text>
+    </view>
+    <view wx:if="{{orderInfo.couponAmt}}" class='coupon-price'>
+      <text class='left'>优惠券抵扣:</text>
+      <text class='right'>￥{{orderInfo.couponAmt?orderInfo.couponAmtYuan:'0.00'}}</text>
+    </view>
+    <view class='final-price'>
+      <text class='left'>实付金额:</text>
+      <text class='right'>￥{{orderInfo.orderAmtYuan?orderInfo.orderAmtYuan:'0.00'}}</text>
+    </view>
+  </view>
+</view>
+
+<view class='order-details'>
+  <view>订单号: {{orderInfo.orderNo}}</view>
+  <view wx:if="{{orderInfo.payOrderNo}}">交易流水: {{orderInfo.payOrderNo}}</view>
+  <view>创建时间: {{orderInfo.crtTs}}</view>
+  <view wx:if="{{orderInfo.payTsTrue}}">支付时间: {{orderInfo.payTsTrue}}</view>
+</view>

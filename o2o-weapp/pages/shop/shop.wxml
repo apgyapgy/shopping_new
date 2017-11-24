@@ -116,3 +116,21 @@
 <image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 <!--toast-->
 <view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>
+<!--领券-->
+<view wx-if="{{showReceiveCouponFlag}}" class="receive-coupon-wrapper">
+	<view class="receive-coupon">
+    <view class="img-wrapper">
+      <image src="../../image/coupon-receive-back.png" alt="" />
+    </view>
+    <image class='receive-coupon-info-back' src="../../image/coupon-receive-info.png"></image>
+		<view class="receive-coupon-info">
+			<view class="receive-coupon-info-left">
+				<text wx-if="{{mchCoupon.couponAmtMin>0}}" class="receive-coupon-condition">消费满<text>{{mchCoupon.couponAmtMin/100}}</text>元减<text>{{mchCoupon.couponAmt/100}}</text>元</text>
+				<text wx:else class="receive-coupon-condition">消费减<text>{{mchCoupon.couponAmt/100}}</text>元</text>
+				<text class="receive-coupon-time">有效期<text>{{mchCoupon.startDt}}</text>-<text>{{mchCoupon.expireDt}}</text></text>
+			</view>
+		</view>
+		<text catchtap="receiveCoupon" class="receive-coupon-btn">免费领</text>
+		<text catchtap="closeReceiveCoupon" class="receive-coupon-close"></text>
+	</view>
+</view>

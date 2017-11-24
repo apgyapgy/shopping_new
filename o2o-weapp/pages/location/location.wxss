@@ -1,0 +1,146 @@
+/* pages/location/location.wxss */
+/*search*/
+.search-container{
+  padding-top:30rpx;
+  width:750rpx;
+  height:86rpx;
+  background:#f2f2f2;
+}
+.search-input-container{
+  position:relative;
+  margin-left:20rpx;
+  margin-right:20rpx;
+  float:left;
+  width:560rpx;
+  height:60rpx;
+  background:#e5e6e8;
+  border-radius:8rpx;
+}
+.search-input-container image{
+  position:absolute;
+  left:100rpx;
+  top:50%;
+  transform:translateY(-50%);
+  width:28rpx;
+  height:28rpx;
+}
+.search-input-container input{
+  padding-top:5rpx;
+  padding-left:140rpx;
+  font-size:26rpx;
+  color:#808080;
+}
+.search-container button{
+  float:left;
+  width:120rpx;
+  height:60rpx;
+  background:#24affd;
+  font-size:28rpx;
+  line-height:60rpx;
+  text-align:center;
+  color:#fff;
+}
+.search-container button:active{
+  background:#009bdb;
+}
+/*location*/
+.location{
+  position:relative;
+  width:750rpx;
+  height:88rpx;
+  border-top:1rpx solid #e5e5e5;
+  border-bottom:1rpx solid #e5e5e5;
+}
+.location .location-wrapper{
+  position:absolute;
+  left:50%;
+  height:88rpx;
+  transform:translateX(-50%);
+}
+.location .location-wrapper image{
+  float:left;
+  margin-top:30rpx;
+  width:30rpx;
+  height:30rpx;
+}
+.location .location-wrapper text{
+  margin-left:5rpx;
+  float:left;
+  height:88rpx;
+  line-height:90rpx;
+  color:#24affd;
+  font-size:28rpx;
+}
+/*附近小区*/
+.nearby-village .title{
+  width:750rpx;
+  height:88rpx;
+  background:#f2f2f2;
+  border-top:1rpx solid #e8e8e8;
+  border-bottom:1rpx solid #e8e8e8;
+  font-size:30rpx;
+  line-height:88rpx;
+  color:#000;
+  text-indent:30rpx;
+}
+.list{
+  position:relative;
+  padding-left:30rpx;
+  width:750rpx;
+  height:90rpx;
+  box-sizing:border-box;
+  border-bottom:1rpx solid #e7e7e7;
+}
+.list>text{
+  display:block;
+}
+.list .list-name{
+  margin-top:10rpx;
+  height:40rpx;
+  line-height:40rpx;
+  font-size:30rpx;
+  color:#000;
+}
+.list .list-address{
+  height:34rpx;
+  line-height:34rpx;
+  color:#acacac;
+  font-size:24rpx;
+}
+/*选择标识*/
+.select-icon{
+  position:absolute;
+  right:20rpx;
+  top:10rpx;
+  float:left;
+  width:36rpx;
+  height:36rpx;
+  border-radius:50%;
+  border:2rpx solid #26b1fe;
+}
+.select-icon image{
+  display:none;
+  float:left;
+  margin-top:6rpx;
+  margin-left:5rpx;
+  width:30rpx;
+  height:26rpx;
+  border:0;
+}
+.select-icon.active image{
+  display:block;
+}
+.select-icon.active{
+  background:#26b1fe;
+}
+/*没有订单*/
+.no-area text{
+  display:block;
+  margin-top:300rpx;
+  width:750rpx;
+  height:50rpx;
+  line-height:50rpx;
+  font-size:40rpx;
+  color:#ccc;
+  text-align:center;
+}

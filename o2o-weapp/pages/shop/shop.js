@@ -27,7 +27,9 @@ Page({
     selectIds:null,
     imgPre:app.globalData.imgPre,
     expireList:[],//过期失效商品
-    netDisconnectFlag: false
+    netDisconnectFlag: false,
+    showReceiveCouponFlag:false,  //是否显示领取优惠券弹窗
+    mchCoupon:{}
   },
   /*生命周期函数--监听页面加载*/
   onLoad: function (options) {
@@ -36,9 +38,10 @@ Page({
       this.setData({
         options: options
       });
-    } else {
+    }/* else {
       app.globalData.loginId = "15316117950";//测试使用，测试完成可删除 
-    }
+    }*/
+    this.getShopCoupon();
     if (wx.onNetworkStatusChange){
       wx.onNetworkStatusChange(function (res) {
         console.log("ent change:", res);
@@ -112,7 +115,8 @@ Page({
         orderNum : 1,
         orderAmt : _goodsAmt,
         operator: app.globalData.loginId,
-        type:0
+        type:0,
+        hostId:app.globalData.location.hostId
       },
       token: app.globalData.token,
       success: function (res) {
@@ -133,7 +137,7 @@ Page({
         }else if (res.data.code == 201){
           common.showModal('该商品已加入购物车');
         }else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.saveCartAjax(_goodsNo, _goodsAmt, fn);
           });
         }else{
@@ -148,7 +152,6 @@ Page({
     });
   },
   showCarInfo:function(){//显示购物车信息
-    console.log(this.data.selectIds.length, this.data.selectInfo.selectAmt, this.data.shop.distAmtMin)
     if (this.data.cartList.length > 0 || this.data.expireList.length>0){
       this.setData({
         showCarInfoFlag: true
@@ -256,11 +259,6 @@ Page({
             if (res.data.data.cartInfo){//如果购物车中有内容 
               for (var key in _goodsList) {
                 _goodsList[key].num = 0;
-                //图片拼接
-                /*if (_goodsList[key].goodsImgLogo){
-                  _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
-                }*/
-                //_goodsList[key].goodsImgLogo = '../../image/good.png';
               }
               _this.setData({
                 goodsList: _goodsList,
@@ -269,10 +267,6 @@ Page({
             } else {//购物车中无商品
               for (var key in _goodsList) {//无商品将商品的num即加入购物车中的数据置0
                 _goodsList[key].num = 0;
-                //图片拼接
-                /*if (_goodsList[key].goodsImgLogo){
-                  _goodsList[key].goodsImgLogo = app.globalData.imgPre + _goodsList[key].goodsImgLogo;
-                }*/
               }
               _this.setData({
                 goodsList: _goodsList,
@@ -282,7 +276,7 @@ Page({
           }
           _this.getCartList();
         }else if(res.data.code == 40101){
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.getGoodsList();
           });
         }else{
@@ -327,7 +321,7 @@ Page({
           });
           _this.getSelectInfo(res.data.data.list);
         }else if(res.data.code == 40101){
-          _this.getToken(function(){
+          app.getToken(_this,function(){
             _this.getCartList();
           });
         }else{
@@ -335,53 +329,6 @@ Page({
         }
       },
       fail: function (res) {
-      }
-    });
-  },
-  getToken:function(fn){//如果用户token过期，重新获取token，并获取数据
-    var _this = this;
-    wx.getNetworkType({
-      success: function (res) {
-        // 返回网络类型, 有效值：
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        if (res.networkType == 'none') {
-          common.showModal("网络已断开，请联网后重试!",function(){
-            _this.setData({
-              clickable:true
-            });
-          });
-        } else {
-          wx.login({
-            success: ress => {
-              // 发送 res.code 到后台换取 openId, sessionKey, unionId
-              if (ress.code) {
-                wx.request({
-                  url: app.globalData.baseUrl + 'wx_we/oauth',
-                  data: {
-                    code: ress.code
-                  },
-                  success: function (re) {
-                    console.log("in shop page oauth:",re);
-                    if (re.data.code == 200) {
-                      app.globalData.loginId = re.data.data.loginId;
-                      app.globalData.token = re.data.data.token;
-                      if(fn){
-                        fn();
-                      }
-                    } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
-                    }
-                  }
-                });
-              } else {
-                console.log('获取用户登录态失败！' + ress.errMsg)
-              }
-            }
-          });
-        }
-      },
-      fail:function(res){
-        console.log("获取网络状态失败:",res);
       }
     });
   },
@@ -412,7 +359,7 @@ Page({
             }
             _this.getGoodsList();
           } else if (res.data.code == 40101) {
-            _this.getToken(function () {
+            app.getToken(_this,function () {
               _this.updateOrderNum(_goodsNo,_num, _type);
             });
           }else{
@@ -447,7 +394,7 @@ Page({
           });
           _this.getGoodsList();
         } else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.deleteCart(_goodsNo);
           });
         }else{
@@ -488,7 +435,7 @@ Page({
           });
           _this.getGoodsList();
         } else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.emptyCart();
           });
         }else{
@@ -546,5 +493,84 @@ Page({
       });
     }
     this.computedCartInfo(cartList);
+  },
+  formatCouponDate:function(_date){//格式化日期
+    _date = _date + '';
+    return _date.substring(0, 4) + '.' + _date.substring(4, 6) + '.' + _date.substring(6, 8);
+  },
+  getShopCoupon:function(){//获取店铺优惠券
+    var _this = this;
+    common.getAjax({
+      url: 'api/coupon/getShopCoupon',
+      params: {
+        mchId: _this.data.options.mchId
+      },
+      token: app.globalData.token,
+      success: function (res) {
+        if (res.data.code == 200) {
+          console.log("getShopCoupon:", res);
+          if(res.data.data){
+            _this.setData({
+              mchCoupon: res.data.data,
+              showReceiveCouponFlag: true
+            });
+          }
+        } else if (res.data.code == 40101) {
+          app.getToken(_this, function () {
+            _this.getShopCoupon();
+          });
+        } else {
+          common.showModal(res.data.desc);
+        }
+      },
+      fail: function (res) {
+      }
+    });
+  },
+  receiveCoupon: function () {//领取优惠券
+    if (this.data.mchCoupon.couponNo){
+      var _this = this;
+      common.getAjax({
+        url: 'api/coupon/takeShopCoupon',
+        params: {
+          couponNo: _this.data.mchCoupon.couponNo
+        },
+        token: app.globalData.token,
+        success: function (res) {
+          if (res.data.code == 200) {
+            console.log("takeShopCoupon:", res);
+            _this.setData({
+              showReceiveCouponFlag:false
+            });
+            var _content = "";
+            if (res.data.desc == '抱歉，优惠券总数量已发放完毕'){
+              _content = '券已被抢光，下次早点来哟!';
+            }else{
+              _content = '领取成功，快去使用';
+            }
+            wx.showModal({
+              title: '提示',
+              showCancel: false,
+              content: _content,
+              confirmText: '知道了',
+              success: function (res) { }
+            });         
+          } else if (res.data.code == 40101) {
+            app.getToken(_this, function () {
+              _this.receiveCoupon();
+            });
+          } else {
+            common.showModal(res.data.desc);
+          }
+        },
+        fail: function (res) {
+        }
+      });
+    }
+  },
+  closeReceiveCoupon:function(){//关闭领取优惠券弹窗 
+    this.setData({
+      showReceiveCouponFlag:false
+    });
   }
 })                                                                                                                             

@@ -21,7 +21,7 @@ Page({
    */
   onLoad: function (options) {
     var _this = this;
-    this.getToken(function(){
+    app.getToken(_this,function(){
       _this.getCoupons();
     });
     if (wx.onNetworkStatusChange){
@@ -74,7 +74,7 @@ Page({
           });
           _this.getShowCoupon();
         } else if (res.data.code == 40101) {
-          _this.getToken(function () {
+          app.getToken(_this,function () {
             _this.getCoupons();
           });
         }else{

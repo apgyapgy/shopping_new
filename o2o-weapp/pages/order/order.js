@@ -2,10 +2,6 @@
 var app = getApp();
 import common from "../../js/common.js";
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     activeTab: 0,
     orderList:[],
@@ -58,9 +54,6 @@ Page({
     noOrderFlag:false,
     netDisconnectFlag: false
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     if(options.type){
       this.setData({
@@ -68,7 +61,7 @@ Page({
       });
     }
     var _this = this;
-    this.getToken(function(){
+    app.getToken(_this,function(){
       _this.getOrders();
     });
     if (wx.onNetworkStatusChange){
@@ -88,11 +81,12 @@ Page({
     }
   },
   onShow:function(){
-    this.qryUserCartNums();
+    app.qryUserCartNums(this);
   },
   changeTab: function (e) {
     var _index = e.target.dataset.index;
     this.setData({
+      orderList:[],
       activeTab: _index
     });
     this.getOrders();
@@ -157,7 +151,7 @@ Page({
             });
           }
         }else if(res.data.code == 40101){
-          _this.getToken(function(){
+          app.getToken(_this,function(){
             _this.getOrders();
           });
         }else{
@@ -213,7 +207,76 @@ Page({
       }
     });
   },
-  topay: function (e) {//点击去结算
+  pay:function(e){
+    var _no = e.currentTarget.dataset.no;
+    if(_no){
+      this.payAgain(_no);
+    }
+  },
+  payAgain: function (_no) {//点击去结算
+    var _this = this;
+    if(_no){
+      common.getAjax({
+        url: 'api/payAgain',
+        params: {
+          orderNo:_no
+        },
+        token: app.globalData.token,
+        success: function (res) {
+          console.log("payAgain:", res);
+          if (res.data.code == 200) {
+            _this.requestPayMent(res.data.data);
+          } else if (res.data.code == 40101) {
+            app.getToken(_this, function () {
+              _this.payAgain(_no);
+            });
+          } else {
+            common.showModal(res.data.desc);
+          }
+        }
+      });
+    }
+  },
+  requestPayMent: function (_data) {//发起微信支付
+    var _this = this;
+    console.log("payData:", this.data.payData);
+    wx.requestPayment({
+      'timeStamp': _data.timestamp,
+      'nonceStr': _data.noncestr,
+      'package': _data.package,
+      'signType': 'MD5',
+      'paySign': _data.paySign,
+      'success': function (res) {
+        if (res.errMsg == "requestPayment:ok") {
+          //调用 支付成功
+          common.showModal("支付成功!", function () {
+            _this.setData({
+              orderList: [],
+              activeTab: 1
+            });
+            _this.getOrders();
+          });
+        }
+      },
+      'fail': function (res) {
+        if (res.errMsg == "requestPayment:fail cancel") {
+          //用户取消支付
+          common.showModal("您已取消支付!", function () {
+            _this.setData({
+              orderList: [],
+              activeTab: 0
+            });
+            _this.getOrders();
+          });
+        } else if (res.errMsg == "requestPayment:fail (detail message)") {
+          //调用支付失败，其中 detail message 为后台返回的详细失败原因
+          console.log("支付失败:", res);
+          common.showModal("支付失败!", function () {
+            _this.cancelPay();
+          });
+        }
+      }
+    })
   },
   goTop: function () { //返回顶部
     this.setData({
@@ -235,32 +298,24 @@ Page({
       }
     }
   },
-  qryUserCartNums: function () {
-    var _this = this;
-    common.getAjax({
-      url: 'wx_we/qryUserCartNums',
-      params: {
-        loginId: app.globalData.loginId
-      },
-      token: app.globalData.token,
-      success: function (res) {
-        if (res.data.code == 200) {
-          console.log("qryUserCartNums:", res);
-          var _tabbarArray = _this.data.tabbarArray;
-          if (res.data.data.totalNumbers != _tabbarArray[1].shopCartNum) {
-            _tabbarArray[1].shopCartNum = res.data.data.totalNumbers;
-            _this.setData({
-              tabbarArray: _tabbarArray
-            });
-          }
-        } else if (res.data.code == 40101) {
-          _this.getToken(function () {
-            _this.qryUserCartNums();
-          })
-        } else {
-          common.showModal(res.data.desc);
-        }
-      }
-    });
+  showOrderIndo:function(e){
+    if (this.data.activeTab == 0){
+      return;
+    }
+    var _orderNo = e.currentTarget.dataset.no;
+    if(_orderNo){
+      wx.navigateTo({
+        url: '/pages/orderinfo/orderinfo?no=' + _orderNo
+      });
+    }
+  },
+  jumpShop:function(e){
+    var _mchId = e.currentTarget.dataset.mchid;
+    var _shopId = e.currentTarget.dataset.shopid;
+    if(_mchId && _shopId){
+      wx.navigateTo({
+        url: '/pages/shop/shop?shopId=' + _shopId + '&mchId=' + _mchId
+      });
+    }
   }
 })

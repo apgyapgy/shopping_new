@@ -1,0 +1,98 @@
+/* pages/orderinfo/orderinfo.wxss */
+page{
+  background:#f2f2f2;
+}
+.padding-30{
+  width:750rpx;
+  height:28rpx;
+  background:#fff;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.goodsList{
+  background:#fff;
+}
+.shop-good{
+  width:750rpx;
+  height:196rpx;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.shop-good image{
+  float:left;
+  margin-top:22rpx;
+  margin-left:28rpx;
+  width:145rpx;
+  height:145rpx;
+  border-radius:10rpx;
+  border:2rpx solid #e5e7e2;
+}
+.shop-good .shop-good-name{
+  float:left;
+  padding-left:20rpx;
+  margin-top:22rpx;
+  width:520rpx;
+  height:80rpx;
+  font-size:30rpx;
+  line-height:40rpx;
+  color:#000;
+  word-break:break-all;
+  overflow:hidden;
+}
+.shop-good-info{
+  float:left;
+  margin-top:22rpx;
+  padding-left:20rpx;
+  width:520rpx;
+}
+.shop-good-info .shop-good-price{
+  float:left;
+  width:120rpx;
+  height:40rpx;
+  line-height:40rpx;
+  font-size:30rpx;
+  font-weight:bold;
+  color:#fa3e2d;
+}
+.shop-good-info .shop-good-num{
+  float:right;
+  text-align:center;
+  font-size:26rpx;
+  color:#333;
+}
+/*各种金额*/
+.order-info-price{
+  padding-top:16rpx;
+  width:750rpx;
+  border-bottom:2rpx solid #e5e7e2;
+}
+.order-info-price>view{
+  padding:0 30rpx;
+  width:690rpx;
+  height:44rpx;
+  line-height:44rpx;
+  color:#000;
+  font-size:28rpx;
+}
+.order-info-price>view .left{
+  float:left;
+  width:300rpx;
+}
+.order-info-price>view .right{
+  float:right;
+  text-align:right;
+  width:390rpx;
+  font-weight:bold;
+}
+.order-info-price>view.final-price .right{
+  color:#fa4b3b;
+}
+/*订单信息*/
+.order-details{
+  margin-top:10rpx;
+  color:#999;
+}
+.order-details>view{
+  padding-left:30rpx;
+  height:42rpx;
+  font-size:26rpx;
+  line-height:42rpx;
+}
