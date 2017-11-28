@@ -191,11 +191,6 @@ Page({
         couponNo: _this.data.couponNo,
         orderGoods: _orderGoods
       };
-      /*console.log("pay params:",_params);
-      this.setData({
-        clickable: true
-      });
-      return;*/
       app.getToken(_this,function(){
         common.getAjax({
           url: 'api/order',
@@ -208,9 +203,7 @@ Page({
                 _this.requestPayMent(res.data.data);
               }else{
                 common.showModal("支付成功!", function () {
-                  wx.reLaunch({
-                    url: '/pages/order/order?type=1',
-                  });
+                  common.reLaunch('/pages/order/order?type=1');
                 });
               }
             }else{
@@ -244,9 +237,7 @@ Page({
           console.log("支付成功:",res);
           common.showModal("支付成功!",function(){
             //wx.navigateBack()
-            wx.reLaunch({
-              url: '/pages/order/order?type=1',
-            });
+            common.reLaunch('/pages/order/order?type=1');
           });
         }
       },
@@ -255,9 +246,7 @@ Page({
           //用户取消支付
           console.log("用户取消支付:",res);
           common.showModal("您已取消支付!",function(){
-            wx.reLaunch({
-              url: '/pages/order/order?type=0',
-            });
+            common.reLaunch('/pages/order/order?type=0');
             /*_this.cancelPay();*/
           });
         } else if (res.errMsg == "requestPayment:fail (detail message)"){
@@ -346,7 +335,7 @@ Page({
                         fn();
                       }
                     } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
+                      common.reLaunch('/pages/login/login');
                     }
                   }
                 });

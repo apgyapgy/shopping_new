@@ -197,6 +197,7 @@ page{
   color:rgba(51,51,51,.5);
 }
 .clear-invalid{
+  float:left;
   margin-top:30rpx;
   padding-top:30rpx;
   width:750rpx;

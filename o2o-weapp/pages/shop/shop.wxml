@@ -26,14 +26,14 @@
       </view>
     </view>
     <view hidden="{{goodsList.length}}" class='nogood'>
-      暂无商品
+      {{noGoodText}}
     </view>
   </view>
   <view class='padding-86'></view>
 </scroll-view>
 
 <!--底部购物车-->
-<view bindtap="showCarInfo" class='car-bar'>
+<view wx:if="{{goodsList.length}}" bindtap="showCarInfo" class='car-bar'>
   <view class="car-icon {{selectIds.length>0?'active':''}}">
     <text hidden="{{cartInfo.orderNums<=0}}" class='car-num'>{{cartInfo.orderNums>99?'99+':cartInfo.orderNums}}</text>
     <image src="../../image/shop-car.png"/>

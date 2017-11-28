@@ -7,11 +7,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    netDisconnectFlag: false
+    netDisconnectFlag: false,
+    isModalClosed:true
   },
   onLoad: function () {
     var _this = this;
-    this.authUserInfo();
+    //this.authUserInfo();
     if (wx.onNetworkStatusChange){
       wx.onNetworkStatusChange(function (res) {
         if (res.networkType == 'none') {
@@ -28,6 +29,24 @@ Page({
     }
   },
   onShow:function(){
+    var _reLaunch = wx.canIUse('reLaunch');
+    var _this = this;
+    if (_reLaunch) {
+      this.authUserInfo();
+    } else {
+      if (_this.data.isModalClosed == true){
+        _this.setData({
+          isModalClosed:false
+        });
+        // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+        common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。', function () {
+          _this.setData({
+            isModalClosed:true
+          });
+          wx.navigateBack();
+        });
+      }
+    }
   },
   checkUserInfoAuth: function (fn) {
     //判断用户是否授权获取用户信息,未授权点任何位置跳转授权页面
@@ -175,11 +194,23 @@ Page({
                       app.globalData.loginId = re.data.data.loginId;
                       app.globalData.hostId = re.data.data.hostId;
                       app.globalData.token = re.data.data.token;
-                      wx.reLaunch({
-                        url: '/pages/index/index'
-                      });
+                      /*if (wx.reLaunch) {
+                        wx.reLaunch({
+                          url: '/pages/index/index'
+                        });
+                      } else {
+                        common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。');
+                      }*/
+                      common.reLaunch('/pages/index/index');
                     } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
+                      /*if (wx.reLaunch) {
+                        wx.reLaunch({
+                          url: '/pages/login/login'
+                        });
+                      } else {
+                        common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。');
+                      }*/
+                      common.reLaunch("/pages/login/login");
                     }
                   }
                 });

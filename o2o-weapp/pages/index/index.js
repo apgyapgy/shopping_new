@@ -237,9 +237,7 @@ Page({
       this.setData({
         jumpUrl:_url
       });
-      wx.reLaunch({
-        url: _this.data.jumpUrl,
-      });
+      common.reLaunch(_this.data.jumpUrl);
     }
   }
 });

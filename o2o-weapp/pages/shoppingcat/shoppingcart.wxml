@@ -1,5 +1,5 @@
 <!--pages/shoppingcat/shoppingcart.wxml-->
-<scroll-view wx:if="{{shoppingCartList.length>0}}" class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
+<scroll-view wx:if="{{shoppingCartList.length>0 || disAbledGoods.length>0}}" class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop">
   <view class='car-body'>
     <!--不可用小区开始-->
     <view wx:for="{{shoppingCartList}}" wx:for-index="area" wx:key="area" class='car-area clearfix'>
@@ -10,10 +10,10 @@
         </view>
       </view>
       <view wx:for="{{item.list}}" wx:for-item="shop" wx:for-index="shopidx" 
-        wx:key="{{shop.shopId}}"  catchtap="jumpShop" data-shopid="{{shop.shopId}}" 
+        wx:key="{{shop.shopId}}"  catchtap="jumpShop" data-shopid="{{shop.shopId}}"
         data-mchid="{{shop.mchId}}" data-active="{{item.isActive?'active':''}}" class='car-order active clearfix'>
         <view class='car-name'>
-          <image src="../../image/nearby.png"/>
+          <image src="{{shop.shopLogo?imgPre+shop.shopLogo:'../../image/shop-icon.png'}}"/>
           <text class='s-name'>{{shop.shopNm}}</text>
           <text class='gt'>></text>
         </view>
@@ -24,7 +24,7 @@
                 wx:key="{{good.goodsNo}}" class="car-container {{good.isTouchMove ? 'touch-move-active' : ''}}"
                 wx:for-index="goodidx"
                 data-index="{{area+'#'+shopidx+'#'+goodidx}}" 
-                bindtouchstart="touchstart" bindtouchmove="touchmove" >
+                catchtouchstart="touchstart" catchtouchmove="touchmove" >
             <view class="car-good {{good.isExpire==0?'expired':''}}">
               <image src="{{imgPre+good.goodsImgLogo}}"/>
               <!--<image src="../../image/good.png"/>-->
@@ -44,7 +44,7 @@
     <!--不可用小区结束-->
     <!--失效商品开始-->
     <view class='car-goods-list clearfix expired-list'>
-      <view wx:for="{{expiredList}}" wx:for-index="idx" wx:key="idx" class="car-container">
+      <view wx:for="{{disAbledGoods}}" wx:for-index="idx" wx:key="idx" class="car-container">
         <view class="car-good expired">
           <view class='ex-tip'>失效</view>
           <image src="{{imgPre+item.goodsImgLogo}}"/>
@@ -57,7 +57,7 @@
       </view>
     </view>
     <!--失效商品结束-->
-    <view hidden="{{!shoppingCartList.length || !expiredId.length}}" class="clear-invalid {{expiredId?'':'disbaled'}}">
+    <view hidden="{{!expiredId.length}}" class="clear-invalid {{expiredId?'':'disbaled'}}">
       <button bindtap="clearInvalid">清空失效商品</button>
     </view>
   </view>
@@ -67,6 +67,7 @@
   <image src='../../image/cart-empty.png'/>
   <text>购物车空空如也...</text>
 </view>
+<view class='padding-100'></view>
 <image catchtap="goTop" class="top {{backTopIconShowFlag==true?'active':''}}" src='../../image/top.png'/>
 <!--toast-->
 <view class="toast {{netDisconnectFlag?'show':''}}">网络异常请稍后再试</view>

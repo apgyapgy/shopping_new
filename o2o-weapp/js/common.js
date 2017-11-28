@@ -1,5 +1,5 @@
-var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
-//var baseUrl = 'https://chi.fuiou.com/';//生产
+//var baseUrl = 'https://dswx-test.fuiou.com/o2o/';//测试
+var baseUrl = 'https://chi.fuiou.com/';//生产
 var getSerial = function () {
   return new Date().getTime();
 }
@@ -259,7 +259,19 @@ var showModal = function (cont,fn) {
     }
   });
 }
-
+var reLaunch = function(_url){
+  var _reLaunch = wx.canIUse('reLaunch');
+  if (_reLaunch) {
+    wx.reLaunch({
+      url: _url
+    });
+  } else {
+    // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+    showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。',function(){
+      wx.navigateBack();
+    });
+  }
+}
 module.exports = {
   baseUrl: baseUrl,
   ajaxAsync: ajaxAsync,
@@ -270,5 +282,6 @@ module.exports = {
   layer: layer,
   clearSession: clearSession, 
   getAjax: getAjax,
-  showModal: showModal
+  showModal: showModal,
+  reLaunch: reLaunch
 } 

@@ -29,7 +29,8 @@ Page({
     expireList:[],//过期失效商品
     netDisconnectFlag: false,
     showReceiveCouponFlag:false,  //是否显示领取优惠券弹窗
-    mchCoupon:{}
+    mchCoupon:{},
+    noGoodText:'暂无商品'
   },
   /*生命周期函数--监听页面加载*/
   onLoad: function (options) {
@@ -256,25 +257,26 @@ Page({
           var _goodsList = [];
           if (res.data.data.list) {
             _goodsList = res.data.data.list;
-            if (res.data.data.cartInfo){//如果购物车中有内容 
-              for (var key in _goodsList) {
-                _goodsList[key].num = 0;
-              }
+            if (JSON.stringify(res.data.data.shop) != '{}' && res.data.data.shop.shopSt==1){//如果店铺未关闭
               _this.setData({
                 goodsList: _goodsList,
-                shop:res.data.data.shop
+                shop: res.data.data.shop
               });
-            } else {//购物车中无商品
-              for (var key in _goodsList) {//无商品将商品的num即加入购物车中的数据置0
-                _goodsList[key].num = 0;
+              //如果店铺没有商品且提示不为‘暂无商品’，改提示
+              if (!_goodsList.length && _this.data.noGoodText != '暂无商品') {
+                _this.setData({
+                  noGoodText: '暂无商品'
+                });
               }
+              _this.getCartList();
+            }else{//店铺已关闭，提示用户
               _this.setData({
-                goodsList: _goodsList,
-                shop:res.data.data.shop
+                goodsList: [],
+                shop: res.data.data.shop,
+                noGoodText:'店铺升级中，敬请期待...'
               });
             }
           }
-          _this.getCartList();
         }else if(res.data.code == 40101){
           app.getToken(_this,function () {
             _this.getGoodsList();

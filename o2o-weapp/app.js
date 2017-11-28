@@ -94,11 +94,11 @@ App({
     openId: '',
     latitude:'',
     longitude:'',
-    imgPre: 'http://staticds.fuiou.god',//生产
+    imgPre: 'https://staticds.fuiou.com',//生产
     location:{},
     src:3,
-    //baseUrl: 'https://chi.fuiou.com/'  //生产
-    baseUrl: 'https://dswx-test.fuiou.com/o2o/', //测试
+    baseUrl: 'https://chi.fuiou.com/',  //生产
+    //baseUrl: 'https://dswx-test.fuiou.com/o2o/', //测试
     selectedHostId:''
   }
 })

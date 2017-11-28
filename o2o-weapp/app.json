@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/front/front",
     "pages/index/index",
     "pages/location/location",
     "pages/orderinfo/orderinfo",
-    "pages/front/front",
     "pages/shop/shop",
     "pages/shoppingcat/shoppingcart",
     "pages/checkOrder/checkOrder",

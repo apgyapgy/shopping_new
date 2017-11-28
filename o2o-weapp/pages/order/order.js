@@ -191,7 +191,7 @@ Page({
                         fn();
                       }
                     } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
+                      common.reLaunch('/pages/login/login');
                     }
                   }
                 });

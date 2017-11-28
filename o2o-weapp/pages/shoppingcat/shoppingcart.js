@@ -48,7 +48,7 @@ Page({
     startY:0,
     //测试左滑删除end,
     shoppingCartList:[],
-    expiredList:[],
+    disAbledGoods:[],
     expiredId:'',
     jumpFlag:true,
     clickable: true,//是否可点击，用于防止连续点击 
@@ -157,12 +157,13 @@ Page({
     if(this.data.jumpFlag){
       var _dataset = e.currentTarget.dataset;
       var _shopid = _dataset.shopid,
-          _mchid = _dataset.mchid;
+          _mchid = _dataset.mchid,
+          _shopSt = _dataset.shopst;
       var _active = _dataset.active;
-      if (_active) {
+      if (_active) { 
         var _url = "/pages/shop/shop";
-        if(_shopid){
-          _url = _url+'?shopId='+_shopid+'&mchId='+_mchid;
+        if (_shopid) {
+          _url = _url + '?shopId=' + _shopid + '&mchId=' + _mchid;
           wx.navigateTo({
             url: _url
           });
@@ -308,23 +309,13 @@ Page({
             _area.isActive = true;
             for(var shopkey in _area.list){
               var _shop = _area.list[shopkey];
-              for (var goodkey = 0;goodkey < _shop.list.length;goodkey++) {
+              for(var goodkey in _shop.list){
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
-                if (_good.isExpire == 0) {//isExpire为0表示失效，为1未失效
-                  _expiredId += ',' + _good.goodsNo;
-                  _expiredList.push(_shop.list[goodkey]);
-                  _shop.list.splice(goodkey, 1);
-                  goodkey--;
-                }
-              }
-              /*for(var goodkey in _shop.list){
-                var _good = _shop.list[goodkey];
-                _good.isTouchMove = false;
-                if(_good.isExpire == 0){//isExpire为0表示失效，为1未失效
+                /*if(_good.isExpire == 0){//isExpire为0表示失效，为1未失效
                   _expiredId+=','+_good.goodsNo;
-                }
-              }*/
+                }*/
+              }
             }
             _shopCartList.push(_area);
           }
@@ -333,31 +324,29 @@ Page({
             _area.isActive = false;
             for (var shopkey in _area.list) {
               var _shop = _area.list[shopkey];
-              for (var goodkey = 0; goodkey < _shop.list.length; goodkey++) {
+              for (var goodkey in _shop.list) {
                 var _good = _shop.list[goodkey];
                 _good.isTouchMove = false;
-                if (_good.isExpire == 0) {//isExpire为0表示失效，为1未失效
-                  _expiredId += ',' + _good.goodsNo;
-                  _expiredList.push(_shop.list[goodkey]);
-                  _shop.list.splice(goodkey, 1);
-                  goodkey--;
-                }
               }
             }
             _shopCartList.push(_area);
           }
-          if(_shopCartList.length){
+          var _disAbledGoods = res.data.data.disAbledGoods;
+          for (var key in _disAbledGoods){
+            _expiredId += ',' + _disAbledGoods[key].goodsNo;
+          }
+          if (_shopCartList.length || _disAbledGoods.length){
             _this.setData({
               shoppingCartList: _shopCartList,
               expiredId: _expiredId.substring(1),
-              expiredList:_expiredList
+              disAbledGoods: _disAbledGoods
             });
           }else{
             _this.setData({
               shoppingCartList: _shopCartList,
               expiredId: _expiredId.substring(1),
               noCartFlag: true,
-              expiredList: _expiredList
+              disAbledGoods: _disAbledGoods
             });
           }
           //_this.qryUserCartNums();
@@ -407,7 +396,7 @@ Page({
                         fn();
                       }
                     } else if (re.data.code == 40110) {
-                      wx.reLaunch({ url: "/pages/login/login" });
+                      common.reLaunch('/pages/login/login');
                     }
                   }
                 });
