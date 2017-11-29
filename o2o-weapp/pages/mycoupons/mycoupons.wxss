@@ -45,7 +45,7 @@ page{
 .coupon .coupon-left{
   position:relative;
   float:left;
-  width:330rpx;
+  width:300rpx;
   height:208rpx;
 }
 .coupon .coupon-left .select{
@@ -117,9 +117,11 @@ page{
 .coupon-name{
   margin-top:24rpx;
   height:44rpx;
+  width:360rpx;
   line-height:44rpx;
   font-size:30rpx;
   color:#666;
+  overflow:hidden;
 }
 .coupon-info{
   height:40rpx;

@@ -299,6 +299,8 @@ page{
 .coupon-name{
   margin-top:24rpx;
   height:44rpx;
+  width:360rpx;
+  overflow:hidden;
   line-height:44rpx;
   font-size:30rpx;
   color:#666;

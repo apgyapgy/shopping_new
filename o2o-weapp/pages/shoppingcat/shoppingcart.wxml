@@ -24,7 +24,7 @@
                 wx:key="{{good.goodsNo}}" class="car-container {{good.isTouchMove ? 'touch-move-active' : ''}}"
                 wx:for-index="goodidx"
                 data-index="{{area+'#'+shopidx+'#'+goodidx}}" 
-                catchtouchstart="touchstart" catchtouchmove="touchmove" >
+                bindtouchstart="touchstart" bindtouchmove="touchmove" >
             <view class="car-good {{good.isExpire==0?'expired':''}}">
               <image src="{{imgPre+good.goodsImgLogo}}"/>
               <!--<image src="../../image/good.png"/>-->

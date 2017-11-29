@@ -287,6 +287,13 @@ Page({
       },
       fail: function (res) {
         console.log("获取店铺数据失败了:", res);
+      },
+      complete: function () {
+        if (_this.data.clickable == false){
+          _this.setData({
+            clickable: true
+          });
+        }
       }
     });
   },
@@ -331,6 +338,13 @@ Page({
         }
       },
       fail: function (res) {
+      },
+      complete: function () {
+        if (_this.data.clickable == false) {
+          _this.setData({
+            clickable: true
+          });
+        }
       }
     });
   },
@@ -368,10 +382,12 @@ Page({
             common.showModal(res.data.desc);
           }
         },
-        complete:function(){
-          _this.setData({
-            clickable:true
-          });
+        complete: function () {
+          if (_this.data.clickable == false) {
+            _this.setData({
+              clickable: true
+            });
+          }
         }
       }); 
     }
@@ -404,9 +420,11 @@ Page({
         }
       },
       complete: function () {
-        _this.setData({
-          clickable: true
-        });
+        if (_this.data.clickable == false) {
+          _this.setData({
+            clickable: true
+          });
+        }
       }
     });
   },
@@ -445,9 +463,11 @@ Page({
         }
       },
       complete: function () {
-        _this.setData({
-          clickable: true
-        });
+        if (_this.data.clickable == false) {
+          _this.setData({
+            clickable: true
+          });
+        }
       }
     });
   },
@@ -526,6 +546,13 @@ Page({
         }
       },
       fail: function (res) {
+      },
+      complete: function () {
+        if (_this.data.clickable == false) {
+          _this.setData({
+            clickable: true
+          });
+        }
       }
     });
   },
@@ -566,6 +593,13 @@ Page({
           }
         },
         fail: function (res) {
+        },
+        complete: function () {
+          if (_this.data.clickable == false) {
+            _this.setData({
+              clickable: true
+            });
+          }
         }
       });
     }
