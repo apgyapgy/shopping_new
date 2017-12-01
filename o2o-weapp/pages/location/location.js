@@ -86,10 +86,10 @@ Page({
       url: 'wx_we/hostNearBy',
       token: app.globalData.token,
       params:{
-        //bmapLng: _this.data.location.longitude,
-        //bmapLat: _this.data.location.latitude,
-        bmapLng: 121.54623, 
-        bmapLat: 31.226477
+        bmapLng: _this.data.location.longitude,
+        bmapLat: _this.data.location.latitude
+        //bmapLng: 121.54623, 
+        //bmapLat: 31.226477
 
       },
       success: function (res) {
