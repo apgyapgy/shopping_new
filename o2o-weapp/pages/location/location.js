@@ -88,8 +88,16 @@ Page({
       params:{
         bmapLng: _this.data.location.longitude,
         bmapLat: _this.data.location.latitude
-        //bmapLng: 121.54623, 
+        //bmapLng: 121.54623, //508
         //bmapLat: 31.226477
+        //bmapLng: 121.512744 , //博爱家园
+        //bmapLat: 31.186794
+        //bmapLng: 121.517789, //齐河三小区 
+        //bmapLat: 31.181602
+        //bmapLng: 121.52196, //新昌里公寓
+        //bmapLat: 31.189364
+        //bmapLng: 121.518692, //都市庭院
+        //bmapLat: 31.190773
 
       },
       success: function (res) {
@@ -162,5 +170,12 @@ Page({
       });
     }
     this.checkNearByEmpty();
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 })

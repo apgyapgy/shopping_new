@@ -317,5 +317,12 @@ Page({
         url: '/pages/shop/shop?shopId=' + _shopId + '&mchId=' + _mchId
       });
     }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 })

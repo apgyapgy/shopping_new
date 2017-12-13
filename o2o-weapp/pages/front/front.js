@@ -34,14 +34,14 @@ Page({
     if (_reLaunch) {
       this.authUserInfo();
     } else {
-      if (_this.data.isModalClosed == true){
+      if (_this.data.isModalClosed == true) {
         _this.setData({
-          isModalClosed:false
+          isModalClosed: false
         });
         // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
         common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。', function () {
           _this.setData({
-            isModalClosed:true
+            isModalClosed: true
           });
           wx.navigateBack();
         });
@@ -182,7 +182,7 @@ Page({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               if (ress.code) {
                 wx.request({
-                  url: app.globalData.baseUrl + 'wx_we/oauth',
+                  url: common.baseUrl + 'wx_we/oauth',
                   data: {
                     code: ress.code,
                     bmapLng: app.globalData.longitude,
@@ -194,23 +194,13 @@ Page({
                       app.globalData.loginId = re.data.data.loginId;
                       app.globalData.hostId = re.data.data.hostId;
                       app.globalData.token = re.data.data.token;
-                      /*if (wx.reLaunch) {
-                        wx.reLaunch({
-                          url: '/pages/index/index'
-                        });
-                      } else {
-                        common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。');
-                      }*/
-                      common.reLaunch('/pages/index/index');
+                      setTimeout(function(){
+                        common.reLaunch('/pages/index/index');
+                      },1000);                      
                     } else if (re.data.code == 40110) {
-                      /*if (wx.reLaunch) {
-                        wx.reLaunch({
-                          url: '/pages/login/login'
-                        });
-                      } else {
-                        common.showModal('当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。');
-                      }*/
-                      common.reLaunch("/pages/login/login");
+                      setTimeout(function(){
+                        common.reLaunch("/pages/login/login");
+                      },1000);
                     }
                   }
                 });
@@ -225,5 +215,12 @@ Page({
         console.log("获取网络状态失败:",res);
       }
     });
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 })

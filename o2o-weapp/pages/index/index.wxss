@@ -1,11 +1,11 @@
 /**index.wxss**/
 .banner{
   width:750rpx;
-  height:150px;
+  height:510rpx;
 }
-.banner .slide-image{
+.banner .banner-image{
   width:750rpx;
-  height:150px;
+  height:510rpx;
 }
 .scrollview{
   position:absolute; 

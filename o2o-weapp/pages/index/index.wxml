@@ -2,15 +2,17 @@
 
   <scroll-view class="scrollview" scroll-top="{{scrollTop}}" scroll-y bindscroll="checkBackTop" enable-back-to-top="true" bindscrolltoupper="refresh">
     <!--banner-->
-    <swiper class="banner" indicator-dots="{{indicatorDots}}"
+    <view class="banner">
+      <image catchtap="bannerJump" src="{{bannerImg}}" class="banner-image"/>
+    </view>
+    <!--<swiper class="banner" indicator-dots="{{indicatorDots}}"
       autoplay="{{autoplay}}" >
       <block wx:for="{{bannerImgs}}" wx:key="*this">
         <swiper-item>
-          <!--<image src="{{item}}" class="slide-image"/>-->
-          <image src="../../image/banner.png" class="slide-image"/>
+          <image src="../../image/banner.jpg" class="slide-image"/>
         </swiper-item>
       </block>
-    </swiper>
+    </swiper>-->
 
     <!--定位-->
     <view class='location-wrapper'>

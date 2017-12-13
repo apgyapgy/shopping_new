@@ -1,20 +1,9 @@
 /* pages/front/front.wxss */
-.front-container{
-  margin-top:200rpx;
-  width:750rpx;
-  height:200rpx;
+page{
+  width:100%;
+  height:100%;
 }
-.front-container .front-img,
-.front-container .front-text{
-  display:block;
-}
-.front-container .front-img{
-  margin:100rpx auto 0;
-  width:424rpx;
-  height:406rpx;
-}
-.front-container .front-text{
-  margin:100rpx auto 0;
-  width:390rpx;
-  height:120rpx;
+.front-img{
+  width:100%;
+  height:100%;
 }

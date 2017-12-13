@@ -455,5 +455,12 @@ Page({
       }
       
     }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 })

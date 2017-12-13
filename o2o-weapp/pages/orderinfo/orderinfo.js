@@ -68,5 +68,12 @@ Page({
   },
   breakStr:function(str,start,end){
     return str.substring(start,end);
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 })

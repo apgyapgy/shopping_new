@@ -223,5 +223,12 @@ Page({
   },
   getStorageLocation: function () {//从缓存中获取定位
     return wx.getStorageSync("location");
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 });

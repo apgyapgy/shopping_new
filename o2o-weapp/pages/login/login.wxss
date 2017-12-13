@@ -9,8 +9,8 @@
   align-items: center;
 }
 .logo{
-  width: 60px;
-  height: 60px;
+  width: 130rpx;
+  height: 130rpx;
 }
 .logoYz{
   width: 100%;
@@ -36,7 +36,7 @@
   font-size:28rpx;
   line-height:34px;
   border-radius:10rpx;
-  background:#1aad19;
+  background:#0fa8ff;
   text-align:center;
   color:#fff;
   cursor:pointer;
@@ -65,4 +65,7 @@
 .confirm{
   width: 100%;
   float: left;
+}
+.confirm .weui-btn{
+  background:#0fa8ff;
 }

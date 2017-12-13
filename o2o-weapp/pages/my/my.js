@@ -94,5 +94,12 @@ Page({
     wx.navigateTo({
       url: '/pages/mycoupons/mycoupons'
     });
+  },
+  onShareAppMessage: function () {
+    return {
+      title: app.globalData.shareTitleText,
+      path: '/pages/front/front',
+      imageUrl: app.globalData.shareImgUrl
+    }
   }
 });

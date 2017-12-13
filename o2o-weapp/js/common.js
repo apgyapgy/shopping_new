@@ -7,21 +7,6 @@ var getSession = function (suc) {
   var session_id = wx.getStorageSync('sessionId');
   suc(session_id);
 };
-var clearSession = function () {
-  setTimeout(function () {
-    wx.clearStorageSync();
-    wx.showModal({
-      title: '提示',
-      content: '登录超时,请重新登录',
-      showCancel: false,
-      success: function (res) {
-        wx.navigateTo({
-          url: '../login/login',
-        });
-      }
-    });
-  }, 1800000);
-}
 //基本参数
 var basicParms = {
   clientType: '3',
@@ -280,7 +265,6 @@ module.exports = {
   payOrderInf: payOrderInf,
   getWeinxinPay: getWeinxinPay,
   layer: layer,
-  clearSession: clearSession, 
   getAjax: getAjax,
   showModal: showModal,
   reLaunch: reLaunch

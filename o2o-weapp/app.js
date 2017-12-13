@@ -28,7 +28,7 @@ App({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               if (ress.code) {
                 wx.request({
-                  url: _appThis.globalData.baseUrl + 'wx_we/oauth',
+                  url: common.baseUrl + 'wx_we/oauth',
                   data: {
                     code: ress.code
                   },
@@ -99,6 +99,8 @@ App({
     src:3,
     baseUrl: 'https://chi.fuiou.com/',  //生产
     //baseUrl: 'https://dswx-test.fuiou.com/o2o/', //测试
-    selectedHostId:''
+    selectedHostId:'',
+    shareImgUrl:'../../image/banner.jpg',
+    shareTitleText:'周边随心订，下班柜中取！'
   }
 })
